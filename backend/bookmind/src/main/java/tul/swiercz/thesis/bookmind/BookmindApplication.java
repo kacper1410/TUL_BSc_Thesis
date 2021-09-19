@@ -7,11 +7,15 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import tul.swiercz.thesis.bookmind.domain.Book;
-import tul.swiercz.thesis.bookmind.repositories.BookRepository;
+import tul.swiercz.thesis.bookmind.repository.BookRepository;
 
 
 @SpringBootApplication
 public class BookmindApplication implements CommandLineRunner {
+
+	public BookmindApplication(BookRepository repository) {
+		this.repository = repository;
+	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(BookmindApplication.class, args);
@@ -19,8 +23,7 @@ public class BookmindApplication implements CommandLineRunner {
 
 	private static final Logger log = LoggerFactory.getLogger(BookmindApplication.class);
 
-	@Autowired
-	private BookRepository repository;
+	private final BookRepository repository;
 
 	@Override
 	public void run(String... args) {

@@ -1,4 +1,4 @@
-package tul.swiercz.thesis.bookmind.controllers;
+package tul.swiercz.thesis.bookmind.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;

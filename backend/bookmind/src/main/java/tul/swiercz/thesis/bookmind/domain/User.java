@@ -6,13 +6,15 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="bookmind_book")
-@AllArgsConstructor
+@Table(name="bookmind_user")
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
-public class Book extends AbstractDomain {
+public class User extends AbstractDomain {
 
-    private String title;
+    private String login;
+    private String password;
+    private String email;
 
 }
