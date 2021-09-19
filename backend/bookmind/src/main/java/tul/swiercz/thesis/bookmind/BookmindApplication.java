@@ -28,7 +28,7 @@ public class BookmindApplication implements CommandLineRunner {
 		log.info("StartApplication...");
 
 		repository.save(new Book("Java"));
-		repository.save(new Book("Node"));
+		repository.save(new Book("Kotlin"));
 		repository.save(new Book("Python"));
 
 		System.out.println("\nfindAll()");
@@ -37,7 +37,7 @@ public class BookmindApplication implements CommandLineRunner {
 		System.out.println("\nfindById(1L)");
 		repository.findById(1L).ifPresent(System.out::println);
 
-		System.out.println("\nfindByName('Node')");
+		System.out.println("\nfindByTitle('Node')");
 		repository.findByTitle("Node").forEach(System.out::println);
 
 	}
