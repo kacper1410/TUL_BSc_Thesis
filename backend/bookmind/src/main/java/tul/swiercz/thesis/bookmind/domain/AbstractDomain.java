@@ -6,10 +6,11 @@ import javax.persistence.*;
 public abstract class AbstractDomain {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id = 0L;
 
     @Version
-    private Long version;
+    @Column(columnDefinition = "bigint default 0")
+    private Long version = 0L;
 
 }

@@ -28,20 +28,20 @@ public class BookmindApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) {
 
-		log.info("StartApplication...");
-
-		repository.save(new Book("Java"));
-		repository.save(new Book("Kotlin"));
-		repository.save(new Book("Python"));
-
-		System.out.println("\nfindAll()");
-		repository.findAll().forEach(System.out::println);
-
-		System.out.println("\nfindById(1L)");
-		repository.findById(1L).ifPresent(System.out::println);
-
-		System.out.println("\nfindByTitle('Node')");
-		repository.findByTitle("Node").forEach(System.out::println);
+//		log.info("StartApplication...");
+//
+//		repository.save(new Book("Java"));
+//		repository.save(new Book("Kotlin"));
+//		repository.save(new Book("Python"));
+//
+//		System.out.println("\nfindAll()");
+//		repository.findAll().forEach(System.out::println);
+//
+//		System.out.println("\nfindById(1L)");
+//		repository.findById(1L).ifPresent(System.out::println);
+//
+//		System.out.println("\nfindByTitle('Node')");
+//		repository.findByTitle("Node").forEach(System.out::println);
 
 	}
 
