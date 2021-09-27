@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -14,8 +15,8 @@ import javax.persistence.Table;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AccessLevel extends AbstractDomain {
+public class AccessLevel extends AbstractDomain implements GrantedAuthority {
 
-    private String level;
+    private String authority;
 
 }

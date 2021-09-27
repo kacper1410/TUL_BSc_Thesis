@@ -2,9 +2,7 @@ package tul.swiercz.thesis.bookmind.domain;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.List;
 
 @Entity
@@ -13,12 +11,14 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-public class User extends AbstractDomain {
+@ToString
+public class User extends AbstractUserDetails {
 
-    private String login;
+    @Column(unique = true)
+    private String username;
     private String password;
     private String email;
-    @ManyToMany
-    private List<AccessLevel> accessLevels;
+    @ManyToMany(fetch = FetchType.EAGER)
+    private List<AccessLevel> authorities;
 
 }
