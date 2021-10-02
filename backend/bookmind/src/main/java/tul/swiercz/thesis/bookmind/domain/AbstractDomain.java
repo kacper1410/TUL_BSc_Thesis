@@ -1,6 +1,7 @@
 package tul.swiercz.thesis.bookmind.domain;
 
 import lombok.Getter;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 
@@ -10,10 +11,10 @@ public abstract class AbstractDomain {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter
-    private Long id = 0L;
+    private Long id;
 
     @Version
-    @Column(columnDefinition = "bigint default 0")
-    private Long version = 0L;
+    @ColumnDefault("0")
+    private Long version;
 
 }

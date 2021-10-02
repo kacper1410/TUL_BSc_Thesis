@@ -1,6 +1,7 @@
 package tul.swiercz.thesis.bookmind.domain;
 
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
@@ -21,6 +22,7 @@ public class User extends AbstractDomain implements UserDetails {
     private String email;
     @ManyToMany(fetch = FetchType.EAGER)
     private List<AccessLevel> authorities;
+    @ColumnDefault("false")
     private boolean enabled;
 
     @Override
