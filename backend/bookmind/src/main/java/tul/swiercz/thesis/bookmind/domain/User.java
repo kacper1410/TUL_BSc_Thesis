@@ -1,6 +1,7 @@
 package tul.swiercz.thesis.bookmind.domain;
 
 import lombok.*;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class User extends AbstractUserDetails {
+public class User extends AbstractDomain implements UserDetails {
 
     @Column(unique = true)
     private String username;
@@ -20,5 +21,20 @@ public class User extends AbstractUserDetails {
     private String email;
     @ManyToMany(fetch = FetchType.EAGER)
     private List<AccessLevel> authorities;
+    private boolean enabled;
 
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
 }
