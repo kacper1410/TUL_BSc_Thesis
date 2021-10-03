@@ -1,4 +1,4 @@
-package tul.swiercz.thesis.bookmind.controller;
+package tul.swiercz.thesis.bookmind.controller.auth;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,8 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import tul.swiercz.thesis.bookmind.controller.dto.AuthRequest;
-import tul.swiercz.thesis.bookmind.controller.dto.JwtResponse;
+import tul.swiercz.thesis.bookmind.dto.auth.AuthRequest;
+import tul.swiercz.thesis.bookmind.dto.auth.JwtResponse;
 import tul.swiercz.thesis.bookmind.security.JwtTokenUtil;
 
 @Controller

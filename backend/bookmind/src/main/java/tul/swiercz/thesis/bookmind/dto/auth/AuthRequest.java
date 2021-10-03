@@ -1,4 +1,4 @@
-package tul.swiercz.thesis.bookmind.controller.dto;
+package tul.swiercz.thesis.bookmind.dto.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,9 +7,11 @@ import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @AllArgsConstructor
-public class JwtResponse {
+public class AuthRequest {
 
-    private String jwtToken;
+    private String username;
+    private String password;
 
 }

@@ -9,3 +9,8 @@ INSERT INTO bookmind_user (email, username, password) VALUES ('r@domain.com', 'r
 INSERT INTO bookmind_user_access_levels (user_id, access_levels_id) VALUES (1, 1);
 INSERT INTO bookmind_user_access_levels (user_id, access_levels_id) VALUES (2, 2);
 INSERT INTO bookmind_user_access_levels (user_id, access_levels_id) VALUES (3, 3);
+
+INSERT INTO bookmind_book (title) VALUES ('Biblia');
+INSERT INTO bookmind_book (title) VALUES ('Nad Niemnem');
+INSERT INTO bookmind_book (title) VALUES ('Poppy war');
+INSERT INTO bookmind_book (title) VALUES ('Chłopi');
