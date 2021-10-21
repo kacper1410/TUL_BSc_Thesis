@@ -17,8 +17,8 @@ public abstract class CRUDService<DOMAIN extends AbstractDomain> {
         return getRepository().findById(id).orElseThrow();
     }
 
-    public void create(DOMAIN domain) {
-        getRepository().save(domain);
+    public Long create(DOMAIN domain) {
+        return getRepository().save(domain).getId();
     }
 
     public void update(DOMAIN domain) {
