@@ -1,9 +1,5 @@
 package tul.swiercz.thesis.bookmind.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.Entity;
@@ -11,12 +7,24 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="bookmind_access_level")
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class AccessLevel extends AbstractDomain implements GrantedAuthority {
 
     private String authority;
+
+    public AccessLevel() {
+    }
+
+    public AccessLevel(String authority) {
+        this.authority = authority;
+    }
+
+    @Override
+    public String getAuthority() {
+        return authority;
+    }
+
+    public void setAuthority(String authority) {
+        this.authority = authority;
+    }
 
 }

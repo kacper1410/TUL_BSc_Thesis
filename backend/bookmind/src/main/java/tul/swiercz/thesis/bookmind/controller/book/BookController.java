@@ -3,17 +3,14 @@ package tul.swiercz.thesis.bookmind.controller.book;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import tul.swiercz.thesis.bookmind.dto.book.BookInfo;
 import tul.swiercz.thesis.bookmind.dto.book.CreateBook;
+import tul.swiercz.thesis.bookmind.dto.book.ModifyBook;
 import tul.swiercz.thesis.bookmind.mapper.BookMapper;
 import tul.swiercz.thesis.bookmind.service.BookService;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 
 @Controller
 @RequestMapping("/books")
@@ -34,9 +31,21 @@ public class BookController {
         return ResponseEntity.ok(bookInfos);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<BookInfo> get(@PathVariable Long id) {
+        BookInfo bookInfo = bookMapper.bookToDto(bookService.getById(id));
+        return ResponseEntity.ok(bookInfo);
+    }
+
     @PostMapping
     public ResponseEntity<Long> add(@RequestBody CreateBook createBook) {
         Long id  = bookService.create(bookMapper.createToBook(createBook));
         return ResponseEntity.created(URI.create("/books/" + id)).build();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Long> update(@PathVariable Long id, @RequestBody ModifyBook modifyBook) {
+        Long newId = bookService.update(bookMapper.modifyToBook(modifyBook));
+        return ResponseEntity.created(URI.create("/books/" + newId)).build();
     }
 }

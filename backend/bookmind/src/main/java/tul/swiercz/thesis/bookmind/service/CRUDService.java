@@ -21,9 +21,9 @@ public abstract class CRUDService<DOMAIN extends AbstractDomain> {
         return getRepository().save(domain).getId();
     }
 
-    public void update(DOMAIN domain) {
+    public Long update(DOMAIN domain) {
         if (getRepository().existsById(domain.getId())) {
-            getRepository().save(domain);
+            return getRepository().save(domain).getId();
         } else {
             throw new NoSuchElementException("Object to update not found");
         }

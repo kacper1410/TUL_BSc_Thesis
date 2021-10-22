@@ -1,13 +1,13 @@
 package tul.swiercz.thesis.bookmind.dto.book;
 
-public class CreateBook {
+public class ModifyBook {
 
     private String title;
 
-    public CreateBook() {
+    public ModifyBook() {
     }
 
-    public CreateBook(String title) {
+    public ModifyBook(String title) {
         this.title = title;
     }
 

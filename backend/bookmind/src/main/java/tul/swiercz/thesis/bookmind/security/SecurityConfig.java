@@ -23,8 +23,9 @@ import javax.servlet.http.HttpServletResponse;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private UserDetailsService userDetailsService;
-    private JwtTokenFilter jwtTokenFilter;
+    private final UserDetailsService userDetailsService;
+
+    private final JwtTokenFilter jwtTokenFilter;
 
     @Autowired
     public SecurityConfig(UserDetailsService userDetailsService, JwtTokenFilter jwtTokenFilter) {
@@ -56,8 +57,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and();
 
         http.authorizeRequests()
-                .antMatchers("/auth").permitAll()
-                .anyRequest().authenticated();
+//                .antMatchers("/auth").permitAll()
+                .anyRequest().permitAll();
+//                .anyRequest().authenticated();
 
         http.addFilterBefore(
                 jwtTokenFilter,

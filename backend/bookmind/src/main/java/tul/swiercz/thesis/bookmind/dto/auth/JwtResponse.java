@@ -1,14 +1,19 @@
 package tul.swiercz.thesis.bookmind.dto.auth;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-
-@Getter
-@Setter
-@AllArgsConstructor
 public class JwtResponse {
 
     private String jwtToken;
+
+    public JwtResponse(String jwtToken) {
+        this.jwtToken = jwtToken;
+    }
+
+    public String getJwtToken() {
+        return jwtToken;
+    }
+
+    public void setJwtToken(String jwtToken) {
+        this.jwtToken = jwtToken;
+    }
 
 }
