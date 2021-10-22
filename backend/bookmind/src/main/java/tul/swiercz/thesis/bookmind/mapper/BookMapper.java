@@ -7,11 +7,14 @@ import tul.swiercz.thesis.bookmind.dto.book.CreateBook;
 import tul.swiercz.thesis.bookmind.dto.book.ModifyBook;
 
 @Mapper(componentModel = "spring")
-public interface BookMapper {
+public interface BookMapper extends AbstractMapper<Book> {
 
     BookInfo bookToDto(Book book);
+
     Iterable<BookInfo> booksToDtos(Iterable<Book> books);
+
     Book createToBook(CreateBook createBook);
+
     Book modifyToBook(ModifyBook createBook);
 
 }

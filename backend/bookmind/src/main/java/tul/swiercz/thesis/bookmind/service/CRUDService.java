@@ -2,12 +2,15 @@ package tul.swiercz.thesis.bookmind.service;
 
 import org.springframework.data.repository.CrudRepository;
 import tul.swiercz.thesis.bookmind.domain.AbstractDomain;
+import tul.swiercz.thesis.bookmind.mapper.AbstractMapper;
 
 import java.util.NoSuchElementException;
 
 public abstract class CRUDService<DOMAIN extends AbstractDomain> {
 
     protected abstract CrudRepository<DOMAIN, Long> getRepository();
+
+    protected abstract AbstractMapper<DOMAIN> getMapper();
 
     public Iterable<DOMAIN> getAll() {
         return getRepository().findAll();
@@ -21,12 +24,13 @@ public abstract class CRUDService<DOMAIN extends AbstractDomain> {
         return getRepository().save(domain).getId();
     }
 
-    public Long update(DOMAIN domain) {
-        if (getRepository().existsById(domain.getId())) {
-            return getRepository().save(domain).getId();
-        } else {
-            throw new NoSuchElementException("Object to update not found");
-        }
+    public Long update(Long id, DOMAIN domain) {
+            DOMAIN toUpdate = getRepository()
+                    .findById(id)
+                    .orElseThrow(() -> new NoSuchElementException("Object to update not found"));
+            getMapper().update(domain, toUpdate);
+            getRepository().save(toUpdate);
+            return toUpdate.getId();
     }
 
     public void delete(Long id) {
