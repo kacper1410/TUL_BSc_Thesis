@@ -1,0 +1,14 @@
+button {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+table {
+    width: 100%;
+    text-align: center;
+}
+a {
+    display: flex;
+    justify-content: center;
+}

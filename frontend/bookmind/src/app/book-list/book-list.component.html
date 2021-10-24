@@ -1,0 +1,12 @@
+<a routerLink="">Back</a>
+<button (click)="getBooks()">Get books</button>
+<table>
+    <tr>
+        <th>Id</th>
+        <th>Title</th>
+    </tr>
+    <tr *ngFor="let b of books">
+        <td>{{b.id}}</td>
+        <td>{{b.title}}</td>
+    </tr>
+</table>
