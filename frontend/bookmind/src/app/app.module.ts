@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
+import { OnlineStatusModule } from 'ngx-online-status';
 
 import { AppComponent } from './app.component';
 import { BookListComponent } from './book-list/book-list.component';
@@ -23,6 +24,7 @@ import { environment } from '../environments/environment';
         HttpClientModule,
         AppRoutingModule,
         ReactiveFormsModule,
+        OnlineStatusModule,
         ServiceWorkerModule.register('ngsw-worker.js', {
           enabled: environment.production,
           // Register the ServiceWorker as soon as the app is stable
