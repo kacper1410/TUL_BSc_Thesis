@@ -38,4 +38,5 @@ public class Shelf extends AbstractDomain {
         this.books = books;
     }
     //endregion
+
 }

@@ -4,6 +4,7 @@ public class JwtResponse {
 
     private String jwtToken;
 
+    //region Accessors
     public JwtResponse(String jwtToken) {
         this.jwtToken = jwtToken;
     }
@@ -15,5 +16,6 @@ public class JwtResponse {
     public void setJwtToken(String jwtToken) {
         this.jwtToken = jwtToken;
     }
+    //endregion
 
 }

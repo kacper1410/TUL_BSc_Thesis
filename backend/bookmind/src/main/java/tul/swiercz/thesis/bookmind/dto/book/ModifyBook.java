@@ -4,6 +4,7 @@ public class ModifyBook {
 
     private String title;
 
+    //region Accessors
     public ModifyBook() {
     }
 
@@ -18,5 +19,6 @@ public class ModifyBook {
     public void setTitle(String title) {
         this.title = title;
     }
+    //endregion
 
 }

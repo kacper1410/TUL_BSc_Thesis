@@ -4,6 +4,7 @@ public abstract class AbstractDto {
 
     private Long id;
 
+    //region Accessors
     public Long getId() {
         return id;
     }
@@ -11,5 +12,6 @@ public abstract class AbstractDto {
     public void setId(Long id) {
         this.id = id;
     }
+    //endregion
 
 }

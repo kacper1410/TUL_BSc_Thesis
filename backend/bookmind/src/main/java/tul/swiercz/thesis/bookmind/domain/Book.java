@@ -39,4 +39,5 @@ public class Book extends AbstractDomain {
         this.authors = authors;
     }
     //endregion
+
 }

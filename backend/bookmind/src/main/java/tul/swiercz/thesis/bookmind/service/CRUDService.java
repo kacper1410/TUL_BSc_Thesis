@@ -24,13 +24,12 @@ public abstract class CRUDService<DOMAIN extends AbstractDomain> {
         return getRepository().save(domain).getId();
     }
 
-    public Long update(Long id, DOMAIN domain) {
+    public void update(Long id, DOMAIN domain) {
             DOMAIN toUpdate = getRepository()
                     .findById(id)
                     .orElseThrow(() -> new NoSuchElementException("Object to update not found"));
             getMapper().update(domain, toUpdate);
             getRepository().save(toUpdate);
-            return toUpdate.getId();
     }
 
     public void delete(Long id) {

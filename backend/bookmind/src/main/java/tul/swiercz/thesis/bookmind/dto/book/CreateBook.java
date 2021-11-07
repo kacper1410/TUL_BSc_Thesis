@@ -4,6 +4,7 @@ public class CreateBook {
 
     private String title;
 
+    //region Accessors
     public CreateBook() {
     }
 
@@ -18,5 +19,6 @@ public class CreateBook {
     public void setTitle(String title) {
         this.title = title;
     }
+    //endregion
 
 }

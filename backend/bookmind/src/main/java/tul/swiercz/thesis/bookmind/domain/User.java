@@ -106,4 +106,5 @@ public class User extends AbstractDomain implements UserDetails {
         this.shelves = shelves;
     }
     //endregion
+
 }

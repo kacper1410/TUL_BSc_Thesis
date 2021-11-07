@@ -6,6 +6,7 @@ public class AuthRequest {
 
     private String password;
 
+    //region Accessors
     public AuthRequest() {
     }
 
@@ -29,4 +30,6 @@ public class AuthRequest {
     public void setPassword(String password) {
         this.password = password;
     }
+    //endregion
+
 }

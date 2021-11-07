@@ -28,4 +28,5 @@ public class AccessLevel extends AbstractDomain implements GrantedAuthority {
         this.authority = authority;
     }
     //endregion
+
 }

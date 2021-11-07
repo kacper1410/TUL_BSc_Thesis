@@ -25,4 +25,5 @@ public class Author extends AbstractDomain {
         this.name = name;
     }
     //endregion
+
 }
