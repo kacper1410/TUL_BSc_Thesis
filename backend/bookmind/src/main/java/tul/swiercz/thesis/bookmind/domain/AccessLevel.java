@@ -11,6 +11,7 @@ public class AccessLevel extends AbstractDomain implements GrantedAuthority {
 
     private String authority;
 
+    //region Accessors
     public AccessLevel() {
     }
 
@@ -26,5 +27,5 @@ public class AccessLevel extends AbstractDomain implements GrantedAuthority {
     public void setAuthority(String authority) {
         this.authority = authority;
     }
-
+    //endregion
 }
