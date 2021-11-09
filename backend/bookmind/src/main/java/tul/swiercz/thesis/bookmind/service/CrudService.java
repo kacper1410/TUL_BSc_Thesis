@@ -6,7 +6,7 @@ import tul.swiercz.thesis.bookmind.mapper.AbstractMapper;
 
 import java.util.NoSuchElementException;
 
-public abstract class CRUDService<DOMAIN extends AbstractDomain> {
+public abstract class CrudService<DOMAIN extends AbstractDomain> {
 
     protected abstract CrudRepository<DOMAIN, Long> getRepository();
 
@@ -24,11 +24,11 @@ public abstract class CRUDService<DOMAIN extends AbstractDomain> {
         return getRepository().save(domain).getId();
     }
 
-    public void update(Long id, DOMAIN domain) {
+    public void update(Long id, DOMAIN newDomain) {
             DOMAIN toUpdate = getRepository()
                     .findById(id)
                     .orElseThrow(() -> new NoSuchElementException("Object to update not found"));
-            getMapper().update(domain, toUpdate);
+            getMapper().update(newDomain, toUpdate);
             getRepository().save(toUpdate);
     }
 

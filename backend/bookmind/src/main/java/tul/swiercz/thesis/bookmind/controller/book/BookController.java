@@ -38,8 +38,8 @@ public class BookController {
     }
 
     @PostMapping
-    public ResponseEntity<Long> add(@RequestBody CreateBook createBook) {
-        Long id  = bookService.create(bookMapper.createToBook(createBook));
+    public ResponseEntity<?> add(@RequestBody CreateBook createBook) {
+        Long id = bookService.create(bookMapper.createToBook(createBook));
         return ResponseEntity.created(URI.create("/books/" + id)).build();
     }
 

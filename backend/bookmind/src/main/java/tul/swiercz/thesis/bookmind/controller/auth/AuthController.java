@@ -35,7 +35,7 @@ public class AuthController {
 
 
     @PostMapping
-    public ResponseEntity<?> auth(@RequestBody AuthRequest authenticationRequest) throws Exception {
+    public ResponseEntity<JwtResponse> auth(@RequestBody AuthRequest authenticationRequest) throws Exception {
         authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
 
         final UserDetails userDetails = userDetailsService

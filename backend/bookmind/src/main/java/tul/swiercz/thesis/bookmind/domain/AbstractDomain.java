@@ -19,4 +19,8 @@ public abstract class AbstractDomain {
         return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
 }

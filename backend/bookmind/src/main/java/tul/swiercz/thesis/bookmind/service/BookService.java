@@ -9,9 +9,10 @@ import tul.swiercz.thesis.bookmind.mapper.BookMapper;
 import tul.swiercz.thesis.bookmind.repository.BookRepository;
 
 @Service
-public class BookService extends CRUDService<Book> {
+public class BookService extends CrudService<Book> {
 
     private final BookRepository bookRepository;
+
     private final BookMapper bookMapper;
 
     @Autowired
