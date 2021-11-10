@@ -2,9 +2,9 @@ package tul.swiercz.thesis.bookmind.service;
 
 import org.springframework.data.repository.CrudRepository;
 import tul.swiercz.thesis.bookmind.domain.AbstractDomain;
+import tul.swiercz.thesis.bookmind.exception.ExceptionMessages;
+import tul.swiercz.thesis.bookmind.exception.NotFoundException;
 import tul.swiercz.thesis.bookmind.mapper.AbstractMapper;
-
-import java.util.NoSuchElementException;
 
 public abstract class CrudService<DOMAIN extends AbstractDomain> {
 
@@ -16,18 +16,18 @@ public abstract class CrudService<DOMAIN extends AbstractDomain> {
         return getRepository().findAll();
     }
 
-    public DOMAIN getById(Long id) {
-        return getRepository().findById(id).orElseThrow();
+    public DOMAIN getById(Long id) throws NotFoundException {
+        return getRepository().findById(id)
+                .orElseThrow(() -> new NotFoundException(ExceptionMessages.GET_NOT_FOUND));
     }
 
     public Long create(DOMAIN domain) {
         return getRepository().save(domain).getId();
     }
 
-    public void update(Long id, DOMAIN newDomain) {
-            DOMAIN toUpdate = getRepository()
-                    .findById(id)
-                    .orElseThrow(() -> new NoSuchElementException("Object to update not found"));
+    public void update(Long id, DOMAIN newDomain) throws NotFoundException {
+            DOMAIN toUpdate = getRepository().findById(id)
+                    .orElseThrow(() -> new NotFoundException(ExceptionMessages.UPDATE_NOT_FOUND));
             getMapper().update(newDomain, toUpdate);
             getRepository().save(toUpdate);
     }

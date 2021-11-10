@@ -6,6 +6,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.data.repository.CrudRepository;
 import tul.swiercz.thesis.bookmind.domain.AbstractDomain;
+import tul.swiercz.thesis.bookmind.exception.ExceptionMessages;
+import tul.swiercz.thesis.bookmind.exception.NotFoundException;
 import tul.swiercz.thesis.bookmind.mapper.AbstractMapper;
 
 import java.util.ArrayList;
@@ -13,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -35,11 +38,12 @@ class CrudServiceTest {
     @BeforeEach
     void initMocks() {
         MockitoAnnotations.openMocks(this);
-        testCrudService = new TestCrudService();
     }
 
     @BeforeEach
     void initFields() {
+        testCrudService = new TestCrudService();
+
         testDomain1 = new TestDomain();
         testDomain1.setId(1L);
         testDomain2 = new TestDomain();
@@ -59,12 +63,24 @@ class CrudServiceTest {
     }
 
     @Test
-    void getById() {
+    void getById() throws NotFoundException {
         when(repository.findById(1L)).thenReturn(Optional.ofNullable(testDomain1));
 
         TestDomain testDomain = testCrudService.getById(1L);
 
         assertEquals(testDomain1, testDomain);
+    }
+
+    @Test
+    void getByIdException() {
+        when(repository.findById(1L)).thenReturn(Optional.empty());
+
+        NotFoundException exception = assertThrows(
+                NotFoundException.class,
+                () -> testCrudService.getById(1L)
+        );
+
+        assertEquals(ExceptionMessages.GET_NOT_FOUND, exception.getMessage());
     }
 
     @Test
@@ -78,13 +94,25 @@ class CrudServiceTest {
     }
 
     @Test
-    void update() {
+    void update() throws NotFoundException {
         when(repository.findById(1L)).thenReturn(Optional.ofNullable(testDomain1));
 
         testCrudService.update(1L, testDomain2);
 
         verify(mapper).update(testDomain2, testDomain1);
         verify(repository).save(testDomain1);
+    }
+
+    @Test
+    void updateException() {
+        when(repository.findById(1L)).thenReturn(Optional.empty());
+
+        NotFoundException exception = assertThrows(
+                NotFoundException.class,
+                () -> testCrudService.update(1L, testDomain2)
+        );
+
+        assertEquals(ExceptionMessages.UPDATE_NOT_FOUND, exception.getMessage());
     }
 
     @Test

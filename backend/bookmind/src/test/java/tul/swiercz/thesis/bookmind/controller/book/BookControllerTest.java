@@ -11,6 +11,7 @@ import tul.swiercz.thesis.bookmind.domain.Book;
 import tul.swiercz.thesis.bookmind.dto.book.BookInfo;
 import tul.swiercz.thesis.bookmind.dto.book.CreateBook;
 import tul.swiercz.thesis.bookmind.dto.book.ModifyBook;
+import tul.swiercz.thesis.bookmind.exception.NotFoundException;
 import tul.swiercz.thesis.bookmind.mapper.BookMapper;
 import tul.swiercz.thesis.bookmind.service.BookService;
 
@@ -85,7 +86,7 @@ class BookControllerTest {
     }
 
     @Test
-    void get() {
+    void get() throws NotFoundException {
         when(bookService.getById(1L)).thenReturn(book1);
         when(bookMapper.bookToDto(book1)).thenReturn(bookInfo1);
 
@@ -108,7 +109,7 @@ class BookControllerTest {
     }
 
     @Test
-    void update() {
+    void update() throws NotFoundException {
         when(bookMapper.modifyToBook(modifyBook)).thenReturn(book1);
 
         ResponseEntity<?> response = bookController.update(1L, modifyBook);

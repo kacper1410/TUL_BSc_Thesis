@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import tul.swiercz.thesis.bookmind.dto.book.BookInfo;
 import tul.swiercz.thesis.bookmind.dto.book.CreateBook;
 import tul.swiercz.thesis.bookmind.dto.book.ModifyBook;
+import tul.swiercz.thesis.bookmind.exception.NotFoundException;
 import tul.swiercz.thesis.bookmind.mapper.BookMapper;
 import tul.swiercz.thesis.bookmind.service.BookService;
 
@@ -32,7 +33,7 @@ public class BookController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BookInfo> get(@PathVariable Long id) {
+    public ResponseEntity<BookInfo> get(@PathVariable Long id) throws NotFoundException {
         BookInfo bookInfo = bookMapper.bookToDto(bookService.getById(id));
         return ResponseEntity.ok(bookInfo);
     }
@@ -44,7 +45,7 @@ public class BookController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody ModifyBook modifyBook) {
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody ModifyBook modifyBook) throws NotFoundException {
         bookService.update(id, bookMapper.modifyToBook(modifyBook));
         return ResponseEntity.accepted().build();
     }
