@@ -6,7 +6,7 @@ import javax.persistence.Table;
 import java.util.List;
 
 @Entity
-@Table(name="bookmind_author")
+@Table(name="bookmind_shelf")
 public class Shelf extends AbstractDomain {
 
     private String name;

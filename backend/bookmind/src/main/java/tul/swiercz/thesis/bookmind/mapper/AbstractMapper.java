@@ -7,6 +7,6 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 public interface AbstractMapper<DOMAIN> {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void update(DOMAIN newDomain, @MappingTarget DOMAIN DomainToUpdate);
+    void update(DOMAIN newDomain, @MappingTarget DOMAIN domainToUpdate);
 
 }

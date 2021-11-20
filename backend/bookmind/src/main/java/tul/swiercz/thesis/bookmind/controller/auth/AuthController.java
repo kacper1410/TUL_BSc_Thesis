@@ -16,7 +16,11 @@ import tul.swiercz.thesis.bookmind.dto.auth.AuthRequest;
 import tul.swiercz.thesis.bookmind.dto.auth.JwtResponse;
 import tul.swiercz.thesis.bookmind.security.JwtTokenUtil;
 
+import javax.annotation.security.DenyAll;
+import javax.annotation.security.PermitAll;
+
 @Controller
+@DenyAll
 @RequestMapping("/auth")
 public class AuthController {
 
@@ -35,6 +39,7 @@ public class AuthController {
 
 
     @PostMapping
+    @PermitAll
     public ResponseEntity<JwtResponse> auth(@RequestBody AuthRequest authenticationRequest) throws Exception {
         authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
 

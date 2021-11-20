@@ -20,7 +20,7 @@ import org.springframework.web.filter.CorsFilter;
 import javax.servlet.http.HttpServletResponse;
 
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableGlobalMethodSecurity(jsr250Enabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsService userDetailsService;
@@ -41,30 +41,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        http.cors().and().csrf().disable();
-
-        http.sessionManagement()
+        http.cors().and()
+                .csrf().disable()
+                .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and();
-
-        http.exceptionHandling()
+                .and()
+                .exceptionHandling()
                 .authenticationEntryPoint(
                         (request, response, ex) -> response.sendError(
                                 HttpServletResponse.SC_UNAUTHORIZED,
                                 ex.getMessage()
                         )
                 )
-                .and();
-
-        http.authorizeRequests()
-//                .antMatchers("/auth").permitAll()
-                .anyRequest().permitAll();
-//                .anyRequest().authenticated();
-
-        http.addFilterBefore(
-                jwtTokenFilter,
-                UsernamePasswordAuthenticationFilter.class
-        );
+                .and()
+                .authorizeRequests()
+                .anyRequest().permitAll()
+                .and()
+                .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
 
     }
 
