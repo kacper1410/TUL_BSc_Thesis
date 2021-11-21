@@ -23,20 +23,16 @@ public class User extends AbstractDomain implements UserDetails {
     @ColumnDefault("false")
     private boolean enabled;
 
-    @OneToMany
-    private List<Shelf> shelves;
-
     //region Accessors
     public User() {
     }
 
-    public User(String username, String password, String email, List<AccessLevel> authorities, boolean enabled, List<Shelf> shelves) {
+    public User(String username, String password, String email, List<AccessLevel> authorities, boolean enabled) {
         this.username = username;
         this.password = password;
         this.email = email;
         this.authorities = authorities;
         this.enabled = enabled;
-        this.shelves = shelves;
     }
 
     @Override
@@ -98,13 +94,6 @@ public class User extends AbstractDomain implements UserDetails {
         return true;
     }
 
-    public List<Shelf> getShelves() {
-        return shelves;
-    }
-
-    public void setShelves(List<Shelf> shelves) {
-        this.shelves = shelves;
-    }
     //endregion
 
 }

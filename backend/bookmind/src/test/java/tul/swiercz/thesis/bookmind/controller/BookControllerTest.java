@@ -1,4 +1,4 @@
-package tul.swiercz.thesis.bookmind.controller.book;
+package tul.swiercz.thesis.bookmind.controller;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

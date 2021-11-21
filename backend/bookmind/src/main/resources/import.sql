@@ -18,3 +18,5 @@ INSERT INTO bookmind_book (title) VALUES ('Biblia');
 INSERT INTO bookmind_book (title) VALUES ('Nad Niemnem');
 INSERT INTO bookmind_book (title) VALUES ('Poppy war');
 INSERT INTO bookmind_book (title) VALUES ('Chłopi');
+
+INSERT INTO bookmind_shelf (name, user_id) VALUES ('To read', 3);

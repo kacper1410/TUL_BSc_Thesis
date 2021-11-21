@@ -1,4 +1,4 @@
-package tul.swiercz.thesis.bookmind.controller.book;
+package tul.swiercz.thesis.bookmind.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

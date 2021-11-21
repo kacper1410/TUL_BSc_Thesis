@@ -49,7 +49,6 @@ class RestExceptionHandlerTest {
         assertEquals(message, exceptionInfo.getMessage());
         assertTrue(exceptionInfo.getTimestamp().isAfter(before));
         assertTrue(exceptionInfo.getTimestamp().isBefore(after));
-
     }
 
 }

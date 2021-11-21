@@ -1,8 +1,6 @@
 package tul.swiercz.thesis.bookmind.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.List;
 
 @Entity
@@ -13,6 +11,9 @@ public class Shelf extends AbstractDomain {
 
     @ManyToMany
     private List<Book> books;
+
+    @ManyToOne
+    private User user;
 
     //region Accessors
     public Shelf() {
