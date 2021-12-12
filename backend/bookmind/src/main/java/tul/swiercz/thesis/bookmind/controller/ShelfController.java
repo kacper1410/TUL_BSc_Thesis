@@ -62,4 +62,11 @@ public class ShelfController {
         return ResponseEntity.ok(shelfMapper.shelfToInfo(shelf));
     }
 
+    @PutMapping("/me/{id}/book/{bookId}")
+    @RolesAllowed(Roles.READER)
+    public ResponseEntity<?> addBookToShelf(@PathVariable Long id, @PathVariable Long bookId, Principal principal) throws NotFoundException {
+        shelfService.addBookToShelf(id, bookId, principal.getName());
+        return ResponseEntity.accepted().build();
+    }
+
 }

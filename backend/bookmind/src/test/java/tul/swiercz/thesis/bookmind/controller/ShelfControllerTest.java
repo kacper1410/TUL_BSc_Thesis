@@ -128,4 +128,15 @@ class ShelfControllerTest {
         assertEquals(shelfInfo, response.getBody());
     }
 
+    @Test
+    void addBookToShelf() throws NotFoundException {
+        when(principal.getName()).thenReturn(username);
+
+        ResponseEntity<?> response = shelfController.addBookToShelf(1L, 2L, principal);
+
+        verify(shelfService).addBookToShelf(1L, 2L, username);
+        assertNull(response.getBody());
+        assertEquals(HttpStatus.ACCEPTED, response.getStatusCode());
+    }
+
 }

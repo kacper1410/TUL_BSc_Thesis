@@ -5,21 +5,22 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import tul.swiercz.thesis.bookmind.domain.Book;
 import tul.swiercz.thesis.bookmind.domain.Shelf;
 import tul.swiercz.thesis.bookmind.domain.User;
 import tul.swiercz.thesis.bookmind.exception.ExceptionMessages;
 import tul.swiercz.thesis.bookmind.exception.NotFoundException;
 import tul.swiercz.thesis.bookmind.mapper.ShelfMapper;
+import tul.swiercz.thesis.bookmind.repository.BookRepository;
 import tul.swiercz.thesis.bookmind.repository.ShelfRepository;
 import tul.swiercz.thesis.bookmind.repository.UserRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 class ShelfServiceTest {
 
@@ -28,6 +29,9 @@ class ShelfServiceTest {
 
     @Mock
     private ShelfRepository shelfRepository;
+
+    @Mock
+    private BookRepository bookRepository;
 
     @Mock
     private UserRepository userRepository;
@@ -40,6 +44,12 @@ class ShelfServiceTest {
     private Shelf shelf1;
 
     private Shelf shelf2;
+
+    private Book book1;
+
+    private Book book2;
+
+    private Book book3;
 
     private String username;
 
@@ -55,6 +65,13 @@ class ShelfServiceTest {
         username = "username";
         shelf1 = new Shelf("name1");
         shelf2 = new Shelf("name2");
+        book1 = new Book("bname1");
+        book2 = new Book("bname2");
+        book3 = new Book("bname3");
+        List<Book> books = new ArrayList<>();
+        books.add(book1);
+        books.add(book2);
+        shelf1.setBooks(books);
         user = new User();
         user.setUsername(username);
 
@@ -122,6 +139,55 @@ class ShelfServiceTest {
         );
 
         assertEquals(ExceptionMessages.GET_NOT_FOUND, exception.getMessage());
+    }
+
+    @Test
+    void addBookToShelf() throws NotFoundException {
+        when(shelfRepository.findWithBooksByIdAndUserUsername(1L, username)).thenReturn(Optional.ofNullable(shelf1));
+        when(bookRepository.findById(2L)).thenReturn(Optional.ofNullable(book3));
+
+        shelfService.addBookToShelf(1L, 2L, username);
+
+        verify(shelfRepository).save(shelf1);
+        assertEquals(3, shelf1.getBooks().size());
+        assertTrue(shelf1.getBooks().contains(book3));
+    }
+
+
+    @Test
+    void addBookToShelfException() {
+        when(shelfRepository.findWithBooksByIdAndUserUsername(1L, username)).thenReturn(Optional.empty());
+
+        NotFoundException exception = assertThrows(
+                NotFoundException.class,
+                () -> shelfService.addBookToShelf(1L, 2L, username)
+        );
+
+        assertEquals(ExceptionMessages.UPDATE_NOT_FOUND, exception.getMessage());
+    }
+
+    @Test
+    void addBookToShelfBookException() {
+        when(bookRepository.findById(2L)).thenReturn(Optional.empty());
+
+        NotFoundException exception = assertThrows(
+                NotFoundException.class,
+                () -> shelfService.addBookToShelf(1L, 2L, username)
+        );
+
+        assertEquals(ExceptionMessages.UPDATE_NOT_FOUND, exception.getMessage());
+    }
+
+    @Test
+    void addBookToShelfContains() throws NotFoundException {
+        when(shelfRepository.findWithBooksByIdAndUserUsername(1L, username)).thenReturn(Optional.ofNullable(shelf1));
+        when(bookRepository.findById(2L)).thenReturn(Optional.ofNullable(book2));
+
+        shelfService.addBookToShelf(1L, 2L, username);
+
+        verify(shelfRepository, times(0)).save(shelf1);
+        assertEquals(2, shelf1.getBooks().size());
+        assertTrue(shelf1.getBooks().contains(book2));
     }
 
 }
