@@ -3,13 +3,12 @@ package tul.swiercz.thesis.bookmind.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import tul.swiercz.thesis.bookmind.domain.Shelf;
 import tul.swiercz.thesis.bookmind.dto.shelf.CreateShelf;
+import tul.swiercz.thesis.bookmind.dto.shelf.ModifyShelf;
 import tul.swiercz.thesis.bookmind.dto.shelf.ShelfListInfo;
+import tul.swiercz.thesis.bookmind.exception.NotFoundException;
 import tul.swiercz.thesis.bookmind.mapper.ShelfMapper;
 import tul.swiercz.thesis.bookmind.security.Roles;
 import tul.swiercz.thesis.bookmind.service.ShelfService;
@@ -46,6 +45,13 @@ public class ShelfController {
     public ResponseEntity<?> addShelf(@RequestBody CreateShelf createShelf, Principal principal) {
         Long id = shelfService.create(shelfMapper.createToShelf(createShelf), principal.getName());
         return ResponseEntity.created(URI.create("/shelves/me/" + id)).build();
+    }
+
+    @PutMapping("/me/{id}")
+    @RolesAllowed(Roles.READER)
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody ModifyShelf modifyShelf) throws NotFoundException {
+        shelfService.update(id, shelfMapper.modifyToShelf(modifyShelf));
+        return ResponseEntity.accepted().build();
     }
 
 }
