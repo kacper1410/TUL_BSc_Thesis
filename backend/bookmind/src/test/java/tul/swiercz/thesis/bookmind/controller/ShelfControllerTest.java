@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import tul.swiercz.thesis.bookmind.domain.Shelf;
 import tul.swiercz.thesis.bookmind.dto.shelf.CreateShelf;
 import tul.swiercz.thesis.bookmind.dto.shelf.ModifyShelf;
+import tul.swiercz.thesis.bookmind.dto.shelf.ShelfInfo;
 import tul.swiercz.thesis.bookmind.dto.shelf.ShelfListInfo;
 import tul.swiercz.thesis.bookmind.exception.NotFoundException;
 import tul.swiercz.thesis.bookmind.mapper.ShelfMapper;
@@ -17,6 +18,7 @@ import tul.swiercz.thesis.bookmind.service.ShelfService;
 
 import java.net.URI;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -47,6 +49,8 @@ class ShelfControllerTest {
 
     private ShelfListInfo shelfListInfo;
 
+    private ShelfInfo shelfInfo;
+
     private ShelfListInfo shelfListInfo2;
 
     private CreateShelf createShelf;
@@ -66,6 +70,7 @@ class ShelfControllerTest {
         shelf = new Shelf("name1");
         shelf2 = new Shelf("name2");
         shelfListInfo = new ShelfListInfo("name1ListInfo");
+        shelfInfo = new ShelfInfo("name1Info", new ArrayList<>());
         shelfListInfo2 = new ShelfListInfo("name1ListInfo");
         createShelf = new CreateShelf("create");
         modifyShelf = new ModifyShelf("modify");
@@ -109,6 +114,18 @@ class ShelfControllerTest {
         verify(shelfService).update(1L, shelf, username);
         assertNull(response.getBody());
         assertEquals(HttpStatus.ACCEPTED, response.getStatusCode());
+    }
+
+    @Test
+    void getShelfDetails() throws NotFoundException {
+        when(principal.getName()).thenReturn(username);
+        when(shelfService.getShelf(1L, username)).thenReturn(shelf);
+        when(shelfMapper.shelfToInfo(shelf)).thenReturn(shelfInfo);
+
+        ResponseEntity<?> response = shelfController.getShelfDetails(1L, principal);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(shelfInfo, response.getBody());
     }
 
 }

@@ -19,7 +19,7 @@ public class ShelfService extends CrudService<Shelf> {
 
     private final ShelfRepository shelfRepository;
 
-    private ShelfMapper shelfMapper;
+    private final ShelfMapper shelfMapper;
 
     @Autowired
     public ShelfService(UserRepository userRepository, ShelfRepository shelfRepository, ShelfMapper shelfMapper) {
@@ -52,6 +52,11 @@ public class ShelfService extends CrudService<Shelf> {
         shelfRepository.findByIdAndUserUsername(id, username)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessages.UPDATE_NOT_FOUND));
         super.update(id, newShelf);
+    }
+
+    public Shelf getShelf(Long id, String name) throws NotFoundException {
+        return shelfRepository.findWithBooksByIdAndUserUsername(id, name)
+                .orElseThrow(() -> new NotFoundException(ExceptionMessages.GET_NOT_FOUND));
     }
 
 }

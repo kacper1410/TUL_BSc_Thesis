@@ -103,4 +103,25 @@ class ShelfServiceTest {
         assertEquals(ExceptionMessages.UPDATE_NOT_FOUND, exception.getMessage());
     }
 
+    @Test
+    void getShelf() throws NotFoundException {
+        when(shelfRepository.findWithBooksByIdAndUserUsername(1L, username)).thenReturn(Optional.ofNullable(shelf1));
+
+        Shelf shelf = shelfService.getShelf(1L, username);
+
+        assertEquals(shelf1, shelf);
+    }
+
+    @Test
+    void getShelfException() {
+        when(shelfRepository.findWithBooksByIdAndUserUsername(1L, username)).thenReturn(Optional.empty());
+
+        NotFoundException exception = assertThrows(
+                NotFoundException.class,
+                () -> shelfService.getShelf(1L, username)
+        );
+
+        assertEquals(ExceptionMessages.GET_NOT_FOUND, exception.getMessage());
+    }
+
 }

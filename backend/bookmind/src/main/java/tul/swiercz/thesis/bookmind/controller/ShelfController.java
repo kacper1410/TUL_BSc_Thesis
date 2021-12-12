@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import tul.swiercz.thesis.bookmind.domain.Shelf;
 import tul.swiercz.thesis.bookmind.dto.shelf.CreateShelf;
 import tul.swiercz.thesis.bookmind.dto.shelf.ModifyShelf;
+import tul.swiercz.thesis.bookmind.dto.shelf.ShelfInfo;
 import tul.swiercz.thesis.bookmind.dto.shelf.ShelfListInfo;
 import tul.swiercz.thesis.bookmind.exception.NotFoundException;
 import tul.swiercz.thesis.bookmind.mapper.ShelfMapper;
@@ -52,6 +53,13 @@ public class ShelfController {
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody ModifyShelf modifyShelf, Principal principal) throws NotFoundException {
         shelfService.update(id, shelfMapper.modifyToShelf(modifyShelf), principal.getName());
         return ResponseEntity.accepted().build();
+    }
+
+    @GetMapping("/me/{id}")
+    @RolesAllowed(Roles.READER)
+    public ResponseEntity<ShelfInfo> getShelfDetails(@PathVariable Long id, Principal principal) throws NotFoundException {
+        Shelf shelf = shelfService.getShelf(id, principal.getName());
+        return ResponseEntity.ok(shelfMapper.shelfToInfo(shelf));
     }
 
 }
