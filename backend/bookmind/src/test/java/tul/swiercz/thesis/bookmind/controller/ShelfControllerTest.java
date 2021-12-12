@@ -99,14 +99,14 @@ class ShelfControllerTest {
         assertEquals(URI.create("/shelves/me/1"), response.getHeaders().getLocation());
     }
 
-
     @Test
     void update() throws NotFoundException {
         when(shelfMapper.modifyToShelf(modifyShelf)).thenReturn(shelf);
+        when(principal.getName()).thenReturn(username);
 
-        ResponseEntity<?> response = shelfController.update(1L, modifyShelf);
+        ResponseEntity<?> response = shelfController.update(1L, modifyShelf, principal);
 
-        verify(shelfService).update(1L, shelf);
+        verify(shelfService).update(1L, shelf, username);
         assertNull(response.getBody());
         assertEquals(HttpStatus.ACCEPTED, response.getStatusCode());
     }

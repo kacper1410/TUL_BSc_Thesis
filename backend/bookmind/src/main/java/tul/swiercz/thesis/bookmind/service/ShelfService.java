@@ -5,6 +5,8 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 import tul.swiercz.thesis.bookmind.domain.Shelf;
 import tul.swiercz.thesis.bookmind.domain.User;
+import tul.swiercz.thesis.bookmind.exception.ExceptionMessages;
+import tul.swiercz.thesis.bookmind.exception.NotFoundException;
 import tul.swiercz.thesis.bookmind.mapper.AbstractMapper;
 import tul.swiercz.thesis.bookmind.mapper.ShelfMapper;
 import tul.swiercz.thesis.bookmind.repository.ShelfRepository;
@@ -44,6 +46,12 @@ public class ShelfService extends CrudService<Shelf> {
         User user = userRepository.findUserByUsername(username);
         domain.setUser(user);
         return super.create(domain);
+    }
+
+    public void update(Long id, Shelf newShelf, String username) throws NotFoundException {
+        shelfRepository.findByIdAndUserUsername(id, username)
+                .orElseThrow(() -> new NotFoundException(ExceptionMessages.UPDATE_NOT_FOUND));
+        super.update(id, newShelf);
     }
 
 }

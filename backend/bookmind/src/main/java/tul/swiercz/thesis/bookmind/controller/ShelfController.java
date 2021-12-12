@@ -49,8 +49,8 @@ public class ShelfController {
 
     @PutMapping("/me/{id}")
     @RolesAllowed(Roles.READER)
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody ModifyShelf modifyShelf) throws NotFoundException {
-        shelfService.update(id, shelfMapper.modifyToShelf(modifyShelf));
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody ModifyShelf modifyShelf, Principal principal) throws NotFoundException {
+        shelfService.update(id, shelfMapper.modifyToShelf(modifyShelf), principal.getName());
         return ResponseEntity.accepted().build();
     }
 
