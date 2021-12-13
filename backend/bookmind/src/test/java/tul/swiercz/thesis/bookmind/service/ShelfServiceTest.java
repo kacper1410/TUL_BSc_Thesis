@@ -66,8 +66,11 @@ class ShelfServiceTest {
         shelf1 = new Shelf("name1");
         shelf2 = new Shelf("name2");
         book1 = new Book("bname1");
+        book1.setId(1L);
         book2 = new Book("bname2");
+        book2.setId(2L);
         book3 = new Book("bname3");
+        book3.setId(3L);
         List<Book> books = new ArrayList<>();
         books.add(book1);
         books.add(book2);
@@ -186,6 +189,55 @@ class ShelfServiceTest {
         shelfService.addBookToShelf(1L, 2L, username);
 
         verify(shelfRepository, times(0)).save(shelf1);
+        assertEquals(2, shelf1.getBooks().size());
+        assertTrue(shelf1.getBooks().contains(book2));
+    }
+
+    @Test
+    void removeBookFromShelf() throws NotFoundException {
+        when(shelfRepository.findWithBooksByIdAndUserUsername(1L, username)).thenReturn(Optional.ofNullable(shelf1));
+        when(bookRepository.findById(2L)).thenReturn(Optional.ofNullable(book2));
+
+        shelfService.removeBookFromShelf(1L, 2L, username);
+
+        verify(shelfRepository).save(shelf1);
+        assertEquals(1, shelf1.getBooks().size());
+        assertFalse(shelf1.getBooks().contains(book2));
+    }
+
+
+    @Test
+    void removeBookFromShelfException() {
+        when(shelfRepository.findWithBooksByIdAndUserUsername(1L, username)).thenReturn(Optional.empty());
+
+        NotFoundException exception = assertThrows(
+                NotFoundException.class,
+                () -> shelfService.removeBookFromShelf(1L, 2L, username)
+        );
+
+        assertEquals(ExceptionMessages.UPDATE_NOT_FOUND, exception.getMessage());
+    }
+
+    @Test
+    void removeBookFromShelfBookException() {
+        when(bookRepository.findById(2L)).thenReturn(Optional.empty());
+
+        NotFoundException exception = assertThrows(
+                NotFoundException.class,
+                () -> shelfService.removeBookFromShelf(1L, 2L, username)
+        );
+
+        assertEquals(ExceptionMessages.UPDATE_NOT_FOUND, exception.getMessage());
+    }
+
+    @Test
+    void removeBookFromShelfNotContains() throws NotFoundException {
+        when(shelfRepository.findWithBooksByIdAndUserUsername(1L, username)).thenReturn(Optional.ofNullable(shelf1));
+        when(bookRepository.findById(2L)).thenReturn(Optional.ofNullable(book3));
+
+        shelfService.removeBookFromShelf(1L, 2L, username);
+
+        verify(shelfRepository).save(shelf1);
         assertEquals(2, shelf1.getBooks().size());
         assertTrue(shelf1.getBooks().contains(book2));
     }

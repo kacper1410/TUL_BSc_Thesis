@@ -139,4 +139,15 @@ class ShelfControllerTest {
         assertEquals(HttpStatus.ACCEPTED, response.getStatusCode());
     }
 
+    @Test
+    void removeBookFromShelf() throws NotFoundException {
+        when(principal.getName()).thenReturn(username);
+
+        ResponseEntity<?> response = shelfController.removeBookFromShelf(1L, 2L, principal);
+
+        verify(shelfService).removeBookFromShelf(1L, 2L, username);
+        assertNull(response.getBody());
+        assertEquals(HttpStatus.ACCEPTED, response.getStatusCode());
+    }
+
 }

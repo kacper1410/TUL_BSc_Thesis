@@ -75,4 +75,13 @@ public class ShelfService extends CrudService<Shelf> {
         shelfRepository.save(shelf);
     }
 
+    public void removeBookFromShelf(Long id, Long bookId, String username) throws NotFoundException {
+        Shelf shelf = shelfRepository.findWithBooksByIdAndUserUsername(id, username)
+                .orElseThrow(() -> new NotFoundException(ExceptionMessages.UPDATE_NOT_FOUND));
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new NotFoundException(ExceptionMessages.UPDATE_NOT_FOUND));
+        shelf.getBooks().remove(book);
+        shelfRepository.save(shelf);
+    }
+
 }

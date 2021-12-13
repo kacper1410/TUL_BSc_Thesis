@@ -69,4 +69,11 @@ public class ShelfController {
         return ResponseEntity.accepted().build();
     }
 
+    @DeleteMapping("/me/{id}/book/{bookId}")
+    @RolesAllowed(Roles.READER)
+    public ResponseEntity<?> removeBookFromShelf(@PathVariable Long id, @PathVariable Long bookId, Principal principal) throws NotFoundException {
+        shelfService.removeBookFromShelf(id, bookId, principal.getName());
+        return ResponseEntity.accepted().build();
+    }
+
 }
