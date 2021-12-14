@@ -97,7 +97,7 @@ class ShelfControllerTest {
         when(shelfService.create(shelf, username)).thenReturn(1L);
         when(principal.getName()).thenReturn(username);
 
-        ResponseEntity<?> response = shelfController.addShelf(createShelf, principal);
+        ResponseEntity<?> response = shelfController.add(createShelf, principal);
 
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertNull(response.getBody());
@@ -148,6 +148,17 @@ class ShelfControllerTest {
         verify(shelfService).removeBookFromShelf(1L, 2L, username);
         assertNull(response.getBody());
         assertEquals(HttpStatus.ACCEPTED, response.getStatusCode());
+    }
+
+    @Test
+    void delete() {
+        when(principal.getName()).thenReturn(username);
+
+        ResponseEntity<?> response = shelfController.delete(1L, principal);
+
+        verify(shelfService).delete(1L, username);
+        assertNull(response.getBody());
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
     }
 
 }

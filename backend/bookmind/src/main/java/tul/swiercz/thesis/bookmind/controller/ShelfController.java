@@ -43,7 +43,7 @@ public class ShelfController {
 
     @PostMapping("/me")
     @RolesAllowed(Roles.READER)
-    public ResponseEntity<?> addShelf(@RequestBody CreateShelf createShelf, Principal principal) {
+    public ResponseEntity<?> add(@RequestBody CreateShelf createShelf, Principal principal) {
         Long id = shelfService.create(shelfMapper.createToShelf(createShelf), principal.getName());
         return ResponseEntity.created(URI.create("/shelves/me/" + id)).build();
     }
@@ -74,6 +74,13 @@ public class ShelfController {
     public ResponseEntity<?> removeBookFromShelf(@PathVariable Long id, @PathVariable Long bookId, Principal principal) throws NotFoundException {
         shelfService.removeBookFromShelf(id, bookId, principal.getName());
         return ResponseEntity.accepted().build();
+    }
+
+    @DeleteMapping("/me/{id}")
+    @RolesAllowed(Roles.READER)
+    public ResponseEntity<?> delete(@PathVariable Long id, Principal principal) {
+        shelfService.delete(id, principal.getName());
+        return ResponseEntity.noContent().build();
     }
 
 }

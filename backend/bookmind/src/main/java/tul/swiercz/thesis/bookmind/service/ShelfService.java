@@ -84,4 +84,9 @@ public class ShelfService extends CrudService<Shelf> {
         shelfRepository.save(shelf);
     }
 
+    public void delete(Long id, String username) {
+        shelfRepository.findByIdAndUserUsername(id, username)
+                .ifPresent(shelf -> super.delete(id));
+    }
+
 }

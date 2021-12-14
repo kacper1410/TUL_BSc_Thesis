@@ -242,4 +242,13 @@ class ShelfServiceTest {
         assertTrue(shelf1.getBooks().contains(book2));
     }
 
+    @Test
+    void delete() {
+        when(shelfRepository.findByIdAndUserUsername(1L, username)).thenReturn(Optional.ofNullable(shelf1));
+
+        shelfService.delete(1L, username);
+
+        verify(shelfRepository).deleteById(1L);
+    }
+
 }
