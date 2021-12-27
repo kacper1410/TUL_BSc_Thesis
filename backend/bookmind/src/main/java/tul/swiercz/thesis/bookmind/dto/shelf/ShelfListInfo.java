@@ -1,8 +1,8 @@
 package tul.swiercz.thesis.bookmind.dto.shelf;
 
-import tul.swiercz.thesis.bookmind.dto.AbstractDto;
+import tul.swiercz.thesis.bookmind.dto.InfoDto;
 
-public class ShelfListInfo extends AbstractDto {
+public class ShelfListInfo extends InfoDto {
 
     private String name;
 

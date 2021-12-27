@@ -1,6 +1,8 @@
 package tul.swiercz.thesis.bookmind.dto.shelf;
 
-public class ModifyShelf {
+import tul.swiercz.thesis.bookmind.dto.ModifyDto;
+
+public class ModifyShelf extends ModifyDto {
 
     private String name;
 

@@ -1,8 +1,9 @@
 package tul.swiercz.thesis.bookmind.dto.shelf;
 
+import tul.swiercz.thesis.bookmind.dto.InfoDto;
 import tul.swiercz.thesis.bookmind.dto.book.BookInfo;
 
-public class ShelfInfo {
+public class ShelfInfo extends InfoDto {
 
     private String name;
     private Iterable<BookInfo> books;

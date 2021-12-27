@@ -8,4 +8,8 @@ public class ExceptionMessages {
     public static final String GET_NOT_FOUND = EXCEPTION_PREFIX + "GET_NOT_FOUND";
     public static final String UPDATE_NOT_FOUND = EXCEPTION_PREFIX + "UPDATE_NOT_FOUND";
 
+    public static final String INTERNAL_EXCEPTION = EXCEPTION_PREFIX + "INTERNAL_EXCEPTION";
+
+    public static final String OPTIMISTIC_LOCK = EXCEPTION_PREFIX + "OPTIMISTIC_LOCK";
+
 }

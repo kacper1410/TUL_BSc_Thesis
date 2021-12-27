@@ -1,6 +1,8 @@
 package tul.swiercz.thesis.bookmind.dto.book;
 
-public class ModifyBook {
+import tul.swiercz.thesis.bookmind.dto.ModifyDto;
+
+public class ModifyBook extends ModifyDto {
 
     private String title;
 

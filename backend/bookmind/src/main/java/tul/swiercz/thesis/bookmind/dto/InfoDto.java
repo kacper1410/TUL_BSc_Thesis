@@ -1,8 +1,10 @@
 package tul.swiercz.thesis.bookmind.dto;
 
-public abstract class AbstractDto {
+public abstract class InfoDto {
 
     private Long id;
+
+    private Long version;
 
     //region Accessors
     public Long getId() {
@@ -11,6 +13,14 @@ public abstract class AbstractDto {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
     //endregion
 
