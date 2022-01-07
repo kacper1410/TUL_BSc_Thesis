@@ -31,5 +31,4 @@ build/
 
 ### VS Code ###
 .vscode/
-
-**/passwords.properties
+/src/main/resources/passwords.properties
