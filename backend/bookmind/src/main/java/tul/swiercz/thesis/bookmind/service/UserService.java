@@ -27,11 +27,14 @@ public class UserService extends CrudService<User> implements UserDetailsService
 
     private final UserMapper userMapper;
 
+    private final MailService mailService;
+
     @Autowired
-    public UserService(UserRepository userRepository, AccessLevelRepository accessLevelRepository, UserMapper userMapper) {
+    public UserService(UserRepository userRepository, AccessLevelRepository accessLevelRepository, UserMapper userMapper, MailService mailService) {
         this.userRepository = userRepository;
         this.accessLevelRepository = accessLevelRepository;
         this.userMapper = userMapper;
+        this.mailService = mailService;
     }
 
     @Override
@@ -51,7 +54,7 @@ public class UserService extends CrudService<User> implements UserDetailsService
 
     public Long register(User user) throws InternalException {
         setReaderAuthority(user);
-//        sendConfirmationMail(user);
+        mailService.sendRegisterConfirmation(user.getEmail());
         return super.create(user);
     }
 

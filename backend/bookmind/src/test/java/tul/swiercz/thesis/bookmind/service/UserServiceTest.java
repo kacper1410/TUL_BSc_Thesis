@@ -29,6 +29,9 @@ class UserServiceTest {
     @Mock
     private AccessLevelRepository accessLevelRepository;
 
+    @Mock
+    private MailService mailService;
+
     private User user;
 
     private AccessLevel accessLevel;
@@ -41,6 +44,7 @@ class UserServiceTest {
     @BeforeEach
     void initFields() {
         user = new User();
+        user.setEmail("email@domain.com");
 
         accessLevel = new AccessLevel();
     }
@@ -63,6 +67,7 @@ class UserServiceTest {
         userService.register(user);
 
         verify(userRepository).save(user);
+        verify(mailService).sendRegisterConfirmation(user.getEmail());
         assertEquals(1, user.getAuthorities().size());
         assertEquals(accessLevel, user.getAuthorities().get(0));
     }
