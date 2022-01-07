@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import tul.swiercz.thesis.bookmind.domain.AccessLevel;
+import tul.swiercz.thesis.bookmind.domain.OneTimeUrl;
 import tul.swiercz.thesis.bookmind.domain.User;
 import tul.swiercz.thesis.bookmind.exception.ExceptionMessages;
 import tul.swiercz.thesis.bookmind.exception.InternalException;
@@ -29,12 +30,16 @@ public class UserService extends CrudService<User> implements UserDetailsService
 
     private final MailService mailService;
 
+    private final OneTimeUrlService oneTimeUrlService;
+
     @Autowired
-    public UserService(UserRepository userRepository, AccessLevelRepository accessLevelRepository, UserMapper userMapper, MailService mailService) {
+    public UserService(UserRepository userRepository, AccessLevelRepository accessLevelRepository,
+                       UserMapper userMapper, MailService mailService, OneTimeUrlService oneTimeUrlService) {
         this.userRepository = userRepository;
         this.accessLevelRepository = accessLevelRepository;
         this.userMapper = userMapper;
         this.mailService = mailService;
+        this.oneTimeUrlService = oneTimeUrlService;
     }
 
     @Override
@@ -54,8 +59,10 @@ public class UserService extends CrudService<User> implements UserDetailsService
 
     public Long register(User user) throws InternalException {
         setReaderAuthority(user);
-        mailService.sendRegisterConfirmation(user.getEmail());
-        return super.create(user);
+        Long id = super.create(user);
+        OneTimeUrl oneTimeUrl = oneTimeUrlService.generateRegistrationUrl(user);
+        mailService.sendRegisterConfirmation(user.getEmail(), oneTimeUrl.getUrl());
+        return id;
     }
 
     private void setReaderAuthority(User user) throws InternalException {

@@ -15,11 +15,10 @@ public class MailService {
         this.javaMailSender = javaMailSender;
     }
 
-    public void sendRegisterConfirmation(String recipient) {
+    public void sendRegisterConfirmation(String recipient, String url) {
         SimpleMailMessage message = getDefaultMessage(recipient);
         message.setSubject("Confirmation email");
-        message.setText("To confirm your email, please click link below\n" +
-                "<link>");
+        message.setText("To confirm your email, please click link below\n" + url);
         javaMailSender.send(message);
     }
 
