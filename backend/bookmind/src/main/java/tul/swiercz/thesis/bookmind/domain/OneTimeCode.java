@@ -4,11 +4,11 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name="bookmind_one_time_url")
-public class OneTimeUrl extends AbstractDomain {
+@Table(name="bookmind_one_time_code")
+public class OneTimeCode extends AbstractDomain {
 
     @Column(unique = true)
-    private String url;
+    private String code;
 
     @ManyToOne
     private User user;
@@ -16,22 +16,22 @@ public class OneTimeUrl extends AbstractDomain {
     private LocalDateTime expirationDate;
 
     //region Accessors
-    public OneTimeUrl(String url, User user, LocalDateTime expirationDate) {
-        this.url = url;
+    public OneTimeCode(String code, User user, LocalDateTime expirationDate) {
+        this.code = code;
         this.user = user;
         this.expirationDate = expirationDate;
     }
 
-    public OneTimeUrl() {
+    public OneTimeCode() {
 
     }
 
-    public String getUrl() {
-        return url;
+    public String getCode() {
+        return code;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setCode(String url) {
+        this.code = url;
     }
 
     public User getUser() {

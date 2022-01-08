@@ -82,5 +82,4 @@ public class ShelfController {
         shelfService.delete(id, principal.getName());
         return ResponseEntity.noContent().build();
     }
-
 }

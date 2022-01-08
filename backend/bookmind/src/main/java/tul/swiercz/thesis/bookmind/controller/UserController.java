@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import tul.swiercz.thesis.bookmind.dto.user.CreateUser;
 import tul.swiercz.thesis.bookmind.exception.InternalException;
+import tul.swiercz.thesis.bookmind.exception.NotFoundException;
 import tul.swiercz.thesis.bookmind.mapper.UserMapper;
 import tul.swiercz.thesis.bookmind.security.Roles;
 import tul.swiercz.thesis.bookmind.service.UserService;
@@ -43,5 +44,12 @@ public class UserController {
     public ResponseEntity<?> registerUser(@RequestBody CreateUser createUser) throws InternalException {
         Long id = userService.register(userMapper.createToUser(createUser));
         return ResponseEntity.created(URI.create("/users/" + id)).build();
+    }
+
+    @PostMapping("/confirm/{code}")
+    @PermitAll
+    public ResponseEntity<?> confirmUser(@PathVariable String code) throws NotFoundException {
+        userService.confirmUser(code);
+        return ResponseEntity.noContent().build();
     }
 }

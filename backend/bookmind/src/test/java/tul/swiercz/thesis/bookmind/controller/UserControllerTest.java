@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import tul.swiercz.thesis.bookmind.domain.User;
 import tul.swiercz.thesis.bookmind.dto.user.CreateUser;
 import tul.swiercz.thesis.bookmind.exception.InternalException;
+import tul.swiercz.thesis.bookmind.exception.NotFoundException;
 import tul.swiercz.thesis.bookmind.mapper.UserMapper;
 import tul.swiercz.thesis.bookmind.service.UserService;
 
@@ -17,6 +18,7 @@ import java.net.URI;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class UserControllerTest {
@@ -62,5 +64,15 @@ class UserControllerTest {
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertNull(response.getBody());
         assertEquals(URI.create("/users/2"), response.getHeaders().getLocation());
+    }
+
+    @Test
+    void confirmUser() throws NotFoundException {
+
+        ResponseEntity<?> response = userController.confirmUser("code");
+
+        verify(userService).confirmUser("code");
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+        assertNull(response.getBody());
     }
 }

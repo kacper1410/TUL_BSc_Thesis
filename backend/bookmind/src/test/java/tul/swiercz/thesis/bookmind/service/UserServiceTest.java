@@ -7,16 +7,19 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import tul.swiercz.thesis.bookmind.domain.AccessLevel;
-import tul.swiercz.thesis.bookmind.domain.OneTimeUrl;
+import tul.swiercz.thesis.bookmind.domain.OneTimeCode;
 import tul.swiercz.thesis.bookmind.domain.User;
 import tul.swiercz.thesis.bookmind.exception.InternalException;
+import tul.swiercz.thesis.bookmind.exception.NotFoundException;
 import tul.swiercz.thesis.bookmind.repository.AccessLevelRepository;
 import tul.swiercz.thesis.bookmind.repository.UserRepository;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -33,7 +36,7 @@ class UserServiceTest {
     private AccessLevelRepository accessLevelRepository;
 
     @Mock
-    private OneTimeUrlService oneTimeUrlService;
+    private OneTimeCodeService oneTimeCodeService;
 
     @Mock
     private MailService mailService;
@@ -42,7 +45,7 @@ class UserServiceTest {
 
     private AccessLevel accessLevel;
 
-    private OneTimeUrl oneTimeUrl;
+    private OneTimeCode oneTimeCode;
 
     @BeforeEach
     void initMocks() {
@@ -53,11 +56,12 @@ class UserServiceTest {
     void initFields() {
         user = new User();
         user.setEmail("email@domain.com");
+        user.setPassword("password");
 
         accessLevel = new AccessLevel();
 
-        oneTimeUrl = new OneTimeUrl();
-        oneTimeUrl.setUrl("url");
+        oneTimeCode = new OneTimeCode();
+        oneTimeCode.setCode("url");
     }
 
     @Test
@@ -73,15 +77,27 @@ class UserServiceTest {
     @Test
     void register() throws InternalException {
         when(accessLevelRepository.findByAuthority("ROLE_READER")).thenReturn(Optional.ofNullable(accessLevel));
-        when(oneTimeUrlService.generateRegistrationUrl(user)).thenReturn(oneTimeUrl);
+        when(oneTimeCodeService.generateRegistrationCode(user)).thenReturn(oneTimeCode);
         when(userRepository.save(user)).thenReturn(user);
 
         userService.register(user);
 
         verify(userRepository).save(user);
-        verify(oneTimeUrlService).generateRegistrationUrl(user);
+        verify(oneTimeCodeService).generateRegistrationCode(user);
         verify(mailService).sendRegisterConfirmation(eq(user.getEmail()), Mockito.notNull());
+        assertTrue(new BCryptPasswordEncoder().matches("password", user.getPassword()));
         assertEquals(1, user.getAuthorities().size());
         assertEquals(accessLevel, user.getAuthorities().get(0));
+    }
+
+    @Test
+    void confirmUser() throws NotFoundException {
+        when(oneTimeCodeService.getUserToActivate("code")).thenReturn(user);
+        user.setEnabled(false);
+
+        userService.confirmUser("code");
+
+        assertTrue(user.isEnabled());
+        verify(userRepository).save(user);
     }
 }
