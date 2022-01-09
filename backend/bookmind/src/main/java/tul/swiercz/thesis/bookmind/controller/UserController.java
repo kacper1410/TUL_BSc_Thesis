@@ -2,10 +2,10 @@ package tul.swiercz.thesis.bookmind.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import tul.swiercz.thesis.bookmind.dto.user.CreateUser;
+import tul.swiercz.thesis.bookmind.dto.user.UserListInfo;
 import tul.swiercz.thesis.bookmind.exception.InternalException;
 import tul.swiercz.thesis.bookmind.exception.NotFoundException;
 import tul.swiercz.thesis.bookmind.mapper.UserMapper;
@@ -33,10 +33,11 @@ public class UserController {
         this.userMapper = userMapper;
     }
 
-    @GetMapping("/{username}")
+    @GetMapping
     @RolesAllowed(Roles.ADMIN)
-    public ResponseEntity<UserDetails> getAll(@PathVariable String username) {
-        return ResponseEntity.ok(userService.loadUserByUsername(username));
+    public ResponseEntity<Iterable<UserListInfo>> getAll() {
+        Iterable<UserListInfo> userListInfos = userMapper.usersToDtos(userService.getAll());
+        return ResponseEntity.ok(userListInfos);
     }
 
     @PostMapping("/register")

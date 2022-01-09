@@ -9,12 +9,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import tul.swiercz.thesis.bookmind.domain.User;
 import tul.swiercz.thesis.bookmind.dto.user.CreateUser;
+import tul.swiercz.thesis.bookmind.dto.user.UserListInfo;
 import tul.swiercz.thesis.bookmind.exception.InternalException;
 import tul.swiercz.thesis.bookmind.exception.NotFoundException;
 import tul.swiercz.thesis.bookmind.mapper.UserMapper;
 import tul.swiercz.thesis.bookmind.service.UserService;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -36,6 +39,10 @@ class UserControllerTest {
 
     private CreateUser createUser;
 
+    private List<User> userList;
+
+    private List<UserListInfo> userListInfos;
+
     @BeforeEach
     void initMocks() {
         MockitoAnnotations.openMocks(this);
@@ -52,6 +59,11 @@ class UserControllerTest {
         createUser.setUsername("createUsername1");
         createUser.setPassword("createPassword1");
         createUser.setEmail("createEmail1");
+
+        userList = new ArrayList<>();
+        userList.add(user);
+
+        userListInfos = new ArrayList<>();
     }
 
     @Test
@@ -74,5 +86,16 @@ class UserControllerTest {
         verify(userService).confirmUser("code");
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
         assertNull(response.getBody());
+    }
+
+    @Test
+    void getAll() {
+        when(userService.getAll()).thenReturn(userList);
+        when(userMapper.usersToDtos(userList)).thenReturn(userListInfos);
+
+        ResponseEntity<Iterable<UserListInfo>> response = userController.getAll();
+
+        assertEquals(userListInfos, response.getBody());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 }
