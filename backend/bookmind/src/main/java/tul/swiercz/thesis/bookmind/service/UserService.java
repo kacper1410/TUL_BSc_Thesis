@@ -84,4 +84,8 @@ public class UserService extends CrudService<User> implements UserDetailsService
         user.setEnabled(true);
         userRepository.save(user);
     }
+
+    public User getByUsername(String name) {
+        return userRepository.findUserByUsername(name);
+    }
 }

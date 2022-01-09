@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import tul.swiercz.thesis.bookmind.dto.user.CreateUser;
+import tul.swiercz.thesis.bookmind.dto.user.UserInfo;
 import tul.swiercz.thesis.bookmind.dto.user.UserListInfo;
 import tul.swiercz.thesis.bookmind.exception.InternalException;
 import tul.swiercz.thesis.bookmind.exception.NotFoundException;
@@ -16,6 +17,7 @@ import javax.annotation.security.DenyAll;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import java.net.URI;
+import java.security.Principal;
 
 
 @Controller
@@ -38,6 +40,13 @@ public class UserController {
     public ResponseEntity<Iterable<UserListInfo>> getAll() {
         Iterable<UserListInfo> userListInfos = userMapper.usersToDtos(userService.getAll());
         return ResponseEntity.ok(userListInfos);
+    }
+
+    @GetMapping("/profile")
+    @RolesAllowed({Roles.READER, Roles.ADMIN, Roles.MODERATOR})
+    public ResponseEntity<UserInfo> getProfile(Principal principal) {
+        UserInfo userInfo = userMapper.userToDto(userService.getByUsername(principal.getName()));
+        return ResponseEntity.ok(userInfo);
     }
 
     @PostMapping("/register")

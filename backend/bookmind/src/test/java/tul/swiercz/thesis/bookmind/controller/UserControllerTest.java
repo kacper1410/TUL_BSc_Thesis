@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import tul.swiercz.thesis.bookmind.domain.User;
 import tul.swiercz.thesis.bookmind.dto.user.CreateUser;
+import tul.swiercz.thesis.bookmind.dto.user.UserInfo;
 import tul.swiercz.thesis.bookmind.dto.user.UserListInfo;
 import tul.swiercz.thesis.bookmind.exception.InternalException;
 import tul.swiercz.thesis.bookmind.exception.NotFoundException;
@@ -16,6 +17,7 @@ import tul.swiercz.thesis.bookmind.mapper.UserMapper;
 import tul.swiercz.thesis.bookmind.service.UserService;
 
 import java.net.URI;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +37,9 @@ class UserControllerTest {
     @Mock
     private UserMapper userMapper;
 
+    @Mock
+    private Principal principal;
+
     private User user;
 
     private CreateUser createUser;
@@ -42,6 +47,8 @@ class UserControllerTest {
     private List<User> userList;
 
     private List<UserListInfo> userListInfos;
+
+    private UserInfo userInfo;
 
     @BeforeEach
     void initMocks() {
@@ -64,6 +71,8 @@ class UserControllerTest {
         userList.add(user);
 
         userListInfos = new ArrayList<>();
+
+        userInfo = new UserInfo();
     }
 
     @Test
@@ -96,6 +105,18 @@ class UserControllerTest {
         ResponseEntity<Iterable<UserListInfo>> response = userController.getAll();
 
         assertEquals(userListInfos, response.getBody());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
+
+    @Test
+    void getProfile() {
+        when(userService.getByUsername("username")).thenReturn(user);
+        when(userMapper.userToDto(user)).thenReturn(userInfo);
+        when(principal.getName()).thenReturn("username");
+
+        ResponseEntity<UserInfo> response = userController.getProfile(principal);
+
+        assertEquals(userInfo, response.getBody());
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 }
