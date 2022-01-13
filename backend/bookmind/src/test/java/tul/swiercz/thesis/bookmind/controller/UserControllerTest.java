@@ -7,12 +7,15 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import tul.swiercz.thesis.bookmind.domain.AccessLevel;
 import tul.swiercz.thesis.bookmind.domain.User;
+import tul.swiercz.thesis.bookmind.dto.user.AccessLevelInfo;
 import tul.swiercz.thesis.bookmind.dto.user.CreateUser;
 import tul.swiercz.thesis.bookmind.dto.user.UserInfo;
 import tul.swiercz.thesis.bookmind.dto.user.UserListInfo;
 import tul.swiercz.thesis.bookmind.exception.InternalException;
 import tul.swiercz.thesis.bookmind.exception.NotFoundException;
+import tul.swiercz.thesis.bookmind.mapper.AccessLevelMapper;
 import tul.swiercz.thesis.bookmind.mapper.UserMapper;
 import tul.swiercz.thesis.bookmind.service.UserService;
 
@@ -38,6 +41,9 @@ class UserControllerTest {
     private UserMapper userMapper;
 
     @Mock
+    private AccessLevelMapper accessLevelMapper;
+
+    @Mock
     private Principal principal;
 
     private User user;
@@ -49,6 +55,10 @@ class UserControllerTest {
     private List<UserListInfo> userListInfos;
 
     private UserInfo userInfo;
+
+    private AccessLevelInfo accessLevelInfo;
+
+    private AccessLevel accessLevel;
 
     @BeforeEach
     void initMocks() {
@@ -73,6 +83,10 @@ class UserControllerTest {
         userListInfos = new ArrayList<>();
 
         userInfo = new UserInfo();
+
+        accessLevelInfo = new AccessLevelInfo();
+
+        accessLevel = new AccessLevel();
     }
 
     @Test
@@ -118,5 +132,16 @@ class UserControllerTest {
 
         assertEquals(userInfo, response.getBody());
         assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
+
+    @Test
+    void addAccessLevel() throws NotFoundException, InternalException {
+        when(accessLevelMapper.dtoToAccessLevel(accessLevelInfo)).thenReturn(accessLevel);
+
+        ResponseEntity<?> response = userController.addAccessLevel(2L, accessLevelInfo);
+
+        verify(userService).addAccessLevel(accessLevel, 2L);
+        assertEquals(HttpStatus.ACCEPTED, response.getStatusCode());
+        assertNull(response.getBody());
     }
 }

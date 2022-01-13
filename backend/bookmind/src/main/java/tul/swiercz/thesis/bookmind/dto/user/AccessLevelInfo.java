@@ -4,6 +4,9 @@ public class AccessLevelInfo {
 
     private String authority;
 
+    public AccessLevelInfo() {
+    }
+
     public AccessLevelInfo(String authority) {
         this.authority = authority;
     }

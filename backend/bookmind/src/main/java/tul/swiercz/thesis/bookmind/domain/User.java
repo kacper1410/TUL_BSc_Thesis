@@ -4,7 +4,7 @@ import org.hibernate.annotations.ColumnDefault;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name="bookmind_user")
@@ -18,7 +18,7 @@ public class User extends AbstractDomain implements UserDetails {
     private String email;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    private List<AccessLevel> authorities;
+    private Set<AccessLevel> authorities;
 
     @ColumnDefault("false")
     private boolean enabled;
@@ -27,7 +27,7 @@ public class User extends AbstractDomain implements UserDetails {
     public User() {
     }
 
-    public User(String username, String password, String email, List<AccessLevel> authorities, boolean enabled) {
+    public User(String username, String password, String email, Set<AccessLevel> authorities, boolean enabled) {
         this.username = username;
         this.password = password;
         this.email = email;
@@ -62,11 +62,11 @@ public class User extends AbstractDomain implements UserDetails {
     }
 
     @Override
-    public List<AccessLevel> getAuthorities() {
+    public Set<AccessLevel> getAuthorities() {
         return authorities;
     }
 
-    public void setAuthorities(List<AccessLevel> authorities) {
+    public void setAuthorities(Set<AccessLevel> authorities) {
         this.authorities = authorities;
     }
 
@@ -93,7 +93,5 @@ public class User extends AbstractDomain implements UserDetails {
     public boolean isCredentialsNonExpired() {
         return true;
     }
-
     //endregion
-
 }

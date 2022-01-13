@@ -16,7 +16,9 @@ import tul.swiercz.thesis.bookmind.exception.NotFoundException;
 import tul.swiercz.thesis.bookmind.repository.AccessLevelRepository;
 import tul.swiercz.thesis.bookmind.repository.UserRepository;
 
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -57,8 +59,10 @@ class UserServiceTest {
         user = new User();
         user.setEmail("email@domain.com");
         user.setPassword("password");
+        user.setAuthorities(new HashSet<>());
 
         accessLevel = new AccessLevel();
+        accessLevel.setAuthority("ROLE_READER");
 
         oneTimeCode = new OneTimeCode();
         oneTimeCode.setCode("url");
@@ -87,7 +91,7 @@ class UserServiceTest {
         verify(mailService).sendRegisterConfirmation(eq(user.getEmail()), Mockito.notNull());
         assertTrue(new BCryptPasswordEncoder().matches("password", user.getPassword()));
         assertEquals(1, user.getAuthorities().size());
-        assertEquals(accessLevel, user.getAuthorities().get(0));
+        assertTrue(user.getAuthorities().contains(accessLevel));
     }
 
     @Test
@@ -98,6 +102,17 @@ class UserServiceTest {
         userService.confirmUser("code");
 
         assertTrue(user.isEnabled());
+        verify(userRepository).save(user);
+    }
+
+    @Test
+    void addAccessLevel() throws NotFoundException, InternalException {
+        when(userRepository.findById(2L)).thenReturn(Optional.ofNullable(user));
+        when(accessLevelRepository.findByAuthority(accessLevel.getAuthority())).thenReturn(Optional.ofNullable(accessLevel));
+
+        userService.addAccessLevel(accessLevel, 2L);
+
+        assertTrue(user.getAuthorities().contains(accessLevel));
         verify(userRepository).save(user);
     }
 }

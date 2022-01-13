@@ -4,11 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import tul.swiercz.thesis.bookmind.dto.user.AccessLevelInfo;
 import tul.swiercz.thesis.bookmind.dto.user.CreateUser;
 import tul.swiercz.thesis.bookmind.dto.user.UserInfo;
 import tul.swiercz.thesis.bookmind.dto.user.UserListInfo;
 import tul.swiercz.thesis.bookmind.exception.InternalException;
 import tul.swiercz.thesis.bookmind.exception.NotFoundException;
+import tul.swiercz.thesis.bookmind.mapper.AccessLevelMapper;
 import tul.swiercz.thesis.bookmind.mapper.UserMapper;
 import tul.swiercz.thesis.bookmind.security.Roles;
 import tul.swiercz.thesis.bookmind.service.UserService;
@@ -29,10 +31,13 @@ public class UserController {
 
     private final UserMapper userMapper;
 
+    private final AccessLevelMapper accessLevelMapper;
+
     @Autowired
-    public UserController(UserService userService, UserMapper userMapper) {
+    public UserController(UserService userService, UserMapper userMapper, AccessLevelMapper accessLevelMapper) {
         this.userService = userService;
         this.userMapper = userMapper;
+        this.accessLevelMapper = accessLevelMapper;
     }
 
     @GetMapping
@@ -61,5 +66,12 @@ public class UserController {
     public ResponseEntity<?> confirmUser(@PathVariable String code) throws NotFoundException {
         userService.confirmUser(code);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/accessLevel/{userId}")
+    @RolesAllowed(Roles.ADMIN)
+    public ResponseEntity<?> addAccessLevel(@PathVariable Long userId, @RequestBody AccessLevelInfo accessLevelInfo) throws NotFoundException, InternalException {
+        userService.addAccessLevel(accessLevelMapper.dtoToAccessLevel(accessLevelInfo), userId);
+        return ResponseEntity.accepted().build();
     }
 }

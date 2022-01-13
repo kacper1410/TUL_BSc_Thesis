@@ -19,7 +19,7 @@ import tul.swiercz.thesis.bookmind.repository.AccessLevelRepository;
 import tul.swiercz.thesis.bookmind.repository.UserRepository;
 import tul.swiercz.thesis.bookmind.security.Roles;
 
-import java.util.List;
+import java.util.Set;
 
 @Service
 public class UserService extends CrudService<User> implements UserDetailsService {
@@ -76,7 +76,7 @@ public class UserService extends CrudService<User> implements UserDetailsService
     private void setReaderAuthority(User user) throws InternalException {
         AccessLevel accessLevel = accessLevelRepository.findByAuthority("ROLE_" + Roles.READER)
                 .orElseThrow(() -> new InternalException(ExceptionMessages.INTERNAL_EXCEPTION));
-        user.setAuthorities(List.of(accessLevel));
+        user.setAuthorities(Set.of(accessLevel));
     }
 
     public void confirmUser(String code) throws NotFoundException {
@@ -87,5 +87,14 @@ public class UserService extends CrudService<User> implements UserDetailsService
 
     public User getByUsername(String name) {
         return userRepository.findUserByUsername(name);
+    }
+
+    public void addAccessLevel(AccessLevel toAdd, Long userId) throws NotFoundException, InternalException {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException(ExceptionMessages.UPDATE_NOT_FOUND));
+        AccessLevel accessLevel = accessLevelRepository.findByAuthority(toAdd.getAuthority())
+                .orElseThrow(() -> new InternalException(ExceptionMessages.INTERNAL_EXCEPTION));
+        user.getAuthorities().add(accessLevel);
+        userRepository.save(user);
     }
 }
