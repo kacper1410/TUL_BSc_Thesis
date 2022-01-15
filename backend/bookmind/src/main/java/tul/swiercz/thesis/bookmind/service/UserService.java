@@ -97,4 +97,13 @@ public class UserService extends CrudService<User> implements UserDetailsService
         user.getAuthorities().add(accessLevel);
         userRepository.save(user);
     }
+
+    public void removeAccessLevel(AccessLevel toRemove, Long userId) throws NotFoundException, InternalException {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException(ExceptionMessages.UPDATE_NOT_FOUND));
+        AccessLevel accessLevel = accessLevelRepository.findByAuthority(toRemove.getAuthority())
+                .orElseThrow(() -> new InternalException(ExceptionMessages.INTERNAL_EXCEPTION));
+        user.getAuthorities().remove(accessLevel);
+        userRepository.save(user);
+    }
 }

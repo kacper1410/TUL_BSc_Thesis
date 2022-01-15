@@ -74,4 +74,11 @@ public class UserController {
         userService.addAccessLevel(accessLevelMapper.dtoToAccessLevel(accessLevelInfo), userId);
         return ResponseEntity.accepted().build();
     }
+
+    @DeleteMapping("/accessLevel/{userId}")
+    @RolesAllowed(Roles.ADMIN)
+    public ResponseEntity<?> removeAccessLevel(@PathVariable Long userId, @RequestBody AccessLevelInfo accessLevelInfo) throws NotFoundException, InternalException {
+        userService.removeAccessLevel(accessLevelMapper.dtoToAccessLevel(accessLevelInfo), userId);
+        return ResponseEntity.accepted().build();
+    }
 }

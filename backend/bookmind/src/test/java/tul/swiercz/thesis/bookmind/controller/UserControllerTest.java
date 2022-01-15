@@ -144,4 +144,15 @@ class UserControllerTest {
         assertEquals(HttpStatus.ACCEPTED, response.getStatusCode());
         assertNull(response.getBody());
     }
+
+    @Test
+    void removeAccessLevel() throws NotFoundException, InternalException {
+        when(accessLevelMapper.dtoToAccessLevel(accessLevelInfo)).thenReturn(accessLevel);
+
+        ResponseEntity<?> response = userController.removeAccessLevel(2L, accessLevelInfo);
+
+        verify(userService).removeAccessLevel(accessLevel, 2L);
+        assertEquals(HttpStatus.ACCEPTED, response.getStatusCode());
+        assertNull(response.getBody());
+    }
 }

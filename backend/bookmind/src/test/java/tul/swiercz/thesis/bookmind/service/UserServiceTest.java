@@ -18,10 +18,8 @@ import tul.swiercz.thesis.bookmind.repository.UserRepository;
 
 import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -109,10 +107,23 @@ class UserServiceTest {
     void addAccessLevel() throws NotFoundException, InternalException {
         when(userRepository.findById(2L)).thenReturn(Optional.ofNullable(user));
         when(accessLevelRepository.findByAuthority(accessLevel.getAuthority())).thenReturn(Optional.ofNullable(accessLevel));
+        user.setAuthorities(new HashSet<>());
 
         userService.addAccessLevel(accessLevel, 2L);
 
         assertTrue(user.getAuthorities().contains(accessLevel));
+        verify(userRepository).save(user);
+    }
+
+    @Test
+    void removeAccessLevel() throws NotFoundException, InternalException {
+        when(userRepository.findById(2L)).thenReturn(Optional.ofNullable(user));
+        when(accessLevelRepository.findByAuthority(accessLevel.getAuthority())).thenReturn(Optional.ofNullable(accessLevel));
+        user.getAuthorities().add(accessLevel);
+
+        userService.removeAccessLevel(accessLevel, 2L);
+
+        assertFalse(user.getAuthorities().contains(accessLevel));
         verify(userRepository).save(user);
     }
 }
