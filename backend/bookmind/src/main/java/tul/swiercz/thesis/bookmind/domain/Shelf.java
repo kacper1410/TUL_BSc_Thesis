@@ -9,6 +9,9 @@ public class Shelf extends AbstractDomain {
 
     private String name;
 
+    @Column(unique = true)
+    private String code;
+
     @ManyToMany
     private List<Book> books;
 
@@ -38,13 +41,20 @@ public class Shelf extends AbstractDomain {
     public void setBooks(List<Book> books) {
         this.books = books;
     }
-
     public User getUser() {
         return user;
     }
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
     //endregion
 

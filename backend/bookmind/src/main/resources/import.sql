@@ -19,7 +19,7 @@ INSERT INTO bookmind_book (title) VALUES ('Nad Niemnem');
 INSERT INTO bookmind_book (title) VALUES ('Poppy war');
 INSERT INTO bookmind_book (title) VALUES ('Chłopi');
 
-INSERT INTO bookmind_shelf (name, user_id) VALUES ('To read', 3);
+INSERT INTO bookmind_shelf (name, code, user_id) VALUES ('To read', 'mY40anzJr5giba1b', 3);
 
 INSERT INTO bookmind_shelf_books (shelf_id, books_id) VALUES (1, 2);
 INSERT INTO bookmind_shelf_books (shelf_id, books_id) VALUES (1, 3);
