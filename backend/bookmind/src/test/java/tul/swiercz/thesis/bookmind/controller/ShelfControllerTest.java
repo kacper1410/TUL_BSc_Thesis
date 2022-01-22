@@ -13,6 +13,7 @@ import tul.swiercz.thesis.bookmind.dto.shelf.ModifyShelf;
 import tul.swiercz.thesis.bookmind.dto.shelf.ShelfInfo;
 import tul.swiercz.thesis.bookmind.dto.shelf.ShelfListInfo;
 import tul.swiercz.thesis.bookmind.exception.NotFoundException;
+import tul.swiercz.thesis.bookmind.exception.SyncException;
 import tul.swiercz.thesis.bookmind.mapper.ShelfMapper;
 import tul.swiercz.thesis.bookmind.service.ShelfService;
 
@@ -21,7 +22,10 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.notNull;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -105,13 +109,13 @@ class ShelfControllerTest {
     }
 
     @Test
-    void update() throws NotFoundException {
+    void update() throws NotFoundException, SyncException {
         when(shelfMapper.modifyToShelf(modifyShelf)).thenReturn(shelf);
         when(principal.getName()).thenReturn(username);
 
         ResponseEntity<?> response = shelfController.update(1L, modifyShelf, principal);
 
-        verify(shelfService).update(1L, shelf, username);
+        verify(shelfService).update(eq(1L), eq(shelf), eq(username), notNull());
         assertNull(response.getBody());
         assertEquals(HttpStatus.ACCEPTED, response.getStatusCode());
     }
@@ -129,23 +133,23 @@ class ShelfControllerTest {
     }
 
     @Test
-    void addBookToShelf() throws NotFoundException {
+    void addBookToShelf() throws NotFoundException, SyncException {
         when(principal.getName()).thenReturn(username);
 
         ResponseEntity<?> response = shelfController.addBookToShelf(1L, 2L, principal);
 
-        verify(shelfService).addBookToShelf(1L, 2L, username);
+        verify(shelfService).addBookToShelf(eq(1L), eq(2L), eq(username), notNull());
         assertNull(response.getBody());
         assertEquals(HttpStatus.ACCEPTED, response.getStatusCode());
     }
 
     @Test
-    void removeBookFromShelf() throws NotFoundException {
+    void removeBookFromShelf() throws NotFoundException, SyncException {
         when(principal.getName()).thenReturn(username);
 
         ResponseEntity<?> response = shelfController.removeBookFromShelf(1L, 2L, principal);
 
-        verify(shelfService).removeBookFromShelf(1L, 2L, username);
+        verify(shelfService).removeBookFromShelf(eq(1L), eq(2L), eq(username), notNull());
         assertNull(response.getBody());
         assertEquals(HttpStatus.ACCEPTED, response.getStatusCode());
     }

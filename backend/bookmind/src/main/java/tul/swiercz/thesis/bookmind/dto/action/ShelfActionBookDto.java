@@ -1,6 +1,6 @@
 package tul.swiercz.thesis.bookmind.dto.action;
 
-import com.sun.istack.NotNull;
+import javax.validation.constraints.NotNull;
 
 public class ShelfActionBookDto extends ShelfActionDto {
 

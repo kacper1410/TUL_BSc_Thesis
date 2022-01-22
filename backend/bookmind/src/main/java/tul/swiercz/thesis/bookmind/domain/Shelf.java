@@ -1,7 +1,10 @@
 package tul.swiercz.thesis.bookmind.domain;
 
-import javax.persistence.*;
-import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import java.util.Set;
 
 @Entity
 @Table(name="bookmind_shelf")
@@ -9,11 +12,8 @@ public class Shelf extends AbstractDomain {
 
     private String name;
 
-    @Column(unique = true)
-    private String code;
-
     @ManyToMany
-    private List<Book> books;
+    private Set<Book> books;
 
     @ManyToOne
     private User user;
@@ -34,11 +34,11 @@ public class Shelf extends AbstractDomain {
         this.name = name;
     }
 
-    public List<Book> getBooks() {
+    public Set<Book> getBooks() {
         return books;
     }
 
-    public void setBooks(List<Book> books) {
+    public void setBooks(Set<Book> books) {
         this.books = books;
     }
     public User getUser() {
@@ -47,14 +47,6 @@ public class Shelf extends AbstractDomain {
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
     }
     //endregion
 

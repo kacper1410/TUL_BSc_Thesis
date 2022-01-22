@@ -1,7 +1,8 @@
 package tul.swiercz.thesis.bookmind.dto.action;
 
-import com.sun.istack.NotNull;
 import tul.swiercz.thesis.bookmind.dto.shelf.ModifyShelf;
+
+import javax.validation.constraints.NotNull;
 
 public class ShelfActionModifyDto extends ShelfActionDto {
 

@@ -4,20 +4,22 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import tul.swiercz.thesis.bookmind.domain.ShelfActionType;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
 import java.time.LocalDateTime;
 
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "shelfActionType")
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "shelfActionType", visible = true)
 @JsonSubTypes({
         @JsonSubTypes.Type(value = ShelfActionModifyDto.class, name = "UPDATE"),
-        @JsonSubTypes.Type(value = ShelfActionCreateDto.class, name = "CREATE"),
         @JsonSubTypes.Type(value = ShelfActionBookDto.class, names = {"ADD_BOOK", "REMOVE_BOOK"}),
-        @JsonSubTypes.Type(value = ShelfActionDto.class, name = "DELETE"),
 }
 )
 public class ShelfActionDto {
 
+    @NotNull
     private ShelfActionType shelfActionType;
 
+    @Past
     private LocalDateTime actionDate;
 
     public ShelfActionDto() {

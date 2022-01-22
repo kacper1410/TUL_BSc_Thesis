@@ -8,5 +8,4 @@ public interface AbstractMapper<DOMAIN> {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void update(DOMAIN newDomain, @MappingTarget DOMAIN domainToUpdate);
-
 }

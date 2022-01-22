@@ -23,10 +23,11 @@ public class ShelfAction extends AbstractDomain {
     public ShelfAction() {
     }
 
-    public ShelfAction(ShelfActionType shelfActionType, LocalDateTime actionDate, Shelf shelf) {
+    public ShelfAction(ShelfActionType shelfActionType, LocalDateTime actionDate, Shelf shelf, Book book) {
         this.shelfActionType = shelfActionType;
         this.actionDate = actionDate;
         this.shelf = shelf;
+        this.book = book;
     }
 
     public ShelfActionType getShelfActionType() {
@@ -51,6 +52,14 @@ public class ShelfAction extends AbstractDomain {
 
     public void setShelf(Shelf shelf) {
         this.shelf = shelf;
+    }
+
+    public Book getBook() {
+        return book;
+    }
+
+    public void setBook(Book book) {
+        this.book = book;
     }
     //endregion
 }
