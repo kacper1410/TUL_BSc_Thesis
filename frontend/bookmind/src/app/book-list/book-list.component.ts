@@ -27,7 +27,6 @@ export class BookListComponent implements OnInit {
                 });
             },
             (error) => {
-                console.log(this.databaseService.db.books.toArray());
                 this.databaseService.db.books.toArray().then((value: Book[]) => this.books = value);
             }
         )
