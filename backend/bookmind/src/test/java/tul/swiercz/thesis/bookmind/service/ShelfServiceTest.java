@@ -227,7 +227,7 @@ class ShelfServiceTest {
     }
 
     @Test
-    void addBookToShelfSyncException() throws NotFoundException, SyncException {
+    void addBookToShelfSyncException() {
         when(shelfRepository.findWithBooksByIdAndUserUsername(1L, username)).thenReturn(Optional.ofNullable(shelf1));
         when(bookRepository.findById(2L)).thenReturn(Optional.ofNullable(book3));
         when(shelfActionRepository.findByShelfIdAndBookId(1L, 2L)).thenReturn(shelfAction);
@@ -317,7 +317,7 @@ class ShelfServiceTest {
     }
 
     @Test
-    void removeBookFromShelfSyncException() throws NotFoundException, SyncException {
+    void removeBookFromShelfSyncException() {
         when(shelfRepository.findWithBooksByIdAndUserUsername(1L, username)).thenReturn(Optional.ofNullable(shelf1));
         when(bookRepository.findById(2L)).thenReturn(Optional.ofNullable(book2));
         when(shelfActionRepository.findByShelfIdAndBookId(1L, 2L)).thenReturn(shelfAction);
