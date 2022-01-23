@@ -11,13 +11,17 @@ import { MainComponent } from './main/main.component';
 import { ReactiveFormsModule } from "@angular/forms";
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { NavbarComponent } from './navbar/navbar.component';
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
     declarations: [
         AppComponent,
         BookListComponent,
         BookAddComponent,
-        MainComponent
+        MainComponent,
+        NavbarComponent,
+        LoginComponent
     ],
     imports: [
         BrowserModule,

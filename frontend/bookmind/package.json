@@ -26,6 +26,7 @@
     "ngx-online-status": "^1.0.1",
     "popper.js": "^1.16.1",
     "rxjs": "~6.6.0",
+    "schematics-scss-migrate": "^1.3.14",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
   },
