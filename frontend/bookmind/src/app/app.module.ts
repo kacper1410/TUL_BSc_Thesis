@@ -8,7 +8,7 @@ import { BookListComponent } from './book-list/book-list.component';
 import { HttpClientModule } from "@angular/common/http";
 import { BookAddComponent } from './book-add/book-add.component';
 import { MainComponent } from './main/main.component';
-import { ReactiveFormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { NavbarComponent } from './navbar/navbar.component';
@@ -30,11 +30,12 @@ import { LoginComponent } from './login/login.component';
         ReactiveFormsModule,
         OnlineStatusModule,
         ServiceWorkerModule.register('ngsw-worker.js', {
-          enabled: environment.production,
-          // Register the ServiceWorker as soon as the app is stable
-          // or after 30 seconds (whichever comes first).
-          registrationStrategy: 'registerWhenStable:30000'
-        })
+            enabled: environment.production,
+            // Register the ServiceWorker as soon as the app is stable
+            // or after 30 seconds (whichever comes first).
+            registrationStrategy: 'registerWhenStable:30000'
+        }),
+        FormsModule
     ],
     providers: [],
     bootstrap: [ AppComponent ]
