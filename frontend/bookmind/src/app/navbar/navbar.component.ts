@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from "../service/auth.service";
+import { NotifierService } from "angular-notifier";
 
 @Component({
     selector: 'app-navbar',
@@ -8,7 +9,7 @@ import { AuthService } from "../service/auth.service";
 })
 export class NavbarComponent implements OnInit {
 
-    constructor(public authService: AuthService) {
+    constructor(public authService: AuthService, private notifierService: NotifierService) {
     }
 
     ngOnInit(): void {
@@ -19,6 +20,6 @@ export class NavbarComponent implements OnInit {
     }
 
     test() {
-        console.log(this.authService.isAuth())
+        this.notifierService.notify('default', 'test message');
     }
 }

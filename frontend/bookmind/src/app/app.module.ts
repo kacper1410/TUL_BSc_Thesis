@@ -14,6 +14,9 @@ import { environment } from '../environments/environment';
 import { NavbarComponent } from './navbar/navbar.component';
 import { LoginComponent } from './login/login.component';
 import { AuthInterceptor } from "./interceptor/AuthInterceptor";
+import { NotifierModule } from "angular-notifier";
+import { notifierOptions } from "./config/BookmindNotifierOptions";
+import { ErrorInterceptor } from "./interceptor/ErrorInterceptor";
 
 @NgModule({
     declarations: [
@@ -37,9 +40,11 @@ import { AuthInterceptor } from "./interceptor/AuthInterceptor";
             registrationStrategy: 'registerWhenStable:30000'
         }),
         FormsModule,
+        NotifierModule.withConfig(notifierOptions)
     ],
     providers: [
-        { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+        { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+        { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     ],
     bootstrap: [ AppComponent ]
 })

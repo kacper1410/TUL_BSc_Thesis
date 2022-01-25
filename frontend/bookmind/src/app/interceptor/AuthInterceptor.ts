@@ -3,7 +3,6 @@ import { HttpBackend, HttpClient, HttpEvent, HttpHandler, HttpInterceptor, HttpR
 import { Observable } from "rxjs";
 import { AuthService } from "../service/auth.service";
 
-
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
     private httpClient: HttpClient;
