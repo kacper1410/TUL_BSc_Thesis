@@ -5,7 +5,7 @@ import { OnlineStatusModule } from 'ngx-online-status';
 
 import { AppComponent } from './app.component';
 import { BookListComponent } from './book-list/book-list.component';
-import { HttpClientModule } from "@angular/common/http";
+import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import { BookAddComponent } from './book-add/book-add.component';
 import { MainComponent } from './main/main.component';
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
@@ -13,6 +13,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { NavbarComponent } from './navbar/navbar.component';
 import { LoginComponent } from './login/login.component';
+import { AuthInterceptor } from "./interceptor/AuthInterceptor";
 
 @NgModule({
     declarations: [
@@ -35,9 +36,11 @@ import { LoginComponent } from './login/login.component';
             // or after 30 seconds (whichever comes first).
             registrationStrategy: 'registerWhenStable:30000'
         }),
-        FormsModule
+        FormsModule,
     ],
-    providers: [],
+    providers: [
+        { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+    ],
     bootstrap: [ AppComponent ]
 })
 export class AppModule {

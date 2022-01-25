@@ -48,4 +48,8 @@ export class AuthService {
         console.log(this.isAuth())
         this.cookieService.deleteAll();
     }
+
+    getJwt(): string {
+        return this.cookieService.get('jwt');
+    }
 }
