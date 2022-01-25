@@ -1,11 +1,14 @@
 package tul.swiercz.thesis.bookmind.dto.exception;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.time.LocalDateTime;
 
 public class ExceptionInfo {
 
     private String message;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private LocalDateTime timestamp;
 
     private String path;
