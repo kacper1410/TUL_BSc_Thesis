@@ -1,0 +1,18 @@
+{
+    "Exception": {
+        "UNAUTHORIZED":  "Wrong login or password!",
+        "ACCESS_DENIED": "You have no permission for this action",
+        "GET_NOT_FOUND":  "Resource you tried to access does not exist",
+        "UPDATE_NOT_FOUND": "Resource you tried to update does not exist",
+        "CODE_NOT_FOUND":  "URL you are trying to use has expired or does not exist",
+        "INTERNAL_EXCEPTION": "Something went wrong",
+        "OPTIMISTIC_LOCK":  "Resource was changed by other user",
+        "SYNC_ERROR": "Synchronization not complete"
+    },
+    "Success": {
+        "login": "Login successful"
+    },
+    "navbar": {
+        "home": "Home"
+    }
+}

@@ -5,7 +5,7 @@ import { OnlineStatusModule } from 'ngx-online-status';
 
 import { AppComponent } from './app.component';
 import { BookListComponent } from './book-list/book-list.component';
-import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
+import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from "@angular/common/http";
 import { BookAddComponent } from './book-add/book-add.component';
 import { MainComponent } from './main/main.component';
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
@@ -17,7 +17,12 @@ import { AuthInterceptor } from "./interceptor/AuthInterceptor";
 import { NotifierModule } from "angular-notifier";
 import { notifierOptions } from "./config/BookmindNotifierOptions";
 import { ErrorInterceptor } from "./interceptor/ErrorInterceptor";
+import { TranslateHttpLoader } from "@ngx-translate/http-loader";
+import { TranslateLoader, TranslateModule, TranslateService } from "@ngx-translate/core";
 
+export function rootLoaderFactory(http: HttpClient) {
+    return new TranslateHttpLoader(http)
+}
 @NgModule({
     declarations: [
         AppComponent,
@@ -40,11 +45,19 @@ import { ErrorInterceptor } from "./interceptor/ErrorInterceptor";
             registrationStrategy: 'registerWhenStable:30000'
         }),
         FormsModule,
-        NotifierModule.withConfig(notifierOptions)
+        NotifierModule.withConfig(notifierOptions),
+        TranslateModule.forRoot({
+            loader: {
+                provide: TranslateLoader,
+                useFactory: rootLoaderFactory,
+                deps: [HttpClient]
+            }
+        })
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
         { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+        TranslateService
     ],
     bootstrap: [ AppComponent ]
 })

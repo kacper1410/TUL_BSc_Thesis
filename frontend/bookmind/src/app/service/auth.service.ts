@@ -7,6 +7,7 @@ import { CookieService } from "ngx-cookie-service";
 import jwtDecode from "jwt-decode";
 import { JwtDecoded } from "../domain/JwtDecoded";
 import { Router } from "@angular/router";
+import { NotificationService } from "./notification.service";
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,10 @@ export class AuthService {
 
     private readonly url: string;
 
-    constructor(private http: HttpClient, private cookieService: CookieService, private router: Router) {
+    constructor(private http: HttpClient,
+                private cookieService: CookieService,
+                private router: Router,
+                private notify: NotificationService) {
         this.url = environment.url + '/auth/';
     }
 
@@ -23,6 +27,7 @@ export class AuthService {
         this.http.post<AuthResponse>(this.url, credentials).subscribe(
             (response) => {
                 this.decodeAuthResponse(response);
+                this.notify.success('Success.login');
                 this.router.navigateByUrl("/home");
             }
         );
