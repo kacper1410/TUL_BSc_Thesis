@@ -6,6 +6,7 @@ public class ExceptionMessages {
     private static final String EXCEPTION_PREFIX = "Exception.";
 
     public static final String UNAUTHORIZED = EXCEPTION_PREFIX + "UNAUTHORIZED";
+    public static final String NOT_AUTHENTICATED = EXCEPTION_PREFIX + "NOT_AUTHENTICATED";
     public static final String ACCESS_DENIED = EXCEPTION_PREFIX + "ACCESS_DENIED";
 
     public static final String GET_NOT_FOUND = EXCEPTION_PREFIX + "GET_NOT_FOUND";

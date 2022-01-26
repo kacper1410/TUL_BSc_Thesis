@@ -21,7 +21,10 @@ public class AuthEntryPoint implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest request,
                          HttpServletResponse response,
                          AuthenticationException authException) throws IOException {
-        ExceptionInfo httpResponse = new ExceptionInfo(ExceptionMessages.UNAUTHORIZED, LocalDateTime.now(), request.getRequestURI());
+        String requestURI = request.getRequestURI();
+        String message;
+        message = requestURI.startsWith("/auth") ? ExceptionMessages.UNAUTHORIZED : ExceptionMessages.NOT_AUTHENTICATED;
+        ExceptionInfo httpResponse = new ExceptionInfo(message, LocalDateTime.now(), requestURI);
         response.setContentType(APPLICATION_JSON_VALUE);
         response.setStatus(UNAUTHORIZED.value());
         OutputStream outputStream = response.getOutputStream();
