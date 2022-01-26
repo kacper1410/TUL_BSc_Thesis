@@ -1,6 +1,7 @@
 {
     "Exception": {
         "UNAUTHORIZED":  "Wrong login or password!",
+        "NOT_AUTHENTICATED":  "You are not authenticated!",
         "ACCESS_DENIED": "You have no permission for this action",
         "GET_NOT_FOUND":  "Resource you tried to access does not exist",
         "UPDATE_NOT_FOUND": "Resource you tried to update does not exist",

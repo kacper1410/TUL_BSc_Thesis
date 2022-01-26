@@ -11,28 +11,37 @@ import {
 import { Observable, throwError } from "rxjs";
 import { catchError } from "rxjs/operators";
 import { NotificationService } from "../service/notification.service";
+import { Router } from "@angular/router";
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
     private httpClient: HttpClient;
 
-    constructor(private httpBackend: HttpBackend, private notify: NotificationService) {
+    constructor(private httpBackend: HttpBackend,
+                private notify: NotificationService,
+                private router: Router) {
         this.httpClient = new HttpClient(httpBackend);
     }
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         return next.handle(req).pipe(
             catchError((error: HttpErrorResponse) => {
-                let errorCode: string;
-                console.error(error);
-                if (error.error instanceof ErrorEvent) {
-                    errorCode = 'Exception.INTERNAL_EXCEPTION'
-                } else {
-                    errorCode = error.error.message;
-                }
-                this.notify.error(errorCode);
+                let errorCode = this.processError(error);
+                if (error.status === 401) this.router.navigateByUrl('/login');
                 return throwError(errorCode);
             })
         );
+    }
+
+    private processError(error: HttpErrorResponse) {
+        let errorCode: string;
+        console.error(error);
+        if (error.error instanceof ErrorEvent) {
+            errorCode = 'Exception.INTERNAL_EXCEPTION'
+        } else {
+            errorCode = error.error.message;
+        }
+        this.notify.error(errorCode);
+        return errorCode;
     }
 }

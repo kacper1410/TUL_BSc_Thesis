@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { BookListComponent } from './book-list/book-list.component';
-import { BookAddComponent } from "./book-add/book-add.component";
-import { LoginComponent } from "./login/login.component";
-import { MainComponent } from "./main/main.component";
+import { BookListComponent } from './components/book-list/book-list.component';
+import { BookAddComponent } from "./components/book-add/book-add.component";
+import { LoginComponent } from "./components/login/login.component";
+import { MainComponent } from "./components/main/main.component";
 
 const routes: Routes = [
     {path: '', redirectTo: '/home', pathMatch: 'full'},
