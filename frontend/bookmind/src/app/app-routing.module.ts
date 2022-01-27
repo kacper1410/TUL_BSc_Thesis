@@ -4,12 +4,13 @@ import { BookListComponent } from './components/book-list/book-list.component';
 import { BookAddComponent } from "./components/book-add/book-add.component";
 import { LoginComponent } from "./components/login/login.component";
 import { MainComponent } from "./components/main/main.component";
+import { BookResolver } from "./resolvers/BookResolver";
 
 const routes: Routes = [
     {path: '', redirectTo: '/home', pathMatch: 'full'},
     {path: 'home', component: MainComponent},
     {path: 'login', component: LoginComponent},
-    {path: 'books', component: BookListComponent},
+    {path: 'books', component: BookListComponent, resolve: {books: BookResolver}},
     {path: 'books/add', component: BookAddComponent},
     {path: '**', redirectTo: '/home'},
 ];

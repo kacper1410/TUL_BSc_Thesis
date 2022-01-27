@@ -1,12 +1,19 @@
-<a routerLink="">Back</a>
-<button (click)="getBooks()">Get books</button>
-<table>
-    <tr>
-        <th>Id</th>
-        <th>Title</th>
-    </tr>
-    <tr *ngFor="let b of books">
-        <td>{{b.id}}</td>
-        <td>{{b.title}}</td>
-    </tr>
-</table>
+<div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+            <div class="card bg-dark text-white" style="border-radius: 1rem;">
+                <button class="btn btn-outline-secondary" (click)="getBooks()"> Refresh</button>
+                <table>
+                    <tr>
+                        <th>Id</th>
+                        <th>Title</th>
+                    </tr>
+                    <tr *ngFor="let b of books">
+                        <td>{{b.id}}</td>
+                        <td>{{b.title}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
