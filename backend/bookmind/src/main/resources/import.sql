@@ -14,10 +14,26 @@ INSERT INTO bookmind_user_authorities (user_id, authorities_id) VALUES (4, 1);
 INSERT INTO bookmind_user_authorities (user_id, authorities_id) VALUES (4, 2);
 INSERT INTO bookmind_user_authorities (user_id, authorities_id) VALUES (4, 3);
 
-INSERT INTO bookmind_book (title) VALUES ('Biblia');
-INSERT INTO bookmind_book (title) VALUES ('Nad Niemnem');
-INSERT INTO bookmind_book (title) VALUES ('Poppy war');
-INSERT INTO bookmind_book (title) VALUES ('Chłopi');
+INSERT INTO bookmind_book (title, author) VALUES ('A Tale of Two Cities', 'Charles Dickens');
+INSERT INTO bookmind_book (title, author) VALUES ('The Hobbit', 'J. R. R. Tolkien');
+INSERT INTO bookmind_book (title, author) VALUES ('Harry Potter and the Philosopher''s Stone', 'J. K. Rowling');
+INSERT INTO bookmind_book (title, author) VALUES ('The Little Prince', 'Antoine de Saint-Exupéry');
+INSERT INTO bookmind_book (title, author) VALUES ('Dream of the Red Chamber', 'Cao Xueqin');
+INSERT INTO bookmind_book (title, author) VALUES ('And Then There Were None', 'Agatha Christie');
+INSERT INTO bookmind_book (title, author) VALUES ('The Lion, the Witch and the Wardrobe', 'C. S. Lewis');
+INSERT INTO bookmind_book (title, author) VALUES ('The Adventures of Pinocchio', 'Carlo Collodi');
+INSERT INTO bookmind_book (title, author) VALUES ('The Da Vinci Code', 'Dan Brown');
+INSERT INTO bookmind_book (title, author) VALUES ('Harry Potter and the Chamber of Secrets', 'J. K. Rowling');
+INSERT INTO bookmind_book (title, author) VALUES ('Harry Potter and the Prisoner of Azkaban', 'J. K. Rowling');
+INSERT INTO bookmind_book (title, author) VALUES ('Harry Potter and the Goblet of Fire', 'J. K. Rowling');
+INSERT INTO bookmind_book (title, author) VALUES ('Harry Potter and the Order of the Phoenix', 'J. K. Rowling');
+INSERT INTO bookmind_book (title, author) VALUES ('Harry Potter and the Half-Blood Prince', 'J. K. Rowling');
+INSERT INTO bookmind_book (title, author) VALUES ('Harry Potter and the Deathly Hallows', 'J. K. Rowling');
+INSERT INTO bookmind_book (title, author) VALUES ('The Alchemist', 'Paulo Coelho');
+INSERT INTO bookmind_book (title, author) VALUES ('The Catcher in the Rye', 'J. D. Salinger');
+INSERT INTO bookmind_book (title, author) VALUES ('The Bridges of Madison County', 'Robert James Waller');
+INSERT INTO bookmind_book (title, author) VALUES ('Ben-Hur: A Tale of the Christ', 'Lew Wallace');
+INSERT INTO bookmind_book (title, author) VALUES ('You Can Heal Your Life', 'Louise Hay');
 
 INSERT INTO bookmind_shelf (name, user_id) VALUES ('To read', 3);
 

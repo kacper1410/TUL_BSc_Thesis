@@ -13,8 +13,7 @@ public class Book extends AbstractDomain {
 
     private String title;
 
-    @ManyToMany
-    private List<Author> authors;
+    private String author;
 
     //region Accessors
     public Book() {
@@ -32,12 +31,12 @@ public class Book extends AbstractDomain {
         this.title = title;
     }
 
-    public List<Author> getAuthors() {
-        return authors;
+    public String getAuthor() {
+        return author;
     }
 
-    public void setAuthors(List<Author> authors) {
-        this.authors = authors;
+    public void setAuthor(String author) {
+        this.author = author;
     }
 
     @Override
