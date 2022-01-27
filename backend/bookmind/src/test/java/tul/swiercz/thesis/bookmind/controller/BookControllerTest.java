@@ -61,10 +61,10 @@ class BookControllerTest {
     void initFields() {
         book1 = new Book("title1");
         book2 = new Book("title2");
-        bookInfo1 = new BookInfo("title3");
-        bookInfo2 = new BookInfo("title4");
-        createBook = new CreateBook("titleC");
-        modifyBook = new ModifyBook("titleM");
+        bookInfo1 = new BookInfo("title3", "author1");
+        bookInfo2 = new BookInfo("title4", "author2");
+        createBook = new CreateBook("titleC", "authorC");
+        modifyBook = new ModifyBook("titleM", "authorM");
 
         bookList = new ArrayList<>();
         bookList.add(book1);
