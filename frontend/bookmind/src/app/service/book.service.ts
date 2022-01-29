@@ -22,7 +22,10 @@ export class BookService {
     }
 
     addBook(book: any): Observable<any> {
-        return this.http.post(this.url, book)
+        return this.http.post(this.url, book);
     }
 
+    remove(id: number):  Observable<any> {
+        return this.http.delete(this.url + id);
+    }
 }

@@ -34,14 +34,13 @@ export class ErrorInterceptor implements HttpInterceptor {
     }
 
     private processError(error: HttpErrorResponse) {
-        let errorCode: string;
+        let errorCode = '';
         console.error(error);
-        if (error.error instanceof ErrorEvent) {
-            errorCode = 'Exception.INTERNAL_EXCEPTION'
-        } else {
+        if (!(error.error instanceof ErrorEvent)) {
             errorCode = error.error.message;
         }
-        this.notify.error(errorCode);
+        errorCode = errorCode? errorCode : 'Exception.INTERNAL_EXCEPTION'
+            this.notify.error(errorCode);
         return errorCode;
     }
 }

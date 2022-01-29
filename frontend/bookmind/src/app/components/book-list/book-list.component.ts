@@ -3,17 +3,21 @@ import { Book } from "../../domain/Book";
 import { BookService } from "../../service/book.service";
 import { DatabaseService } from "../../service/database.service";
 import { ActivatedRoute } from "@angular/router";
+import { ConfirmService } from "../../service/confirm.service";
 
 @Component({
     selector: 'app-book-list',
     templateUrl: './book-list.component.html',
-    styleUrls: [ './book-list.component.scss' ]
+    styleUrls: ['./book-list.component.scss']
 })
 export class BookListComponent implements OnInit {
 
     public books: Book[] = [];
 
-    constructor(private bookService: BookService, private databaseService: DatabaseService, private act: ActivatedRoute) {
+    constructor(private bookService: BookService,
+                private databaseService: DatabaseService,
+                private act: ActivatedRoute,
+                private confirm: ConfirmService) {
         this.act.data.subscribe(value => {
             this.books = value.books;
         });
@@ -33,6 +37,14 @@ export class BookListComponent implements OnInit {
             (error) => {
                 this.databaseService.db.books.toArray().then((value: Book[]) => this.books = value);
             }
+        )
+    }
+
+    delete(id: number) {
+        this.confirm.confirm('Are you sure you want to delete this book?', () =>
+            this.bookService.remove(id).subscribe(
+                () => this.getBooks()
+            )
         )
     }
 }

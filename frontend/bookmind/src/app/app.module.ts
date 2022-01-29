@@ -19,6 +19,7 @@ import { notifierOptions } from "./config/BookmindNotifierOptions";
 import { ErrorInterceptor } from "./interceptor/ErrorInterceptor";
 import { TranslateHttpLoader } from "@ngx-translate/http-loader";
 import { TranslateLoader, TranslateModule, TranslateService } from "@ngx-translate/core";
+import { NgxBootstrapConfirmModule } from "ngx-bootstrap-confirm";
 
 export function rootLoaderFactory(http: HttpClient) {
     return new TranslateHttpLoader(http)
@@ -52,7 +53,8 @@ export function rootLoaderFactory(http: HttpClient) {
                 useFactory: rootLoaderFactory,
                 deps: [HttpClient]
             }
-        })
+        }),
+        NgxBootstrapConfirmModule
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },

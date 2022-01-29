@@ -1,16 +1,21 @@
 <div class="container py-5 h-100">
     <div class="row d-flex justify-content-center align-items-center h-100">
-        <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+        <div class="col-12 col-md-8 col-lg-8 col-xl-8">
             <div class="card bg-dark text-white" style="border-radius: 1rem;">
-                <button class="btn btn-outline-secondary" (click)="getBooks()"> Refresh</button>
+                <button class="btn btn-outline-secondary" (click)="getBooks()">Refresh</button>
                 <table>
                     <tr>
-                        <th>Id</th>
                         <th>Title</th>
+                        <th>Author</th>
+                        <th>Actions</th>
                     </tr>
                     <tr *ngFor="let b of books">
-                        <td>{{b.id}}</td>
                         <td>{{b.title}}</td>
+                        <td>{{b.author}}</td>
+                        <td>
+                            <button class="btn btn-outline-secondary m-2" (click)="delete(b.id)">Delete</button>
+<!--                            <button class="btn btn-outline-secondary" (click)="delete(b.id)">Modify</button>-->
+                        </td>
                     </tr>
                 </table>
             </div>

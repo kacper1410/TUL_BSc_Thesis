@@ -1,0 +1,27 @@
+.modal-dialog {
+    width: 360px !important;
+    margin: 50px auto;
+    .modal-content {
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        background-color: $primary;
+    }
+    .confirm {
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        border-radius: 5px;
+        min-height: 162px;
+        .content {
+            padding: 20px;
+            border-radius: 10px;
+            background-color: $dark;
+            color: $white;
+            font-weight: 700;
+        }
+        .buttons {
+            padding: 10px 15px;
+            float: right;
+            button {
+                margin-right: 10px;
+            }
+        }
+    }
+}
