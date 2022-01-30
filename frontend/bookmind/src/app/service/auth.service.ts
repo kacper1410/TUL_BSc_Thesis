@@ -57,4 +57,16 @@ export class AuthService {
     getJwt(): string {
         return this.cookieService.get('jwt');
     }
+
+    isAdmin(): boolean {
+        return this.isAuth() && this.cookieService.get('authorities').includes('ROLE_ADMIN');
+    }
+
+    isModerator(): boolean {
+        return this.isAuth() && this.cookieService.get('authorities').includes('ROLE_MODERATOR');
+    }
+
+    isReader(): boolean {
+        return this.isAuth() && this.cookieService.get('authorities').includes('ROLE_READER');
+    }
 }

@@ -7,13 +7,14 @@
                     <tr>
                         <th>Title</th>
                         <th>Author</th>
-                        <th>Actions</th>
+                        <th *ngIf="authService.isModerator()">Actions</th>
                     </tr>
                     <tr *ngFor="let b of books">
-                        <td>{{b.title}}</td>
+                        <td class="p-2" >{{b.title}}</td>
                         <td>{{b.author}}</td>
                         <td>
-                            <button class="btn btn-outline-secondary m-2" (click)="delete(b.id)">Delete</button>
+                            <button class="btn btn-outline-secondary m-2" (click)="delete(b.id)" *ngIf="authService.isModerator()">Delete</button>
+
 <!--                            <button class="btn btn-outline-secondary" (click)="delete(b.id)">Modify</button>-->
                         </td>
                     </tr>

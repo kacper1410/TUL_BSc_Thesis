@@ -4,6 +4,7 @@ import { BookService } from "../../service/book.service";
 import { DatabaseService } from "../../service/database.service";
 import { ActivatedRoute } from "@angular/router";
 import { ConfirmService } from "../../service/confirm.service";
+import { AuthService } from "../../service/auth.service";
 
 @Component({
     selector: 'app-book-list',
@@ -17,7 +18,8 @@ export class BookListComponent implements OnInit {
     constructor(private bookService: BookService,
                 private databaseService: DatabaseService,
                 private act: ActivatedRoute,
-                private confirm: ConfirmService) {
+                private confirm: ConfirmService,
+                public authService: AuthService) {
         this.act.data.subscribe(value => {
             this.books = value.books;
         });

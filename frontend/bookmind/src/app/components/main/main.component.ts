@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { OnlineStatusService, OnlineStatusType } from "ngx-online-status";
+import { ConnectionService } from "../../service/connection.service";
 
 @Component({
     selector: 'app-main',
@@ -11,11 +12,6 @@ export class MainComponent implements OnInit {
     ngOnInit(): void {
     }
 
-    online = navigator.onLine;
-
-    constructor(private onlineStatusService: OnlineStatusService) {
-        this.onlineStatusService.status.subscribe(
-            (status: OnlineStatusType) => this.online = !!status
-        );
+    constructor(public connection: ConnectionService){
     }
 }
