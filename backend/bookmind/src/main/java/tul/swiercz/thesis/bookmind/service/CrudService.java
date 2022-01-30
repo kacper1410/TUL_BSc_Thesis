@@ -35,5 +35,4 @@ public abstract class CrudService<DOMAIN extends AbstractDomain> {
     public void delete(Long id) {
         getRepository().deleteById(id);
     }
-
 }
