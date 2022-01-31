@@ -2,7 +2,10 @@
     <div class="row d-flex justify-content-center align-items-center h-100">
         <div class="col-12 col-md-8 col-lg-8 col-xl-8">
             <div class="card bg-dark text-white" style="border-radius: 1rem;">
-                <button class="btn btn-outline-secondary" (click)="getBooks()">Refresh</button>
+                <div class="d-flex justify-content-end">
+                    <button class="btn btn-outline-secondary m-3" (click)="getBooks()">Refresh</button>
+                    <button class="btn btn-outline-secondary m-3" *ngIf="authService.isModerator()" routerLink="/books/add">Add book</button>
+                </div>
                 <table>
                     <tr>
                         <th>Title</th>
@@ -12,10 +15,9 @@
                     <tr *ngFor="let b of books">
                         <td class="p-2" >{{b.title}}</td>
                         <td>{{b.author}}</td>
-                        <td>
+                        <td class="d-flex justify-content-end">
                             <button class="btn btn-outline-secondary m-2" (click)="delete(b.id)" *ngIf="authService.isModerator()">Delete</button>
-
-<!--                            <button class="btn btn-outline-secondary" (click)="delete(b.id)">Modify</button>-->
+                            <button class="btn btn-outline-secondary m-2" (click)="modify(b.id)" *ngIf="authService.isModerator()">Modify</button>
                         </td>
                     </tr>
                 </table>

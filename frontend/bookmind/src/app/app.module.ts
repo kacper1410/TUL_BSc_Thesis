@@ -20,6 +20,7 @@ import { ErrorInterceptor } from "./interceptor/ErrorInterceptor";
 import { TranslateHttpLoader } from "@ngx-translate/http-loader";
 import { TranslateLoader, TranslateModule, TranslateService } from "@ngx-translate/core";
 import { NgxBootstrapConfirmModule } from "ngx-bootstrap-confirm";
+import { BookEditComponent } from './components/book-edit/book-edit.component';
 
 export function rootLoaderFactory(http: HttpClient) {
     return new TranslateHttpLoader(http)
@@ -31,7 +32,8 @@ export function rootLoaderFactory(http: HttpClient) {
         BookAddComponent,
         MainComponent,
         NavbarComponent,
-        LoginComponent
+        LoginComponent,
+        BookEditComponent
     ],
     imports: [
         BrowserModule,

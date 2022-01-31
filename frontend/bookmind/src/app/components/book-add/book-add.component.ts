@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BookService } from "../../service/book.service";
+import { defaultBook } from "../../domain/default/defaultBook";
+import { Router } from "@angular/router";
 
 @Component({
     selector: 'app-book-add',
@@ -8,15 +10,17 @@ import { BookService } from "../../service/book.service";
 })
 export class BookAddComponent implements OnInit {
 
-    constructor(private bookService: BookService) {
+    book = defaultBook();
+
+    constructor(private bookService: BookService, private router: Router) {
     }
 
     ngOnInit(): void {
     }
 
-    addBook(title: string) {
-        this.bookService.addBook({title: title}).subscribe(
-            () =>  console.log("Super")
+    addBook() {
+        this.bookService.addBook(this.book).subscribe(
+            () => this.router.navigateByUrl("/books")
         )
     }
 }

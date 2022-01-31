@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Book } from "../../domain/Book";
 import { BookService } from "../../service/book.service";
 import { DatabaseService } from "../../service/database.service";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { ConfirmService } from "../../service/confirm.service";
 import { AuthService } from "../../service/auth.service";
 
@@ -19,7 +19,8 @@ export class BookListComponent implements OnInit {
                 private databaseService: DatabaseService,
                 private act: ActivatedRoute,
                 private confirm: ConfirmService,
-                public authService: AuthService) {
+                public authService: AuthService,
+                private router: Router) {
         this.act.data.subscribe(value => {
             this.books = value.books;
         });
@@ -48,5 +49,9 @@ export class BookListComponent implements OnInit {
                 () => this.getBooks()
             )
         )
+    }
+
+    modify(id: number) {
+        this.router.navigateByUrl('/books/edit/' + id);
     }
 }

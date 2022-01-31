@@ -50,7 +50,6 @@ export class AuthService {
     }
 
     logout() {
-        console.log(this.isAuth())
         this.cookieService.deleteAll();
     }
 

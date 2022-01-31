@@ -25,7 +25,14 @@ export class BookService {
         return this.http.post(this.url, book);
     }
 
-    remove(id: number):  Observable<any> {
+    remove(id: number): Observable<any> {
         return this.http.delete(this.url + id);
+    }
+
+    getBook(id: any): Observable<Book> {
+        return this.http.get<Book>(this.url + id, {
+            observe: 'body',
+            responseType: 'json'
+        });
     }
 }
