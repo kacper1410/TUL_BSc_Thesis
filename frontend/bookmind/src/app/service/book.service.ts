@@ -21,15 +21,19 @@ export class BookService {
         });
     }
 
-    addBook(book: any): Observable<any> {
+    addBook(book: Book): Observable<any> {
         return this.http.post(this.url, book);
+    }
+
+    updateBook(book: Book, id: number): Observable<any> {
+        return this.http.put(this.url + id, book);
     }
 
     remove(id: number): Observable<any> {
         return this.http.delete(this.url + id);
     }
 
-    getBook(id: any): Observable<Book> {
+    getBook(id: number): Observable<Book> {
         return this.http.get<Book>(this.url + id, {
             observe: 'body',
             responseType: 'json'

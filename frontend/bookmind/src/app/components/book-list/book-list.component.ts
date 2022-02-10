@@ -51,7 +51,7 @@ export class BookListComponent implements OnInit {
         )
     }
 
-    modify(id: number) {
+    update(id: number) {
         this.router.navigateByUrl('/books/edit/' + id);
     }
 }

@@ -11,7 +11,10 @@
         "SYNC_ERROR": "Synchronization not complete"
     },
     "Success": {
-        "login": "Login successful"
+        "login": "Login successful",
+        "book": {
+            "update": "Book update successful"
+        }
     },
     "navbar": {
         "home": "Home",
