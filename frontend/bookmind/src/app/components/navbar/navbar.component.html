@@ -28,6 +28,10 @@
                        *ngIf="!authService.isAuth()">Login</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" [routerLink]="['/profile']"
+                       *ngIf="authService.isAuth()">{{authService.getLogin()}}</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" [routerLink]="['/home']" (click)="logout()"
                        *ngIf="authService.isAuth()">Logout</a>
                 </li>

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from "@angular/router";
-import { defaultBook } from "../../domain/default/defaultBook";
-import { BookService } from "../../service/book.service";
-import { NotificationService } from "../../service/notification.service";
+import { defaultBook } from "../../../domain/default/defaultBook";
+import { BookService } from "../../../service/book.service";
+import { NotificationService } from "../../../service/notification.service";
 
 @Component({
     selector: 'app-book-edit',
@@ -23,7 +23,6 @@ export class BookEditComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        console.log(this.book);
     }
 
     updateBook() {

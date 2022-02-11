@@ -6,7 +6,7 @@
                     <button class="btn btn-outline-secondary m-3" (click)="getBooks()">Refresh</button>
                     <button class="btn btn-outline-secondary m-3" *ngIf="authService.isModerator()" routerLink="/books/add">Add book</button>
                 </div>
-                <table>
+                <table class="text-center">
                     <tr>
                         <th>Title</th>
                         <th>Author</th>
@@ -15,7 +15,7 @@
                     <tr *ngFor="let b of books">
                         <td class="p-2" >{{b.title}}</td>
                         <td>{{b.author}}</td>
-                        <td class="d-flex justify-content-end">
+                        <td class="d-flex justify-content-center">
                             <button class="btn btn-outline-secondary m-2" (click)="delete(b.id)" *ngIf="authService.isModerator()">Delete</button>
                             <button class="btn btn-outline-secondary m-2" (click)="update(b.id)" *ngIf="authService.isModerator()">Update</button>
                         </td>

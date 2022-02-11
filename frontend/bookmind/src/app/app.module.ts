@@ -4,9 +4,9 @@ import { AppRoutingModule } from './app-routing.module';
 import { OnlineStatusModule } from 'ngx-online-status';
 
 import { AppComponent } from './app.component';
-import { BookListComponent } from './components/book-list/book-list.component';
+import { BookListComponent } from './components/book/book-list/book-list.component';
 import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from "@angular/common/http";
-import { BookAddComponent } from './components/book-add/book-add.component';
+import { BookAddComponent } from './components/book/book-add/book-add.component';
 import { MainComponent } from './components/main/main.component';
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { ServiceWorkerModule } from '@angular/service-worker';
@@ -20,7 +20,8 @@ import { ErrorInterceptor } from "./interceptor/ErrorInterceptor";
 import { TranslateHttpLoader } from "@ngx-translate/http-loader";
 import { TranslateLoader, TranslateModule, TranslateService } from "@ngx-translate/core";
 import { NgxBootstrapConfirmModule } from "ngx-bootstrap-confirm";
-import { BookEditComponent } from './components/book-edit/book-edit.component';
+import { BookEditComponent } from './components/book/book-edit/book-edit.component';
+import { ProfileComponent } from './components/profile/profile.component';
 
 export function rootLoaderFactory(http: HttpClient) {
     return new TranslateHttpLoader(http)
@@ -33,7 +34,8 @@ export function rootLoaderFactory(http: HttpClient) {
         MainComponent,
         NavbarComponent,
         LoginComponent,
-        BookEditComponent
+        BookEditComponent,
+        ProfileComponent
     ],
     imports: [
         BrowserModule,

@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Book } from "../../domain/Book";
-import { BookService } from "../../service/book.service";
-import { DatabaseService } from "../../service/database.service";
+import { Book } from "../../../domain/Book";
+import { BookService } from "../../../service/book.service";
+import { DatabaseService } from "../../../service/database.service";
 import { ActivatedRoute, Router } from "@angular/router";
-import { ConfirmService } from "../../service/confirm.service";
-import { AuthService } from "../../service/auth.service";
+import { ConfirmService } from "../../../service/confirm.service";
+import { AuthService } from "../../../service/auth.service";
 
 @Component({
     selector: 'app-book-list',

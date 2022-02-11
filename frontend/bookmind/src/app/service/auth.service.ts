@@ -68,4 +68,8 @@ export class AuthService {
     isReader(): boolean {
         return this.isAuth() && this.cookieService.get('authorities').includes('ROLE_READER');
     }
+
+    getLogin(): string {
+        return this.cookieService.get('username');
+    }
 }
