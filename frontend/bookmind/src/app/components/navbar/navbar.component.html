@@ -28,7 +28,7 @@
                        *ngIf="!authService.isAuth()">Login</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" [routerLink]="['/profile']"
+                    <a class="nav-link" [routerLink]="['/profile']" [routerLinkActive]="['active']"
                        *ngIf="authService.isAuth()">{{authService.getLogin()}}</a>
                 </li>
                 <li class="nav-item">

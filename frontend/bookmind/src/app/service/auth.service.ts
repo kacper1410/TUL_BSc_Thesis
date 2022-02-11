@@ -8,6 +8,7 @@ import jwtDecode from "jwt-decode";
 import { JwtDecoded } from "../domain/JwtDecoded";
 import { Router } from "@angular/router";
 import { NotificationService } from "./notification.service";
+import { Authority } from "../domain/Authority";
 
 @Injectable({
   providedIn: 'root'
@@ -38,7 +39,7 @@ export class AuthService {
         let decoded = jwtDecode<JwtDecoded>(response.jwtToken);
         this.cookieService.set('username', decoded.sub);
         this.cookieService.set('expires', String(decoded.exp));
-        this.cookieService.set('authorities', String(decoded.authorities));
+        this.cookieService.set('authority', String(decoded.authorities.split(";")[0]));
     }
 
     isAuth(): boolean {
@@ -58,18 +59,26 @@ export class AuthService {
     }
 
     isAdmin(): boolean {
-        return this.isAuth() && this.cookieService.get('authorities').includes('ROLE_ADMIN');
+        return this.isAuth() && this.cookieService.get('authority') === 'ROLE_ADMIN';
     }
 
     isModerator(): boolean {
-        return this.isAuth() && this.cookieService.get('authorities').includes('ROLE_MODERATOR');
+        return this.isAuth() && this.cookieService.get('authority') === 'ROLE_MODERATOR';
     }
 
     isReader(): boolean {
-        return this.isAuth() && this.cookieService.get('authorities').includes('ROLE_READER');
+        return this.isAuth() && this.cookieService.get('authority') === 'ROLE_READER';
     }
 
     getLogin(): string {
         return this.cookieService.get('username');
+    }
+
+    getCurrentAuth(): string {
+        return this.cookieService.get('authority');
+    }
+
+    setCurrentAuth(authority: string) {
+        this.cookieService.set('authority', authority);
     }
 }

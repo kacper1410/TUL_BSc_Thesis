@@ -19,6 +19,17 @@
                             <p class="fs-3">{{user.email}}</p>
                             <label class="text-white-50">Email</label>
                         </div>
+
+                        <div class="form-outline form-white mb-4">
+                            <div *ngFor="let a of user.authorities">
+                                <div class="d-flex justify-content-end me-5 pe-5">
+                                    <p class="fs-3 mt-2 mb-2 me-4">{{a.authority.split('_')[1]}}</p>
+                                    <button *ngIf="hasAuthority(a)" class="btn disabled btn-outline-secondary mb-2 mt-2 me-4"> ON</button>
+                                    <button *ngIf="!hasAuthority(a)" class="btn btn-outline-light mb-2 mt-2 me-4" (click)="setAuthority(a)">OFF</button>
+                                </div>
+                            </div>
+                            <label class="text-white-50">Authorities</label>
+                        </div>
                     </div>
 
                 </div>
