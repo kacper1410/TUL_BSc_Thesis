@@ -1,7 +1,10 @@
 package tul.swiercz.thesis.bookmind.dto;
 
+import javax.validation.constraints.NotNull;
+
 public abstract class ModifyDto {
 
+    @NotNull
     private Long version;
 
     public ModifyDto() {
