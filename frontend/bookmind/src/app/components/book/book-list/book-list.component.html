@@ -2,6 +2,7 @@
     <div class="row d-flex justify-content-center align-items-center h-100">
         <div class="col-12 col-md-8 col-lg-8 col-xl-8">
             <div class="card bg-dark text-white" style="border-radius: 1rem;">
+                <h2 class="fw-bold text-uppercase text-center mt-3 mb-0">Books</h2>
                 <div class="d-flex justify-content-end">
                     <button class="btn btn-outline-secondary m-3" (click)="getBooks()">Refresh</button>
                     <button class="btn btn-outline-secondary m-3" *ngIf="authService.isModerator()" routerLink="/books/add">Add book</button>

@@ -1,0 +1,8 @@
+import { Book } from "./Book";
+
+export interface Shelf {
+    id: number;
+    version: number;
+    name: string;
+    books: Book[]
+}

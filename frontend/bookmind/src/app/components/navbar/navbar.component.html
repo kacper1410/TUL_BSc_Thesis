@@ -26,6 +26,9 @@
                 <li class="nav-item" *ngIf="authService.isAdmin()">
                     <a class="nav-link" [routerLink]="['/users']" [routerLinkActive]="['active']">Users</a>
                 </li>
+                <li class="nav-item" *ngIf="authService.isReader()">
+                    <a class="nav-link" [routerLink]="['/shelves']" [routerLinkActive]="['active']">My shelves</a>
+                </li>
                 <li class="nav-item" *ngIf="!authService.isAuth()">
                     <a class="nav-link" [routerLink]="['/login']" [routerLinkActive]="['active']">Login</a>
                 </li>
@@ -34,9 +37,6 @@
                 </li>
                 <li class="nav-item" *ngIf="authService.isAuth()">
                     <a class="nav-link" [routerLink]="['/home']" (click)="logout()">Logout</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" (click)="test()">test</a>
                 </li>
             </ul>
         </div>
