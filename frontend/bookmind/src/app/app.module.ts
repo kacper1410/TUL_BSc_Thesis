@@ -22,6 +22,7 @@ import { TranslateLoader, TranslateModule, TranslateService } from "@ngx-transla
 import { NgxBootstrapConfirmModule } from "ngx-bootstrap-confirm";
 import { BookEditComponent } from './components/book/book-edit/book-edit.component';
 import { ProfileComponent } from './components/profile/profile.component';
+import { UserListComponent } from './components/user-list/user-list.component';
 
 export function rootLoaderFactory(http: HttpClient) {
     return new TranslateHttpLoader(http)
@@ -35,7 +36,8 @@ export function rootLoaderFactory(http: HttpClient) {
         NavbarComponent,
         LoginComponent,
         BookEditComponent,
-        ProfileComponent
+        ProfileComponent,
+        UserListComponent
     ],
     imports: [
         BrowserModule,
