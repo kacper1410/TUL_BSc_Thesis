@@ -39,4 +39,28 @@ export class UserListComponent implements OnInit {
             () => this.getUsers()
         )
     }
+
+    removeAuth(id: number, auth: string) {
+        this.userService.removeAuth(id, {authority: auth}).subscribe(
+            () => this.getUsers()
+        )
+    }
+
+    addAuth(id: number, auth: string) {
+        this.userService.addAuth(id, {authority: auth}).subscribe(
+            () => this.getUsers()
+        )
+    }
+
+    isAdmin(user: User): boolean {
+        return user.authorities.some(auth => auth.authority === 'ROLE_ADMIN');
+    }
+
+    isModerator(user: User) {
+        return user.authorities.some(auth => auth.authority === 'ROLE_MODERATOR');
+    }
+
+    isReader(user: User) {
+        return user.authorities.some(auth => auth.authority === 'ROLE_READER');
+    }
 }

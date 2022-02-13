@@ -10,12 +10,39 @@
                         <th>Username</th>
                         <th>Email</th>
                         <th>Enabled</th>
+                        <th>Authorities</th>
                         <th>Actions</th>
                     </tr>
                     <tr *ngFor="let u of users">
-                        <td class="p-2" >{{u.username}}</td>
-                        <td>{{u.email}}</td>
-                        <td>{{u.enabled}}</td>
+                        <td class="p-2 align-top">{{u.username}}</td>
+                        <td class="p-2 align-top">{{u.email}}</td>
+                        <td class="p-2 align-top">{{u.enabled}}</td>
+                        <td class="p-2 align-top">
+                            <div *ngIf="isAdmin(u)">
+                                Admin
+                                <button class="btn btn-outline-secondary m-1" (click)="removeAuth(u.id, 'ROLE_ADMIN')">REMOVE</button>
+                            </div>
+                            <div *ngIf="!isAdmin(u)" class="text-white-50">
+                                Admin
+                                <button class="btn btn-outline-secondary m-1" (click)="addAuth(u.id, 'ROLE_ADMIN')">ADD</button>
+                            </div>
+                            <div *ngIf="isModerator(u)">
+                                Moderator
+                                <button class="btn btn-outline-secondary m-1" (click)="removeAuth(u.id, 'ROLE_MODERATOR')">REMOVE</button>
+                            </div>
+                            <div *ngIf="!isModerator(u)" class="text-white-50">
+                                Moderator
+                                <button class="btn btn-outline-secondary m-1" (click)="addAuth(u.id, 'ROLE_MODERATOR')">ADD</button>
+                            </div>
+                            <div *ngIf="isReader(u)">
+                                Reader
+                                <button class="btn btn-outline-secondary m-1" (click)="removeAuth(u.id, 'ROLE_READER')">REMOVE</button>
+                            </div>
+                            <div *ngIf="!isReader(u)" class="text-white-50">
+                                Reader
+                                <button class="btn btn-outline-secondary m-1" (click)="addAuth(u.id, 'ROLE_READER')">ADD</button>
+                            </div>
+                        </td>
                         <td class="d-flex justify-content-center">
                             <button class="btn btn-outline-secondary m-2" (click)="disable(u.id)" *ngIf="u.enabled">Disable</button>
                             <button class="btn btn-outline-secondary m-2" (click)="enable(u.id)" *ngIf="!u.enabled">Enable</button>
