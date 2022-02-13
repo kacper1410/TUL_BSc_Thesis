@@ -106,4 +106,18 @@ public class UserService extends CrudService<User> implements UserDetailsService
         user.getAuthorities().remove(accessLevel);
         userRepository.save(user);
     }
+
+    public void enableUser(Long userId) throws NotFoundException {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException(ExceptionMessages.UPDATE_NOT_FOUND));
+        user.setEnabled(true);
+        userRepository.save(user);
+    }
+
+    public void disableUser(Long userId) throws NotFoundException {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException(ExceptionMessages.UPDATE_NOT_FOUND));
+        user.setEnabled(false);
+        userRepository.save(user);
+    }
 }

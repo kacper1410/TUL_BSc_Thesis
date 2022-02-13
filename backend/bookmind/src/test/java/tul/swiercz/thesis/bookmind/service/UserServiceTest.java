@@ -126,4 +126,26 @@ class UserServiceTest {
         assertFalse(user.getAuthorities().contains(accessLevel));
         verify(userRepository).save(user);
     }
+
+    @Test
+    void enableUser() throws NotFoundException {
+        when(userRepository.findById(2L)).thenReturn(Optional.ofNullable(user));
+        user.setEnabled(false);
+
+        userService.enableUser(2L);
+
+        assertTrue(user.isEnabled());
+        verify(userRepository).save(user);
+    }
+
+    @Test
+    void disableUser() throws NotFoundException {
+        when(userRepository.findById(2L)).thenReturn(Optional.ofNullable(user));
+        user.setEnabled(true);
+
+        userService.disableUser(2L);
+
+        assertFalse(user.isEnabled());
+        verify(userRepository).save(user);
+    }
 }

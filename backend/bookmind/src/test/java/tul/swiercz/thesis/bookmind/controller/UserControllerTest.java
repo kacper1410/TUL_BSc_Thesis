@@ -155,4 +155,24 @@ class UserControllerTest {
         assertEquals(HttpStatus.ACCEPTED, response.getStatusCode());
         assertNull(response.getBody());
     }
+
+    @Test
+    void enableUser() throws NotFoundException {
+
+        ResponseEntity<?> response = userController.enableUser(2L);
+
+        verify(userService).enableUser(2L);
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+        assertNull(response.getBody());
+    }
+
+    @Test
+    void disableUser() throws NotFoundException {
+
+        ResponseEntity<?> response = userController.enableUser(2L);
+
+        verify(userService).disableUser(2L);
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+        assertNull(response.getBody());
+    }
 }

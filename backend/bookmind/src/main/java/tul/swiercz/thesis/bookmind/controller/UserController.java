@@ -81,4 +81,18 @@ public class UserController {
         userService.removeAccessLevel(accessLevelMapper.dtoToAccessLevel(accessLevelInfo), userId);
         return ResponseEntity.accepted().build();
     }
+
+    @PutMapping("/enable/{userId}")
+    @RolesAllowed(Roles.ADMIN)
+    public ResponseEntity<?> enableUser(@PathVariable Long userId) throws NotFoundException {
+        userService.enableUser(userId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/disable/{userId}")
+    @RolesAllowed(Roles.ADMIN)
+    public ResponseEntity<?> disableUser(@PathVariable Long userId) throws NotFoundException {
+        userService.disableUser(userId);
+        return ResponseEntity.noContent().build();
+    }
 }
