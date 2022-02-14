@@ -25,4 +25,8 @@ export class ShelfService {
     addShelf(shelf: Shelf): Observable<any> {
         return this.http.post(this.url + 'me', shelf);
     }
+
+    deleteShelf(id: number): Observable<any>  {
+        return this.http.delete(this.url + `me/${id}`);
+    }
 }
