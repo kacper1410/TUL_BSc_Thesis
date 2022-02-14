@@ -26,7 +26,18 @@ export class ShelfService {
         return this.http.post(this.url + 'me', shelf);
     }
 
-    deleteShelf(id: number): Observable<any>  {
+    deleteShelf(id: number): Observable<any> {
         return this.http.delete(this.url + `me/${id}`);
+    }
+
+    getShelf(id: number): Observable<Shelf> {
+        return this.http.get<Shelf>(this.url + `me/${id}`, {
+            observe: 'body',
+            responseType: 'json'
+        });
+    }
+
+    removeBookFromShelf(bookId: number, shelfId: number) {
+        return this.http.delete(this.url + `me/${shelfId}/book/${bookId}`);
     }
 }

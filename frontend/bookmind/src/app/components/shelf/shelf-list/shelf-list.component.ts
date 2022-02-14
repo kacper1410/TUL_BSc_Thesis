@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Shelf } from "../../../domain/Shelf";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { ShelfService } from "../../../service/shelf.service";
 import { ConfirmService } from "../../../service/confirm.service";
 
@@ -14,6 +14,7 @@ export class ShelfListComponent implements OnInit {
 
     constructor(private act: ActivatedRoute,
                 private confirm: ConfirmService,
+                private router: Router,
                 private shelfService: ShelfService) {
         this.act.data.subscribe(value => {
             this.shelves = value.shelves;
@@ -35,5 +36,9 @@ export class ShelfListComponent implements OnInit {
                 () => this.getShelves()
             )
         )
+    }
+
+    viewShelf(id: number) {
+        this.router.navigateByUrl(`/shelves/details/${id}`)
     }
 }
