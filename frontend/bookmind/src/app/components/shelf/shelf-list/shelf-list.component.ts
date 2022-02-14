@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Shelf } from "../../domain/Shelf";
+import { Shelf } from "../../../domain/Shelf";
 import { ActivatedRoute } from "@angular/router";
-import { ShelfService } from "../../service/shelf.service";
+import { ShelfService } from "../../../service/shelf.service";
 
 @Component({
     selector: 'app-shelf-list',

@@ -21,4 +21,8 @@ export class ShelfService {
             responseType: 'json'
         });
     }
+
+    addShelf(shelf: Shelf): Observable<any> {
+        return this.http.post(this.url + 'me', shelf);
+    }
 }

@@ -1,0 +1,31 @@
+<div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+            <div class="card bg-dark text-white" style="border-radius: 1rem;">
+                <div class="d-flex justify-content-start">
+                    <button class="btn btn-outline-secondary m-3" routerLink="/shelves">Back</button>
+                </div>
+                <div class="card-body p-5 text-center">
+
+                    <div class="mb-md-5 mt-md-4 pb-5">
+                        <form>
+                            <h2 class="fw-bold mb-2 text-uppercase">Add shelf</h2>
+                            <p class="text-light mb-5">Please enter required values!</p>
+
+                            <div class="form-outline form-white mb-4">
+                                <input [(ngModel)]="shelf.name"
+                                       class="form-control form-control-lg" name="name"/>
+                                <label class="form-label">Name*</label>
+                            </div>
+
+                            <button class="btn btn-outline-secondary btn-lg px-5" type="submit" (click)="addShelf()">
+                                Add
+                            </button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

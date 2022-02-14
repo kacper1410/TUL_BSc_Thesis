@@ -11,8 +11,9 @@ import { ProfileComponent } from "./components/profile/profile.component";
 import { ProfileResolver } from "./resolvers/ProfileResolver";
 import { UserListComponent } from "./components/user-list/user-list.component";
 import { UserResolver } from "./resolvers/UserResolver";
-import { ShelfListComponent } from "./components/shelf-list/shelf-list.component";
+import { ShelfListComponent } from "./components/shelf/shelf-list/shelf-list.component";
 import { ShelfResolver } from "./resolvers/ShelfResolver";
+import { ShelfAddComponent } from "./components/shelf/shelf-add/shelf-add.component";
 
 const routes: Routes = [
     {path: '', redirectTo: '/home', pathMatch: 'full'},
@@ -21,6 +22,7 @@ const routes: Routes = [
     {path: 'profile', component: ProfileComponent, resolve: {user: ProfileResolver}},
     {path: 'users', component: UserListComponent, resolve: {users: UserResolver}},
     {path: 'shelves', component: ShelfListComponent, resolve: {shelves: ShelfResolver}},
+    {path: 'shelves/add', component: ShelfAddComponent},
     {path: 'books', component: BookListComponent, resolve: {books: BookResolver}},
     {path: 'books/add', component: BookAddComponent},
     {path: 'books/edit/:id', component: BookEditComponent, resolve: {book: BookDetailsResolver}},
