@@ -11,12 +11,13 @@
                     <tr>
                         <th>Title</th>
                         <th>Author</th>
-                        <th *ngIf="authService.isModerator()">Actions</th>
+                        <th *ngIf="authService.isModerator() || authService.isReader()">Actions</th>
                     </tr>
                     <tr *ngFor="let b of books">
                         <td class="p-2" >{{b.title}}</td>
                         <td>{{b.author}}</td>
                         <td class="d-flex justify-content-center">
+                            <button class="btn btn-outline-secondary m-2" (click)="addToShelf(b.id)" *ngIf="authService.isReader()">Add to shelf</button>
                             <button class="btn btn-outline-secondary m-2" (click)="delete(b.id)" *ngIf="authService.isModerator()">Delete</button>
                             <button class="btn btn-outline-secondary m-2" (click)="update(b.id)" *ngIf="authService.isModerator()">Update</button>
                         </td>

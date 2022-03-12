@@ -1,0 +1,45 @@
+<div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-12 col-md-8 col-lg-8 col-xl-8">
+            <div class="card bg-dark text-white" style="border-radius: 1rem;">
+                <h2 class="fw-bold text-uppercase text-center mt-3 mb-0">Manage shelf for book</h2>
+                <div class="d-flex justify-content-end">
+                    <button class="btn btn-outline-secondary m-3" (click)="getShelvesAndBook()">Refresh</button>
+                    <button class="btn btn-outline-secondary m-3" routerLink="/shelves/add">Add shelf</button>
+                </div>
+                <div class="card-body text-center">
+
+                    <div class="mb-md-3 mt-md-2 ">
+                        <h2 class="fw-bold mb-3 text-uppercase fs-3">Book</h2>
+
+                        <div class="form-outline form-white mb-2">
+                            <p class="fs-5">{{book.title}}</p>
+                            <label class="text-white-50">Title</label>
+                        </div>
+
+                        <div class="form-outline form-white mb-2">
+                            <p class="fs-5">{{book.author}}</p>
+                            <label class="text-white-50">Author</label>
+                        </div>
+
+                    </div>
+
+                </div>
+                <table class="text-center">
+                    <tr>
+                        <th>Name</th>
+                        <th>Actions</th>
+                    </tr>
+                    <tr *ngFor="let s of shelves">
+                        <td class="p-2" >{{s.name}}</td>
+                        <td class="d-flex justify-content-center">
+                            <button class="btn btn-outline-secondary m-2" (click)="viewShelf(s.id)">View</button>
+<!--                            <button class="btn btn-outline-secondary m-2" (click)="addBookToShelf(s.id)">Add book</button>-->
+<!--                            <button class="btn btn-outline-secondary m-2" (click)="removeBookFromShelf(s.id)">Remove book</button>-->
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

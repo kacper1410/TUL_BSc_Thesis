@@ -10,7 +10,7 @@ import { ConfirmService } from "../../../service/confirm.service";
     styleUrls: ['./shelf-list.component.scss']
 })
 export class ShelfListComponent implements OnInit {
-    public shelves: Array<Shelf> = []
+    public shelves: Array<Shelf> = [];
 
     constructor(private act: ActivatedRoute,
                 private confirm: ConfirmService,

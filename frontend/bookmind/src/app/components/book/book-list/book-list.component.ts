@@ -54,4 +54,8 @@ export class BookListComponent implements OnInit {
     update(id: number) {
         this.router.navigateByUrl('/books/edit/' + id);
     }
+
+    addToShelf(id: number) {
+        this.router.navigateByUrl('/shelves/book/' + id);
+    }
 }

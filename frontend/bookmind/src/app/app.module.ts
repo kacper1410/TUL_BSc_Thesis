@@ -26,6 +26,7 @@ import { UserListComponent } from './components/user-list/user-list.component';
 import { ShelfListComponent } from './components/shelf/shelf-list/shelf-list.component';
 import { ShelfAddComponent } from './components/shelf/shelf-add/shelf-add.component';
 import { ShelfDetailsComponent } from './components/shelf/shelf-details/shelf-details.component';
+import { ShelfAddBookComponent } from './components/shelf/shelf-add-book/shelf-add-book.component';
 
 export function rootLoaderFactory(http: HttpClient) {
     return new TranslateHttpLoader(http)
@@ -43,7 +44,8 @@ export function rootLoaderFactory(http: HttpClient) {
         UserListComponent,
         ShelfListComponent,
         ShelfAddComponent,
-        ShelfDetailsComponent
+        ShelfDetailsComponent,
+        ShelfAddBookComponent
     ],
     imports: [
         BrowserModule,
