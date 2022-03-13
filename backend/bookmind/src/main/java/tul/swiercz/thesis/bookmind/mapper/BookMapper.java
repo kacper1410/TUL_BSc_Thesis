@@ -1,17 +1,21 @@
 package tul.swiercz.thesis.bookmind.mapper;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import tul.swiercz.thesis.bookmind.domain.Book;
-import tul.swiercz.thesis.bookmind.dto.book.BookInfo;
+import tul.swiercz.thesis.bookmind.dto.book.BookWithShelvesInfo;
+import tul.swiercz.thesis.bookmind.dto.book.BookListInfo;
 import tul.swiercz.thesis.bookmind.dto.book.CreateBook;
 import tul.swiercz.thesis.bookmind.dto.book.ModifyBook;
 
 @Mapper(componentModel = "spring")
 public interface BookMapper extends AbstractMapper<Book> {
 
-    BookInfo bookToDto(Book book);
+    BookWithShelvesInfo bookToDtoWithShelves(Book book);
 
-    Iterable<BookInfo> booksToDtos(Iterable<Book> books);
+    BookListInfo bookToDto(Book book);
+
+    Iterable<BookListInfo> booksToDtos(Iterable<Book> books);
 
     Book createToBook(CreateBook createBook);
 

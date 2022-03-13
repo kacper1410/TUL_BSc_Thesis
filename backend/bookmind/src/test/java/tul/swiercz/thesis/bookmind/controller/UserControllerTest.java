@@ -169,7 +169,7 @@ class UserControllerTest {
     @Test
     void disableUser() throws NotFoundException {
 
-        ResponseEntity<?> response = userController.enableUser(2L);
+        ResponseEntity<?> response = userController.disableUser(2L);
 
         verify(userService).disableUser(2L);
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());

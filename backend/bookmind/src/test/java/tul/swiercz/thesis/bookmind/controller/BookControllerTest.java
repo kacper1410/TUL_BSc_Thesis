@@ -8,7 +8,8 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import tul.swiercz.thesis.bookmind.domain.Book;
-import tul.swiercz.thesis.bookmind.dto.book.BookInfo;
+import tul.swiercz.thesis.bookmind.dto.book.BookWithShelvesInfo;
+import tul.swiercz.thesis.bookmind.dto.book.BookListInfo;
 import tul.swiercz.thesis.bookmind.dto.book.CreateBook;
 import tul.swiercz.thesis.bookmind.dto.book.ModifyBook;
 import tul.swiercz.thesis.bookmind.exception.NotFoundException;
@@ -41,11 +42,12 @@ class BookControllerTest {
 
     private Book book2;
 
-    private List<BookInfo> bookInfoList;
+    private List<BookListInfo> bookInfoList;
 
-    private BookInfo bookInfo1;
+    private BookWithShelvesInfo bookWithShelvesInfo1;
 
-    private BookInfo bookInfo2;
+    private BookListInfo bookListInfo1;
+    private BookListInfo bookListInfo2;
 
     private CreateBook createBook;
 
@@ -61,8 +63,9 @@ class BookControllerTest {
     void initFields() {
         book1 = new Book("title1");
         book2 = new Book("title2");
-        bookInfo1 = new BookInfo("title3", "author1");
-        bookInfo2 = new BookInfo("title4", "author2");
+        bookWithShelvesInfo1 = new BookWithShelvesInfo("title3", "author1", List.of());
+        bookListInfo1 = new BookListInfo("title4", "author1");
+        bookListInfo2 = new BookListInfo("title5", "author2");
         createBook = new CreateBook("titleC", "authorC");
         modifyBook = new ModifyBook("titleM", "authorM");
 
@@ -70,8 +73,8 @@ class BookControllerTest {
         bookList.add(book1);
         bookList.add(book2);
         bookInfoList = new ArrayList<>();
-        bookInfoList.add(bookInfo1);
-        bookInfoList.add(bookInfo2);
+        bookInfoList.add(bookListInfo1);
+        bookInfoList.add(bookListInfo2);
     }
 
     @Test
@@ -79,7 +82,7 @@ class BookControllerTest {
         when(bookService.getAll()).thenReturn(bookList);
         when(bookMapper.booksToDtos(bookList)).thenReturn(bookInfoList);
 
-        ResponseEntity<Iterable<BookInfo>> response = bookController.getAll();
+        ResponseEntity<Iterable<BookListInfo>> response = bookController.getAll();
 
         assertEquals(bookInfoList, response.getBody());
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -88,11 +91,11 @@ class BookControllerTest {
     @Test
     void get() throws NotFoundException {
         when(bookService.getById(1L)).thenReturn(book1);
-        when(bookMapper.bookToDto(book1)).thenReturn(bookInfo1);
+        when(bookMapper.bookToDto(book1)).thenReturn(bookListInfo1);
 
-        ResponseEntity<BookInfo> response = bookController.get(1L);
+        ResponseEntity<BookListInfo> response = bookController.get(1L);
 
-        assertEquals(bookInfo1, response.getBody());
+        assertEquals(bookListInfo1, response.getBody());
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 

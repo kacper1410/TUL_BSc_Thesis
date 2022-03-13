@@ -2,9 +2,11 @@ package tul.swiercz.thesis.bookmind.repository;
 
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.repository.CrudRepository;
+import tul.swiercz.thesis.bookmind.domain.Book;
 import tul.swiercz.thesis.bookmind.domain.Shelf;
 
 import java.util.Optional;
+import java.util.Set;
 
 public interface ShelfRepository extends CrudRepository<Shelf, Long> {
 
@@ -15,4 +17,5 @@ public interface ShelfRepository extends CrudRepository<Shelf, Long> {
     @EntityGraph(attributePaths = {"books"})
     Optional<Shelf> findWithBooksByIdAndUserUsername(Long id, String username);
 
+    Set<Shelf> findAllByBooksAndUserUsername(Book book, String username);
 }

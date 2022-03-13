@@ -1,18 +1,18 @@
 package tul.swiercz.thesis.bookmind.dto.shelf;
 
 import tul.swiercz.thesis.bookmind.dto.InfoDto;
-import tul.swiercz.thesis.bookmind.dto.book.BookInfo;
+import tul.swiercz.thesis.bookmind.dto.book.BookListInfo;
 
 public class ShelfInfo extends InfoDto {
 
     private String name;
-    private Iterable<BookInfo> books;
+    private Iterable<BookListInfo> books;
 
     //region Accessors
     public ShelfInfo() {
     }
 
-    public ShelfInfo(String name, Iterable<BookInfo> books) {
+    public ShelfInfo(String name, Iterable<BookListInfo> books) {
         this.name = name;
         this.books = books;
     }
@@ -25,11 +25,11 @@ public class ShelfInfo extends InfoDto {
         this.name = name;
     }
 
-    public Iterable<BookInfo> getBooks() {
+    public Iterable<BookListInfo> getBooks() {
         return books;
     }
 
-    public void setBooks(Iterable<BookInfo> books) {
+    public void setBooks(Iterable<BookListInfo> books) {
         this.books = books;
     }
     //endregion

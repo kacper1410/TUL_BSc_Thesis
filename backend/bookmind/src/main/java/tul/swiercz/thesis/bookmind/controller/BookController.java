@@ -4,7 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import tul.swiercz.thesis.bookmind.dto.book.BookInfo;
+import tul.swiercz.thesis.bookmind.dto.book.BookWithShelvesInfo;
+import tul.swiercz.thesis.bookmind.dto.book.BookListInfo;
 import tul.swiercz.thesis.bookmind.dto.book.CreateBook;
 import tul.swiercz.thesis.bookmind.dto.book.ModifyBook;
 import tul.swiercz.thesis.bookmind.exception.NotFoundException;
@@ -16,6 +17,7 @@ import javax.annotation.security.DenyAll;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
 import java.net.URI;
+import java.security.Principal;
 
 @Controller
 @DenyAll
@@ -33,16 +35,23 @@ public class BookController {
 
     @GetMapping
     @PermitAll
-    public ResponseEntity<Iterable<BookInfo>> getAll() {
-        Iterable<BookInfo> bookInfos = bookMapper.booksToDtos(bookService.getAll());
+    public ResponseEntity<Iterable<BookListInfo>> getAll() {
+        Iterable<BookListInfo> bookInfos = bookMapper.booksToDtos(bookService.getAll());
         return ResponseEntity.ok(bookInfos);
     }
 
     @GetMapping("/{id}")
     @PermitAll
-    public ResponseEntity<BookInfo> get(@PathVariable Long id) throws NotFoundException {
-        BookInfo bookInfo = bookMapper.bookToDto(bookService.getById(id));
+    public ResponseEntity<BookListInfo> get(@PathVariable Long id) throws NotFoundException {
+        BookListInfo bookInfo = bookMapper.bookToDto(bookService.getById(id));
         return ResponseEntity.ok(bookInfo);
+    }
+
+    @GetMapping("/{id}/shelves")
+    @RolesAllowed(Roles.READER)
+    public ResponseEntity<BookWithShelvesInfo> getWithShelves(@PathVariable Long id, Principal principal) throws NotFoundException {
+        BookWithShelvesInfo bookWithShelvesInfo = bookService.getByIdWithShelves(id, principal.getName());
+        return ResponseEntity.ok(bookWithShelvesInfo);
     }
 
     @PostMapping

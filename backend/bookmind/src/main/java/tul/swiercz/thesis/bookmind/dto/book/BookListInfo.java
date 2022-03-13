@@ -2,17 +2,17 @@ package tul.swiercz.thesis.bookmind.dto.book;
 
 import tul.swiercz.thesis.bookmind.dto.InfoDto;
 
-public class BookInfo extends InfoDto {
+public class BookListInfo extends InfoDto {
 
     private String title;
 
     private String author;
 
     //region Accessors
-    public BookInfo() {
+    public BookListInfo() {
     }
 
-    public BookInfo(String title, String author) {
+    public BookListInfo(String title, String author) {
         this.title = title;
         this.author = author;
     }
