@@ -40,4 +40,8 @@ export class ShelfService {
     removeBookFromShelf(bookId: number, shelfId: number) {
         return this.http.delete(this.url + `me/${shelfId}/book/${bookId}`);
     }
+
+    addBookToShelf(bookId: number, shelfId: number) {
+        return this.http.put(this.url + `me/${shelfId}/book/${bookId}`, {});
+    }
 }

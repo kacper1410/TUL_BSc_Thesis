@@ -40,4 +40,11 @@ export class BookService {
             responseType: 'json'
         });
     }
+
+    getBookWithShelves(id: number) {
+        return this.http.get<Book>(this.url + id + '/shelves', {
+            observe: 'body',
+            responseType: 'json'
+        });
+    }
 }

@@ -7,6 +7,7 @@ import { MainComponent } from "./components/main/main.component";
 import { BookResolver } from "./resolvers/BookResolver";
 import { BookEditComponent } from "./components/book/book-edit/book-edit.component";
 import { BookDetailsResolver } from "./resolvers/BookDetailsResolver";
+import { BookWithShelvesResolver } from "./resolvers/BookWithShelvesResolver";
 import { ProfileComponent } from "./components/profile/profile.component";
 import { ProfileResolver } from "./resolvers/ProfileResolver";
 import { UserListComponent } from "./components/user-list/user-list.component";
@@ -26,7 +27,7 @@ const routes: Routes = [
     {path: 'users', component: UserListComponent, resolve: {users: UserResolver}},
     {path: 'shelves', component: ShelfListComponent, resolve: {shelves: ShelfResolver}},
     {path: 'shelves/add', component: ShelfAddComponent},
-    {path: 'shelves/book/:id', component: ShelfAddBookComponent, resolve: {shelves: ShelfResolver, book: BookDetailsResolver}},
+    {path: 'shelves/book/:id', component: ShelfAddBookComponent, resolve: {shelves: ShelfResolver, book: BookWithShelvesResolver}},
     {path: 'shelves/details/:id', component: ShelfDetailsComponent, resolve: {shelf: ShelfDetailsResolver}},
     {path: 'books', component: BookListComponent, resolve: {books: BookResolver}},
     {path: 'books/add', component: BookAddComponent},

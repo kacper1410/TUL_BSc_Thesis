@@ -31,15 +31,36 @@ export class ShelfAddBookComponent implements OnInit {
 
 
     getShelvesAndBook() {
-        this.bookService.getBook(this.book.id).subscribe(
+        this.bookService.getBookWithShelves(this.book.id).subscribe(
             (book) => this.book = book
         )
         this.shelfService.getMyShelves().subscribe(
             (shelves) => this.shelves = shelves
         )
+        console.log(this.book)
     }
 
     viewShelf(id: number) {
         this.router.navigateByUrl(`/shelves/details/${id}`)
+    }
+
+    isOnShelf(shelfId: number) {
+        if (this.book.shelves)
+            return this.book.shelves.some(shelf => shelf.id === shelfId);
+        return false;
+    }
+
+    addBookToShelf(shelfId: number, bookId: number) {
+        this.shelfService.addBookToShelf(bookId, shelfId).subscribe(
+            () => this.getShelvesAndBook()
+        )
+    }
+
+    removeBookFromShelf(shelfId: number, bookId: number) {
+        this.confirm.confirm('Are you sure you want to remove this book from shelf?', () =>
+            this.shelfService.removeBookFromShelf(bookId, shelfId).subscribe(
+                () => this.getShelvesAndBook()
+            )
+        )
     }
 }

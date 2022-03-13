@@ -5,6 +5,7 @@ export function defaultBook(): Book {
         id: 0,
         version: 0,
         title: '',
-        author: ''
+        author: '',
+        shelves: []
     }
 }
