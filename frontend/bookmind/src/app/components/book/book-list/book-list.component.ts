@@ -31,15 +31,7 @@ export class BookListComponent implements OnInit {
 
     getBooks() {
         this.bookService.getBooks().subscribe(
-            (books: Book[]) => {
-                this.books = books;
-                books.forEach(book => {
-                    this.databaseService.db.books.put(book);
-                });
-            },
-            (error) => {
-                this.databaseService.db.books.toArray().then((value: Book[]) => this.books = value);
-            }
+            (books: Book[]) => this.books = books
         )
     }
 

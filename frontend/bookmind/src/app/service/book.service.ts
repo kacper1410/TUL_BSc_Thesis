@@ -3,6 +3,9 @@ import { Observable } from "rxjs";
 import { Book } from "../domain/Book";
 import { HttpClient } from "@angular/common/http";
 import { environment } from "../../environments/environment";
+import { tap } from "rxjs/operators";
+import { DatabaseService } from "./database.service";
+import { ConnectionService } from "./connection.service";
 
 @Injectable({
     providedIn: 'root'
@@ -11,15 +14,24 @@ export class BookService {
 
     private readonly url: string;
 
-    constructor(private http: HttpClient) {
-        this.url = environment.url + '/books/';
+    constructor(private http: HttpClient,
+                private dbService: DatabaseService,
+                    private connService: ConnectionService) {
+            this.url = environment.url + '/books/';
     }
 
     getBooks(): Observable<Book[]> {
-        return this.http.get<Book[]>(this.url, {
-            observe: 'body',
-            responseType: 'json'
-        });
+        return this.connService.getIfOnline(
+            () => this.http.get<Book[]>(this.url, {
+                observe: 'body',
+                responseType: 'json'
+            }),
+            () => this.dbService.getBooks()
+        ).pipe(
+            tap(
+                (books) => this.dbService.saveBooks(books)
+            )
+        );
     }
 
     addBook(book: Book): Observable<any> {

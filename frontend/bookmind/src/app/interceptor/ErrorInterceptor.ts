@@ -26,21 +26,22 @@ export class ErrorInterceptor implements HttpInterceptor {
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         return next.handle(req).pipe(
             catchError((error: HttpErrorResponse) => {
-                let errorCode = this.processError(error);
-                if (error.status === 401) this.router.navigateByUrl('/login');
-                return throwError(errorCode);
+                this.processError(error);
+                return throwError(error);
             })
         );
     }
 
-    private processError(error: HttpErrorResponse) {
-        let errorCode = '';
+    private processError(error: HttpErrorResponse): void {
         console.error(error);
-        if (!(error.error instanceof ErrorEvent)) {
-            errorCode = error.error.message;
-        }
-        errorCode = errorCode? errorCode : 'Exception.INTERNAL_EXCEPTION'
-            this.notify.error(errorCode);
-        return errorCode;
+
+        if (error.status < 400 || error.status > 500)
+            return;
+
+        const errorCode = error.error?.message ? error.error?.message : 'Exception.INTERNAL_EXCEPTION';
+        this.notify.error(errorCode);
+
+        if (error.status === 401)
+            this.router.navigateByUrl('/login');
     }
 }
