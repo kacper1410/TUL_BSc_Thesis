@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from "../../service/auth.service";
-import { NotifierService } from "angular-notifier";
-import { ConnectionService } from "../../service/connection.service";
 
 @Component({
     selector: 'app-navbar',
@@ -10,9 +8,7 @@ import { ConnectionService } from "../../service/connection.service";
 })
 export class NavbarComponent implements OnInit {
 
-    constructor(public authService: AuthService,
-                private notifierService: NotifierService,
-                public connection: ConnectionService) {
+    constructor(public authService: AuthService) {
     }
 
     ngOnInit(): void {
@@ -20,9 +16,5 @@ export class NavbarComponent implements OnInit {
 
     logout() {
         this.authService.logout();
-    }
-
-    test() {
-        this.notifierService.notify('default', 'test message');
     }
 }
