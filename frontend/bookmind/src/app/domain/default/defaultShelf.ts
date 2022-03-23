@@ -5,6 +5,7 @@ export function defaultShelf(): Shelf {
         id: 0,
         version: 0,
         name: '',
+        username: '',
         books: []
     }
 }

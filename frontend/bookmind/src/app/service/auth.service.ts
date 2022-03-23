@@ -8,7 +8,6 @@ import jwtDecode from "jwt-decode";
 import { JwtDecoded } from "../domain/JwtDecoded";
 import { Router } from "@angular/router";
 import { NotificationService } from "./notification.service";
-import { Authority } from "../domain/Authority";
 
 @Injectable({
   providedIn: 'root'
@@ -70,7 +69,7 @@ export class AuthService {
         return this.isAuth() && this.cookieService.get('authority') === 'ROLE_READER';
     }
 
-    getLogin(): string {
+    getUsername(): string {
         return this.cookieService.get('username');
     }
 

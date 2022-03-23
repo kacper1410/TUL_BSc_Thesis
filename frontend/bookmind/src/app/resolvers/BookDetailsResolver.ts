@@ -14,6 +14,6 @@ export class BookDetailsResolver implements Resolve<any> {
 
     resolve(route: ActivatedRouteSnapshot, rstate: RouterStateSnapshot): Observable<any> {
         const pathId = parseInt(route.params.id, 10);
-        return this.bookService.getBook(pathId);
+        return this.bookService.getBookForEdit(pathId);
     }
 }
