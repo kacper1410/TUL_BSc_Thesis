@@ -8,6 +8,8 @@ import jwtDecode from "jwt-decode";
 import { JwtDecoded } from "../domain/JwtDecoded";
 import { Router } from "@angular/router";
 import { NotificationService } from "./notification.service";
+import { DatabaseService } from "./database.service";
+import { Authority } from "../domain/Authority";
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +21,8 @@ export class AuthService {
     constructor(private http: HttpClient,
                 private cookieService: CookieService,
                 private router: Router,
-                private notify: NotificationService) {
+                private notify: NotificationService,
+                private dbService: DatabaseService) {
         this.url = environment.url + '/auth/';
     }
 
@@ -27,6 +30,7 @@ export class AuthService {
         this.http.post<AuthResponse>(this.url, credentials).subscribe(
             (response) => {
                 this.decodeAuthResponse(response);
+                this.dbService.saveUser(this.getLoggedInUser());
                 this.notify.success('Success.login');
                 this.router.navigateByUrl("/home");
             }
@@ -39,6 +43,7 @@ export class AuthService {
         this.cookieService.set('username', decoded.sub);
         this.cookieService.set('expires', String(decoded.exp));
         this.cookieService.set('authority', String(decoded.authorities.split(";")[0]));
+        this.cookieService.set('authorities', String(decoded.authorities));
     }
 
     isAuth(): boolean {
@@ -79,5 +84,19 @@ export class AuthService {
 
     setCurrentAuth(authority: string) {
         this.cookieService.set('authority', authority);
+    }
+
+    private getLoggedInUser() {
+        const auths: Authority[] = this.cookieService.get('authorities')
+            .split(';')
+            .map(auth => {
+                return {
+                    authority: auth
+                }
+            })
+        return {
+            username: this.getUsername(),
+            authorities: auths
+        }
     }
 }

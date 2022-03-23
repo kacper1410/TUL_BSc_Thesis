@@ -4,6 +4,7 @@ import { Book } from "../domain/Book";
 import { Observable } from "rxjs";
 import { fromPromise } from "rxjs/internal-compatibility";
 import { Shelf } from "../domain/Shelf";
+import { User } from "../domain/User";
 
 @Injectable({
     providedIn: 'root'
@@ -15,8 +16,9 @@ export class DatabaseService {
     constructor() {
         this.db = new Dexie("BookmindDatabase");
         this.db.version(1).stores({
-            books: "++id,title,author",
-            shelves: "++id,name,username"
+            books: "++id",
+            shelves: "++id,username",
+            users: "username"
         });
     }
 
@@ -44,6 +46,26 @@ export class DatabaseService {
                 shelf.username = username;
                 this.db.shelves.put(shelf);
             }
+        );
+    }
+
+    saveUser(newUser: any) {
+        this.getUser(newUser.username).subscribe(
+            (user) => {
+                if (user) {
+                    this.db.users.update(newUser.username, newUser);
+                } else {
+                    this.db.users.put(newUser);
+                }
+            }
+        )
+    }
+
+    getUser(username: string): Observable<User> {
+        return fromPromise(
+            this.db.users
+                .where('username').equals(username)
+                .first()
         );
     }
 }
