@@ -17,7 +17,7 @@ export class DatabaseService {
         this.db = new Dexie("BookmindDatabase");
         this.db.version(1).stores({
             books: "++id",
-            shelves: "++id,username",
+            shelves: "++id,username,*books",
             users: "username"
         });
     }
@@ -32,6 +32,23 @@ export class DatabaseService {
         return fromPromise(this.db.books.toArray());
     }
 
+    saveShelvesForUsername(shelves: Shelf[], username: string) {
+        shelves.forEach(
+            (newShelf) => {
+                this.getShelfByUsername(newShelf.id, username).subscribe(
+                    (shelf) => {
+                        if (shelf) {
+                            this.db.shelves.update(newShelf.id, newShelf);
+                        } else {
+                            newShelf.username = username;
+                            this.db.shelves.put(newShelf);
+                        }
+                    }
+                )
+            }
+        );
+    }
+
     getShelvesByUsername(username: string): Observable<Shelf[]> {
         return fromPromise(
             this.db.shelves
@@ -40,12 +57,17 @@ export class DatabaseService {
         );
     }
 
-    saveShelvesForUsername(shelves: Shelf[], username: string) {
-        shelves.forEach(
-            (shelf) => {
-                shelf.username = username;
-                this.db.shelves.put(shelf);
-            }
+    saveShelfForUsername(shelf: Shelf, username: string) {
+        shelf.username = username;
+        this.db.shelves.put(shelf);
+    }
+
+    getShelfByUsername(id: number, username: string): Observable<Shelf> {
+        return fromPromise(
+            this.db.shelves
+                .where('id').equals(id)
+                .and((shelf: Shelf) => shelf.username === username)
+                .first()
         );
     }
 

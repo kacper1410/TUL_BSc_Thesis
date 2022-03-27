@@ -46,10 +46,18 @@ export class ShelfService {
     }
 
     getShelf(id: number): Observable<Shelf> {
-        return this.http.get<Shelf>(this.url + `me/${id}`, {
-            observe: 'body',
-            responseType: 'json'
-        });
+        const username = this.authService.getUsername();
+        return this.connService.getIfOnline(
+            () => this.http.get<Shelf>(this.url + `me/${id}`, {
+                observe: 'body',
+                responseType: 'json'
+            }),
+            () => this.dbService.getShelfByUsername(id, username)
+        ).pipe(
+            tap(
+                (shelf) => this.dbService.saveShelfForUsername(shelf, username)
+            )
+        );
     }
 
     removeBookFromShelf(bookId: number, shelfId: number) {
