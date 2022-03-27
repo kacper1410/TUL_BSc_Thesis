@@ -46,6 +46,19 @@ export class AuthService {
         this.cookieService.set('authorities', String(decoded.authorities));
     }
 
+    loginOffline(username: string) {
+        this.cookieService.set('jwt', 'offline');
+        this.dbService.getUser(username).subscribe(
+            (user) => {
+                this.cookieService.set('username', user.username);
+                this.cookieService.set('expires', String((new Date().getTime() / 1000 + 900)) );
+                this.cookieService.set('authority', user.authorities[0].authority);
+                this.cookieService.set('authorities', user.authorities.map(a => a.authority).join(';'));
+                this.router.navigateByUrl("/home");
+            }
+        );
+    }
+
     isAuth(): boolean {
         return this.cookieService.get('jwt').length > 0 && !this.hasTokenExpired();
     }

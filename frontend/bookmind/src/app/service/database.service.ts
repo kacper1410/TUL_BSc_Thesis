@@ -68,4 +68,10 @@ export class DatabaseService {
                 .first()
         );
     }
+
+    getSavedUsers(): Observable<User[]> {
+        return fromPromise(
+            this.db.users.toArray()
+        );
+    }
 }

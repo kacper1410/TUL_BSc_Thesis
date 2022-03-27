@@ -1,0 +1,21 @@
+
+<div class="mb-md-5 mt-md-4 pb-5">
+    <form>
+        <h2 class="fw-bold mb-2 text-uppercase">Choose account</h2>
+        <p class="text-light mb-5">You are offline, you can only use accounts previously used on this device</p>
+
+        <table class="text-center w-100">
+            <tr>
+                <th>Username</th>
+            </tr>
+            <tr *ngFor="let u of users">
+                <td class="p-2 align-top">{{u.username}}</td>
+
+                <td class="d-flex justify-content-center">
+                    <button class="btn btn-outline-secondary m-2" (click)="login(u.username)">Login</button>
+                    <button class="btn btn-outline-secondary m-2" (click)="removeUser(u.id)">Remove</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>

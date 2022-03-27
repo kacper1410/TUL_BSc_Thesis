@@ -61,4 +61,8 @@ export class UserService {
     addAuth(id: number, auth: Authority) {
         return this.http.put(this.url + `accessLevel/${id}`, auth);
     }
+
+    getSavedUsers() {
+        return this.dbService.getSavedUsers();
+    }
 }

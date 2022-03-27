@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from "../../service/auth.service";
-import { defaultCredentials } from "../../domain/default/defaultCredentials";
+import { ConnectionService } from "../../service/connection.service";
 
 @Component({
     selector: 'app-login',
@@ -9,15 +8,9 @@ import { defaultCredentials } from "../../domain/default/defaultCredentials";
 })
 export class LoginComponent implements OnInit {
 
-    credentials = defaultCredentials();
-
-    constructor(private authService: AuthService) {
+    constructor(public connService: ConnectionService) {
     }
 
     ngOnInit(): void {
-    }
-
-    login(): void {
-        this.authService.login(this.credentials);
     }
 }
