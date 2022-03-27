@@ -33,20 +33,25 @@ export class DatabaseService {
     }
 
     saveShelvesForUsername(shelves: Shelf[], username: string) {
-        shelves.forEach(
-            (newShelf) => {
-                this.getShelfByUsername(newShelf.id, username).subscribe(
-                    (shelf) => {
-                        if (shelf) {
-                            this.db.shelves.update(newShelf.id, newShelf);
-                        } else {
-                            newShelf.username = username;
-                            this.db.shelves.put(newShelf);
-                        }
+        this.db.shelves
+            .where('username').equals(username)
+            .delete()
+            .then(
+                () => shelves.forEach(
+                    (newShelf) => {
+                        this.getShelfByUsername(newShelf.id, username).subscribe(
+                            (shelf) => {
+                                if (shelf) {
+                                    this.db.shelves.update(newShelf.id, newShelf);
+                                } else {
+                                    newShelf.username = username;
+                                    this.db.shelves.put(newShelf);
+                                }
+                            }
+                        )
                     }
                 )
-            }
-        );
+            );
     }
 
     getShelvesByUsername(username: string): Observable<Shelf[]> {
