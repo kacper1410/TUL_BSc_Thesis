@@ -5,5 +5,6 @@ export interface Shelf {
     version: number;
     name: string;
     username: string;
-    books: Book[]
+    books: Book[],
+    notSynced: boolean
 }

@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import Dexie from "dexie";
 import { Book } from "../domain/Book";
-import { Observable, of } from "rxjs";
+import { Observable } from "rxjs";
 import { fromPromise } from "rxjs/internal-compatibility";
 import { Shelf } from "../domain/Shelf";
 import { User } from "../domain/User";
+import { ADD_SHELF, REMOVE_SHELF } from "../domain/actionTypes";
 
 @Injectable({
     providedIn: 'root'
@@ -19,7 +20,7 @@ export class DatabaseService {
             books: "++id",
             shelves: "++id,username,*books",
             users: "username",
-            actions: "++id"
+            actions: "++id, shelfActionType"
         });
     }
 
@@ -106,13 +107,53 @@ export class DatabaseService {
 
     saveNewShelf(shelf: Shelf, username: string): Observable<any> {
         shelf.username = username;
-        this.db.shelves.put(shelf);
-        this.db.actions.put({
-            shelfActionType: "ADD_SHELF",
-            actionDate: new Date(),
-            username: username,
-            shelf: shelf
-        });
-        return of({});
+        shelf.notSynced = true;
+        const newShelf: any = shelf;
+        delete newShelf.id;
+        const promise = this.db.shelves.add(newShelf)
+            .then(
+                (id: number) => {
+                    newShelf.id = id;
+                    return this.db.actions.put({
+                        shelfActionType: ADD_SHELF,
+                        actionDate: new Date(),
+                        username: username,
+                        shelf: newShelf
+                    });
+                }
+            );
+
+        return fromPromise(promise);
+    }
+
+    deleteShelf(id: number, username: string): Observable<any> {
+        const promise = this.db.shelves
+            .where('id').equals(id)
+            .and((shelf: Shelf) => shelf.username === username)
+            .first()
+            .then(
+                (shelf: Shelf) => {
+                    let promiseSync;
+                    if (shelf.notSynced) {
+                        promiseSync = this.db.actions
+                            .where('shelfActionType').equals(ADD_SHELF)
+                            .and((action: any) => action.shelf.id === id)
+                            .delete()
+                    } else {
+                        promiseSync = this.db.actions.put({
+                            shelfActionType: REMOVE_SHELF,
+                            actionDate: new Date(),
+                            username: username,
+                            shelf: shelf
+                        });
+                    }
+
+                    const promiseDelete = this.db.shelves
+                        .where('id').equals(id)
+                        .delete();
+                    return fromPromise(Promise.all([promiseSync, promiseDelete]));
+                }
+            )
+        return fromPromise(promise);
     }
 }

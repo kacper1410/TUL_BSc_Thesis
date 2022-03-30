@@ -6,6 +6,7 @@ export function defaultShelf(): Shelf {
         version: 0,
         name: '',
         username: '',
-        books: []
+        books: [],
+        notSynced: false
     }
 }
