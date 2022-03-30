@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import Dexie from "dexie";
 import { Book } from "../domain/Book";
-import { Observable } from "rxjs";
+import { Observable, of } from "rxjs";
 import { fromPromise } from "rxjs/internal-compatibility";
 import { Shelf } from "../domain/Shelf";
 import { User } from "../domain/User";
@@ -18,7 +18,8 @@ export class DatabaseService {
         this.db.version(1).stores({
             books: "++id",
             shelves: "++id,username,*books",
-            users: "username"
+            users: "username",
+            actions: "++id"
         });
     }
 
@@ -34,7 +35,8 @@ export class DatabaseService {
 
     saveShelvesForUsername(shelves: Shelf[], username: string) {
         this.db.shelves
-            .where('username').equals(username)
+            .where('id').noneOf(shelves.map(s => s.id))
+            .and((shelf: Shelf) => shelf.username === username)
             .delete()
             .then(
                 () => shelves.forEach(
@@ -100,5 +102,17 @@ export class DatabaseService {
         return fromPromise(
             this.db.users.toArray()
         );
+    }
+
+    saveNewShelf(shelf: Shelf, username: string): Observable<any> {
+        shelf.username = username;
+        this.db.shelves.put(shelf);
+        this.db.actions.put({
+            shelfActionType: "ADD_SHELF",
+            actionDate: new Date(),
+            username: username,
+            shelf: shelf
+        });
+        return of({});
     }
 }

@@ -38,7 +38,10 @@ export class ShelfService {
     }
 
     addShelf(shelf: Shelf): Observable<any> {
-        return this.http.post(this.url + 'me', shelf);
+        return this.connService.getIfOnline(
+            () => this.http.post(this.url + 'me', shelf),
+            () => this.dbService.saveNewShelf(shelf, this.authService.getUsername())
+        )
     }
 
     deleteShelf(id: number): Observable<any> {
