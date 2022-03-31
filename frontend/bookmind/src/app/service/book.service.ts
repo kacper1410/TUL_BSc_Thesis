@@ -6,6 +6,7 @@ import { environment } from "../../environments/environment";
 import { tap } from "rxjs/operators";
 import { DatabaseService } from "./database.service";
 import { ConnectionService } from "./connection.service";
+import { AuthService } from "./auth.service";
 
 @Injectable({
     providedIn: 'root'
@@ -16,8 +17,9 @@ export class BookService {
 
     constructor(private http: HttpClient,
                 private dbService: DatabaseService,
-                    private connService: ConnectionService) {
-            this.url = environment.url + '/books/';
+                private connService: ConnectionService,
+                private authService: AuthService) {
+        this.url = environment.url + '/books/';
     }
 
     getBooks(): Observable<Book[]> {
@@ -54,9 +56,12 @@ export class BookService {
     }
 
     getBookWithShelves(id: number) {
-        return this.http.get<Book>(this.url + id + '/shelves', {
-            observe: 'body',
-            responseType: 'json'
-        });
+        return this.connService.getIfOnline(
+            () => this.http.get<Book>(this.url + id + '/shelves', {
+                observe: 'body',
+                responseType: 'json'
+            }),
+            () => this.dbService.getBookWithShelves(id,this.authService.getUsername())
+        );
     }
 }

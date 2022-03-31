@@ -37,7 +37,6 @@ export class ShelfAddBookComponent implements OnInit {
         this.shelfService.getMyShelves().subscribe(
             (shelves) => this.shelves = shelves
         )
-        console.log(this.book)
     }
 
     viewShelf(id: number) {

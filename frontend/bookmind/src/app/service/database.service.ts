@@ -18,7 +18,7 @@ export class DatabaseService {
         this.db = new Dexie("BookmindDatabase");
         this.db.version(1).stores({
             books: "++id",
-            shelves: "++id,username,*books",
+            shelves: "++id,username",
             users: "username",
             actions: "++id, shelfActionType"
         });
@@ -107,7 +107,7 @@ export class DatabaseService {
 
     saveNewShelf(shelf: Shelf, username: string): Observable<any> {
         shelf.username = username;
-        shelf.notSynced = true;
+        shelf.new = true;
         const newShelf: any = shelf;
         delete newShelf.id;
         const promise = this.db.shelves.add(newShelf)
@@ -134,7 +134,7 @@ export class DatabaseService {
             .then(
                 (shelf: Shelf) => {
                     let promiseSync;
-                    if (shelf.notSynced) {
+                    if (shelf.new) {
                         promiseSync = this.db.actions
                             .where('shelfActionType').equals(ADD_SHELF)
                             .and((action: any) => action.shelf.id === id)
@@ -154,6 +154,25 @@ export class DatabaseService {
                     return fromPromise(Promise.all([promiseSync, promiseDelete]));
                 }
             )
+        return fromPromise(promise);
+    }
+
+
+    getBookWithShelves(id: number, username: string): Observable<Book> {
+        const promiseBook = this.db.books
+            .where('id').equals(id)
+            .first();
+        const promiseShelves = this.db.shelves
+            .where('username').equals(username)
+            .and((shelf: Shelf) => shelf.books.some(
+                (book: Book) => book.id === id)
+            )
+            .toArray();
+        const promise = Promise.all([promiseBook, promiseShelves])
+            .then((values: any) => {
+                values[0].shelves = values[1];
+                return values[0];
+            })
         return fromPromise(promise);
     }
 }
