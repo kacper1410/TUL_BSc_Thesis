@@ -67,7 +67,15 @@ export class ShelfService {
     }
 
     removeBookFromShelf(bookId: number, shelfId: number) {
-        return this.http.delete(this.url + `me/${shelfId}/book/${bookId}`);
+        const username = this.authService.getUsername();
+        return this.connService.getIfOnline(
+            () => this.http.delete(this.url + `me/${shelfId}/book/${bookId}`),
+            () => this.dbService.removeBookFromShelfOffline(shelfId, bookId, username)
+        ).pipe(
+            tap(
+                () => this.dbService.removeBookFromShelf(shelfId, bookId, username)
+            )
+        );
     }
 
     addBookToShelf(bookId: number, shelfId: number) {

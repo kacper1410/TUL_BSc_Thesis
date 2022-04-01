@@ -5,7 +5,7 @@ import { Observable } from "rxjs";
 import { fromPromise } from "rxjs/internal-compatibility";
 import { Shelf } from "../domain/Shelf";
 import { User } from "../domain/User";
-import { ADD_SHELF, REMOVE_SHELF } from "../domain/actionTypes";
+import { ADD_BOOK, ADD_SHELF, REMOVE_BOOK, REMOVE_SHELF } from "../domain/actionTypes";
 
 @Injectable({
     providedIn: 'root'
@@ -157,7 +157,6 @@ export class DatabaseService {
         return fromPromise(promise);
     }
 
-
     getBookWithShelves(id: number, username: string): Observable<Book> {
         const promiseBook = this.db.books
             .where('id').equals(id)
@@ -174,5 +173,34 @@ export class DatabaseService {
                 return values[0];
             })
         return fromPromise(promise);
+    }
+
+    removeBookFromShelfOffline(shelfId: number, bookId: number, username: string): Observable<any> {
+        const promiseDelete = this.db.actions
+            .where('shelfActionType').equals(ADD_BOOK)
+            .and((action: any) => action.shelfId === shelfId && action.bookId === bookId)
+            .delete();
+        const promisePut = this.db.actions.put({
+            shelfActionType: REMOVE_BOOK,
+            actionDate: new Date(),
+            username: username,
+            shelfId: shelfId,
+            bookId: bookId
+        });
+        return fromPromise(Promise.all([promisePut, promiseDelete]));
+    }
+
+    removeBookFromShelf(shelfId: number, bookId: number, username: string) {
+        this.db.shelves
+            .where('id').equals(shelfId)
+            .and((shelf: Shelf) => shelf.username === username)
+            .modify(
+                (shelf: Shelf) => {
+                    const bookIndex = shelf.books.findIndex((book: Book) => book.id === bookId);
+                    if (bookIndex >= 0) {
+                        shelf.books.splice(bookIndex, 1);
+                    }
+                }
+            )
     }
 }
