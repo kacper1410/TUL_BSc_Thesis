@@ -190,8 +190,8 @@ export class DatabaseService {
         return fromPromise(Promise.all([promisePut, promiseDelete]));
     }
 
-    removeBookFromShelf(shelfId: number, bookId: number, username: string) {
-        this.db.shelves
+    removeBookFromShelf(shelfId: number, bookId: number, username: string): Observable<any> {
+        return this.db.shelves
             .where('id').equals(shelfId)
             .and((shelf: Shelf) => shelf.username === username)
             .modify(
@@ -202,5 +202,30 @@ export class DatabaseService {
                     }
                 }
             )
+    }
+
+    addBookToShelfOffline(shelfId: number, bookId: number, username: string) {
+        const promiseDelete = this.db.actions
+            .where('shelfActionType').equals(REMOVE_BOOK)
+            .and((action: any) => action.shelfId === shelfId && action.bookId === bookId)
+            .delete();
+        const promisePut = this.db.actions.put({
+            shelfActionType: ADD_BOOK,
+            actionDate: new Date(),
+            username: username,
+            shelfId: shelfId,
+            bookId: bookId
+        });
+        return fromPromise(Promise.all([promisePut, promiseDelete]));
+    }
+
+    async addBookToShelf(shelfId: number, bookId: number, username: string) {
+        const book = await this.db.books
+            .where('id').equals(bookId)
+            .first();
+        return this.db.shelves
+            .where('id').equals(shelfId)
+            .and((shelf: Shelf) => shelf.username === username)
+            .modify((shelf: Shelf) => shelf.books.push(book));
     }
 }

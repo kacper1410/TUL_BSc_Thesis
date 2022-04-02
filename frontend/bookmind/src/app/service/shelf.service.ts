@@ -5,7 +5,7 @@ import { Observable } from "rxjs";
 import { Shelf } from "../domain/Shelf";
 import { ConnectionService } from "./connection.service";
 import { DatabaseService } from "./database.service";
-import { tap } from "rxjs/operators";
+import { mergeMap, tap } from "rxjs/operators";
 import { AuthService } from "./auth.service";
 
 @Injectable({
@@ -72,13 +72,21 @@ export class ShelfService {
             () => this.http.delete(this.url + `me/${shelfId}/book/${bookId}`),
             () => this.dbService.removeBookFromShelfOffline(shelfId, bookId, username)
         ).pipe(
-            tap(
+            mergeMap(
                 () => this.dbService.removeBookFromShelf(shelfId, bookId, username)
             )
         );
     }
 
     addBookToShelf(bookId: number, shelfId: number) {
-        return this.http.put(this.url + `me/${shelfId}/book/${bookId}`, {});
+        const username = this.authService.getUsername();
+        return this.connService.getIfOnline(
+            () => this.http.put(this.url + `me/${shelfId}/book/${bookId}`, {}),
+            () => this.dbService.addBookToShelfOffline(shelfId, bookId, username)
+        ).pipe(
+            mergeMap(
+                () => this.dbService.addBookToShelf(shelfId, bookId, username)
+            )
+        );
     }
 }
