@@ -89,4 +89,8 @@ export class ShelfService {
             )
         );
     }
+
+    updateShelf(shelf: Shelf, id: number) {
+        return this.http.put(this.url + 'me/' + id, shelf);
+    }
 }

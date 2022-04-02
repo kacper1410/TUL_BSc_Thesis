@@ -14,6 +14,9 @@
         "login": "Login successful",
         "book": {
             "update": "Book update successful"
+        },
+        "shelf": {
+            "update": "Shelf update successful"
         }
     },
     "navbar": {

@@ -29,6 +29,7 @@ import { ShelfDetailsComponent } from './components/shelf/shelf-details/shelf-de
 import { ShelfAddBookComponent } from './components/shelf/shelf-add-book/shelf-add-book.component';
 import { OfflineLoginComponent } from './components/login/offline-login/offline-login.component';
 import { OnlineLoginComponent } from './components/login/online-login/online-login.component';
+import { ShelfEditComponent } from './components/shelf/shelf-edit/shelf-edit.component';
 
 export function rootLoaderFactory(http: HttpClient) {
     return new TranslateHttpLoader(http)
@@ -49,7 +50,8 @@ export function rootLoaderFactory(http: HttpClient) {
         ShelfDetailsComponent,
         ShelfAddBookComponent,
         OfflineLoginComponent,
-        OnlineLoginComponent
+        OnlineLoginComponent,
+        ShelfEditComponent
     ],
     imports: [
         BrowserModule,
