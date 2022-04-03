@@ -17,6 +17,7 @@ import tul.swiercz.thesis.bookmind.service.ShelfService;
 
 import javax.annotation.security.DenyAll;
 import javax.annotation.security.RolesAllowed;
+import javax.validation.Valid;
 import java.net.URI;
 import java.security.Principal;
 import java.time.LocalDateTime;
@@ -52,7 +53,7 @@ public class ShelfController {
 
     @PutMapping("/me/{id}")
     @RolesAllowed(Roles.READER)
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody ModifyShelf modifyShelf, Principal principal) throws NotFoundException, SyncException {
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody @Valid ModifyShelf modifyShelf, Principal principal) throws NotFoundException, SyncException {
         shelfService.update(id, shelfMapper.modifyToShelf(modifyShelf), principal.getName(), LocalDateTime.now());
         return ResponseEntity.accepted().build();
     }

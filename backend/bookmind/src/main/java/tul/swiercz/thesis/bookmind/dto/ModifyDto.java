@@ -4,7 +4,6 @@ import javax.validation.constraints.NotNull;
 
 public abstract class ModifyDto {
 
-    @NotNull
     private Long version;
 
     public ModifyDto() {
@@ -14,6 +13,7 @@ public abstract class ModifyDto {
         this.version = version;
     }
 
+    @NotNull
     public Long getVersion() {
         return version;
     }

@@ -61,19 +61,20 @@ public class ShelfService extends CrudService<Shelf> {
 
     @Transactional
     public void update(Long id, Shelf newShelf, String username, LocalDateTime actionDate) throws NotFoundException, SyncException {
-        Shelf toUpdate = shelfRepository.findByIdAndUserUsername(id, username)
+        Shelf shelf = shelfRepository.findByIdAndUserUsername(id, username)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessages.UPDATE_NOT_FOUND));
+        Shelf toUpdate = new Shelf();
+        shelfMapper.update(shelf, toUpdate);
+        shelfMapper.update(newShelf, toUpdate);
 
         ShelfAction dbAction = shelfActionRepository.findByShelfIdAndBookId(id, null);
 
         if (dbAction == null) {
-            shelfMapper.update(newShelf, toUpdate);
             shelfRepository.save(toUpdate);
 
             ShelfAction performed = new ShelfAction(ShelfActionType.UPDATE, actionDate, toUpdate, null);
             shelfActionRepository.save(performed);
         } else if (actionDate.isAfter(dbAction.getActionDate())) {
-            shelfMapper.update(newShelf, toUpdate);
             shelfRepository.save(toUpdate);
 
             dbAction.setActionDate(actionDate);

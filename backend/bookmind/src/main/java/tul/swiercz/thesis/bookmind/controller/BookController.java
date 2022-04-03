@@ -16,6 +16,7 @@ import tul.swiercz.thesis.bookmind.service.BookService;
 import javax.annotation.security.DenyAll;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
+import javax.validation.Valid;
 import java.net.URI;
 import java.security.Principal;
 
@@ -63,7 +64,7 @@ public class BookController {
 
     @PutMapping("/{id}")
     @RolesAllowed(Roles.MODERATOR)
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody ModifyBook modifyBook) throws NotFoundException {
+    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody @Valid ModifyBook modifyBook) throws NotFoundException {
         bookService.update(id, bookMapper.modifyToBook(modifyBook));
         return ResponseEntity.accepted().build();
     }
