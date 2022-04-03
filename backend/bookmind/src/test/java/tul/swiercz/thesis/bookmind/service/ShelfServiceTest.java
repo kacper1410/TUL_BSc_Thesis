@@ -2,6 +2,7 @@ package tul.swiercz.thesis.bookmind.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -69,7 +70,9 @@ class ShelfServiceTest {
     void initFields() {
         username = "username";
         shelf1 = new Shelf("name1");
+        shelf1.setId(1L);
         shelf2 = new Shelf("name2");
+        shelf2.setId(2L);
         book1 = new Book("bname1");
         book1.setId(1L);
         book2 = new Book("bname2");
@@ -112,6 +115,15 @@ class ShelfServiceTest {
         when(shelfRepository.findByIdAndUserUsername(1L, username)).thenReturn(Optional.ofNullable(shelf1));
         when(shelfRepository.findById(1L)).thenReturn(Optional.ofNullable(shelf1));
         when(shelfActionRepository.findByShelfIdAndBookId(1L, null)).thenReturn(null);
+        ArgumentCaptor<Shelf> valueCapture = ArgumentCaptor.forClass(Shelf.class);
+        doAnswer(invocation -> {
+            Shelf arg0 = invocation.getArgument(0, Shelf.class);
+            Shelf arg1 = invocation.getArgument(1, Shelf.class);
+            arg1.setId(arg0.getId());
+            arg1.setName(arg0.getName());
+            arg1.setBooks(arg0.getBooks());
+            return null;
+        }).when(shelfMapper).update(eq(shelf1), any(Shelf.class));
 
         LocalDateTime now = LocalDateTime.now();
         shelfService.update(1L, shelf2, username, now);
@@ -132,6 +144,14 @@ class ShelfServiceTest {
         when(shelfActionRepository.findByShelfIdAndBookId(1L, null)).thenReturn(shelfAction);
         LocalDateTime now = LocalDateTime.now();
         shelfAction.setActionDate(now.minus(20, ChronoUnit.HOURS));
+        doAnswer(invocation -> {
+            Shelf arg0 = invocation.getArgument(0, Shelf.class);
+            Shelf arg1 = invocation.getArgument(1, Shelf.class);
+            arg1.setId(arg0.getId());
+            arg1.setName(arg0.getName());
+            arg1.setBooks(arg0.getBooks());
+            return null;
+        }).when(shelfMapper).update(eq(shelf1), any(Shelf.class));
 
         shelfService.update(1L, shelf2, username, now);
 
