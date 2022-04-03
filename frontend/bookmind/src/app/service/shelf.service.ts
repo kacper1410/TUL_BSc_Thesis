@@ -91,6 +91,9 @@ export class ShelfService {
     }
 
     updateShelf(shelf: Shelf, id: number) {
-        return this.http.put(this.url + 'me/' + id, shelf);
+        return this.connService.getIfOnline(
+            () => this.http.put(this.url + 'me/' + id, shelf),
+            () => this.dbService.modifyShelf(id, shelf, this.authService.getUsername())
+        );
     }
 }

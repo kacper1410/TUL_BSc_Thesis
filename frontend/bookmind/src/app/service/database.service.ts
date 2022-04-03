@@ -5,7 +5,7 @@ import { Observable } from "rxjs";
 import { fromPromise } from "rxjs/internal-compatibility";
 import { Shelf } from "../domain/Shelf";
 import { User } from "../domain/User";
-import { ADD_BOOK, ADD_SHELF, REMOVE_BOOK, REMOVE_SHELF } from "../domain/actionTypes";
+import { ADD_BOOK, ADD_SHELF, REMOVE_BOOK, REMOVE_SHELF, UPDATE } from "../domain/actionTypes";
 
 @Injectable({
     providedIn: 'root'
@@ -227,5 +227,39 @@ export class DatabaseService {
             .where('id').equals(shelfId)
             .and((shelf: Shelf) => shelf.username === username)
             .modify((shelf: Shelf) => shelf.books.push(book));
+    }
+
+    modifyShelf(id: any, newShelf: Shelf, username: string) {
+        const modifyPromise = this.db.shelves
+            .where('id').equals(id)
+            .and((shelf: Shelf) => shelf.username === username)
+            .modify(
+                (shelf: Shelf) => {
+                    shelf.name = newShelf.name
+                }
+            )
+
+        const actionPromise = this.db.actions
+            .where('shelfActionType').equals(UPDATE)
+            .and((action: any) => action.shelf.id === id)
+            .modify((action: any) => {
+                action.actionDate = new Date();
+                action.shelf = newShelf;
+            })
+            .then(
+                (modified: number) => {
+                    if (modified > 0)
+                        return;
+
+                    return this.db.actions.put({
+                        shelfActionType: UPDATE,
+                        actionDate: new Date(),
+                        username: username,
+                        shelf: newShelf,
+                    });
+                }
+            )
+
+        return fromPromise(Promise.all([modifyPromise, actionPromise]));
     }
 }
