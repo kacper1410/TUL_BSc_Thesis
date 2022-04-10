@@ -20,7 +20,7 @@ export class DatabaseService {
             books: "++id",
             shelves: "++id,username",
             users: "username",
-            actions: "++id, shelfActionType"
+            actions: "++id, shelfActionType, username"
         });
     }
 
@@ -105,20 +105,21 @@ export class DatabaseService {
         );
     }
 
-    saveNewShelf(shelf: Shelf, username: string): Observable<any> {
-        shelf.username = username;
-        shelf.new = true;
-        const newShelf: any = shelf;
-        delete newShelf.id;
-        const promise = this.db.shelves.add(newShelf)
+    saveNewShelf(newShelf: Shelf, username: string): Observable<any> {
+        newShelf.username = username;
+        newShelf.new = true;
+        const shelfCopy: any = newShelf;
+        delete shelfCopy.id;
+        const promise = this.db.shelves.add(shelfCopy)
             .then(
                 (id: number) => {
-                    newShelf.id = id;
+                    shelfCopy.id = id;
                     return this.db.actions.put({
                         shelfActionType: ADD_SHELF,
                         actionDate: new Date(),
                         username: username,
-                        shelf: newShelf
+                        shelf: shelfCopy,
+                        shelfId: shelfCopy.id
                     });
                 }
             );
@@ -144,7 +145,8 @@ export class DatabaseService {
                             shelfActionType: REMOVE_SHELF,
                             actionDate: new Date(),
                             username: username,
-                            shelf: shelf
+                            shelf: shelf,
+                            shelfId: shelf.id
                         });
                     }
 
@@ -256,10 +258,17 @@ export class DatabaseService {
                         actionDate: new Date(),
                         username: username,
                         shelf: newShelf,
+                        shelfId: newShelf.id
                     });
                 }
             )
 
         return fromPromise(Promise.all([modifyPromise, actionPromise]));
+    }
+
+    getActionsForUsername(username: string) {
+        return this.db.actions
+            .where('username').equals(username)
+            .toArray();
     }
 }

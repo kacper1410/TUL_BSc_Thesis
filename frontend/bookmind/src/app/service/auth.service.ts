@@ -10,6 +10,8 @@ import { Router } from "@angular/router";
 import { NotificationService } from "./notification.service";
 import { DatabaseService } from "./database.service";
 import { Authority } from "../domain/Authority";
+import { Observable } from "rxjs";
+import { tap } from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root'
@@ -26,14 +28,14 @@ export class AuthService {
         this.url = environment.url + '/auth/';
     }
 
-    login(credentials: Credentials): void {
-        this.http.post<AuthResponse>(this.url, credentials).subscribe(
-            (response) => {
+    login(credentials: Credentials): Observable<any> {
+        return this.http.post<AuthResponse>(this.url, credentials).pipe(
+            tap((response) => {
                 this.decodeAuthResponse(response);
                 this.dbService.saveUser(this.getLoggedInUser());
                 this.notify.success('Success.login');
                 this.router.navigateByUrl("/home");
-            }
+            })
         );
     }
 
@@ -111,5 +113,9 @@ export class AuthService {
             username: this.getUsername(),
             authorities: auths
         }
+    }
+
+    public isLoggedIn(): boolean {
+        return this.isAuth() && this.getJwt() !== 'offline';
     }
 }

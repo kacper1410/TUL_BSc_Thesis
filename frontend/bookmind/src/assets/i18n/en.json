@@ -17,7 +17,8 @@
         },
         "shelf": {
             "update": "Shelf update successful"
-        }
+        },
+        "sync": "Synchronization successful"
     },
     "navbar": {
         "home": "Home",

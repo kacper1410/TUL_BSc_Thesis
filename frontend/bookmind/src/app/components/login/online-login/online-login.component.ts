@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { defaultCredentials } from "../../../domain/default/defaultCredentials";
 import { AuthService } from "../../../service/auth.service";
+import { SyncService } from "../../../service/sync.service";
 
 @Component({
     selector: 'app-online-login',
@@ -12,13 +13,16 @@ export class OnlineLoginComponent implements OnInit {
 
     credentials = defaultCredentials();
 
-    constructor(private authService: AuthService) {
+    constructor(private authService: AuthService,
+                private syncService: SyncService) {
     }
 
     ngOnInit(): void {
     }
 
     login(): void {
-        this.authService.login(this.credentials);
+        this.authService.login(this.credentials).subscribe(
+            () => this.syncService.synchronize(this.authService.getUsername())
+        );
     }
 }
