@@ -4,6 +4,7 @@ import { ADD_SHELF, REMOVE_SHELF } from "../domain/actionTypes";
 import { ShelfService } from "./shelf.service";
 import { OnlineStatusService, OnlineStatusType } from "ngx-online-status";
 import { AuthService } from "./auth.service";
+import { of } from "rxjs";
 
 @Injectable({
     providedIn: 'root'
@@ -26,31 +27,37 @@ export class SyncService {
     }
 
     public async synchronize(username: string) {
+        console.log('Synchronizing...');
         return this.dbService.getActionsForUsername(username).then(
             (actions: any[]) => {
                 const grouped = this.groupByShelf(actions);
-                console.log('SYNCING');
-                console.log(grouped);
 
                 for (let shelfId in grouped) {
-                    // this.syncShelf(Number(shelfId), grouped[shelfId]);
-                    // remove synced actions
+                    this.syncShelf(Number(shelfId), grouped[shelfId]).then(
+                        () => {
+                            console.log(`Successful synchronization of shelf with id: ${shelfId}`)
+                        }
+                    )
+                    this.dbService.removeActions(grouped[shelfId]);
                 }
             }
         );
     }
 
-    private syncShelf(shelfId: number, actions: any[]) {
-        const grouped = this.groupByActionType(actions);
-        if (grouped[REMOVE_SHELF]) {
-            this.shelfService.deleteShelf(shelfId);
-            // end sync
+    private async syncShelf(shelfId: number, actions: any[]): Promise<any> {
+        const groupedByType = this.groupByActionType(actions);
+        if (groupedByType[REMOVE_SHELF]) {
+            return this.shelfService.deleteShelf(shelfId).toPromise();
         }
-        if (grouped[ADD_SHELF]) {
-            // send add shelf req
-            // get new id from backend
+        let newId;
+        if (groupedByType[ADD_SHELF]) {
+            newId = (await this.shelfService.addShelf(groupedByType[ADD_SHELF][0].shelf).toPromise())
+                .headers.get('Location')
+                .replace('/shelves/me/', '');
         }
+        console.log(newId);
         // rest of actions send to sync endpoint
+        return of();
     }
 
     private groupByShelf(actions: any[]) {

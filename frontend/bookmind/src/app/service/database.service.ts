@@ -271,4 +271,10 @@ export class DatabaseService {
             .where('username').equals(username)
             .toArray();
     }
+
+    removeActions(actions: any[]) {
+        for (const action of actions) {
+            this.db.actions.delete(action.id);
+        }
+    }
 }

@@ -39,7 +39,7 @@ export class ShelfService {
 
     addShelf(shelf: Shelf): Observable<any> {
         return this.connService.getIfOnline(
-            () => this.http.post(this.url + 'me', shelf),
+            () => this.http.post(this.url + 'me', shelf, {observe: 'response'}),
             () => this.dbService.saveNewShelf(shelf, this.authService.getUsername())
         )
     }
