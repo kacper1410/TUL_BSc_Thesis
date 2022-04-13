@@ -69,7 +69,7 @@ class SyncControllerTest {
         action3 = new ShelfActionModifyDto();
         action3.setShelfActionType(ShelfActionType.UPDATE);
         action3.setActionDate(LocalDateTime.now());
-        action3.setModifyShelf(modifyShelf);
+        action3.setShelf(modifyShelf);
 
         actions = new ArrayList<>();
     }

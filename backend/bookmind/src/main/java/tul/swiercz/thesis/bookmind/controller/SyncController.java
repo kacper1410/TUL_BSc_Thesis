@@ -55,7 +55,7 @@ public class SyncController {
     private void performAction(Long shelfId, ShelfActionDto action, String username) throws NotFoundException, SyncException {
         switch (action.getShelfActionType()) {
             case UPDATE:
-                shelfService.update(shelfId, shelfMapper.modifyToShelf(((ShelfActionModifyDto) action).getModifyShelf()), username, action.getActionDate());
+                shelfService.update(shelfId, shelfMapper.modifyToShelf(((ShelfActionModifyDto) action).getShelf()), username, action.getActionDate());
                 break;
             case ADD_BOOK:
                 shelfService.addBookToShelf(shelfId, ((ShelfActionBookDto) action).getBookId(), username, action.getActionDate());

@@ -6,14 +6,14 @@ import javax.validation.constraints.NotNull;
 
 public class ShelfActionModifyDto extends ShelfActionDto {
 
-    private ModifyShelf modifyShelf;
+    private ModifyShelf shelf;
 
     @NotNull
-    public ModifyShelf getModifyShelf() {
-        return modifyShelf;
+    public ModifyShelf getShelf() {
+        return shelf;
     }
 
-    public void setModifyShelf(ModifyShelf modifyShelf) {
-        this.modifyShelf = modifyShelf;
+    public void setShelf(ModifyShelf shelf) {
+        this.shelf = shelf;
     }
 }
