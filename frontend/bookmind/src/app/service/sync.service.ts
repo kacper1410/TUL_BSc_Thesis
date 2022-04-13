@@ -1,19 +1,25 @@
 import { Injectable } from '@angular/core';
 import { DatabaseService } from "./database.service";
-import { ADD_SHELF, REMOVE_SHELF } from "../domain/actionTypes";
+import { ADD_BOOK, ADD_SHELF, REMOVE_BOOK, REMOVE_SHELF, UPDATE } from "../domain/actionTypes";
 import { ShelfService } from "./shelf.service";
 import { OnlineStatusService, OnlineStatusType } from "ngx-online-status";
 import { AuthService } from "./auth.service";
-import { of } from "rxjs";
+import { Observable, of } from "rxjs";
+import { HttpClient } from "@angular/common/http";
+import { environment } from "../../environments/environment";
 
 @Injectable({
     providedIn: 'root'
 })
 export class SyncService {
 
+    private readonly url: string;
+
     constructor(private onlineStatusService: OnlineStatusService,
                 private dbService: DatabaseService,
-                private shelfService: ShelfService) {
+                private shelfService: ShelfService,
+                private http: HttpClient) {
+        this.url = environment.url + '/sync/';
     }
 
     public registerSubscriber(authService: AuthService) {
@@ -55,9 +61,11 @@ export class SyncService {
                 .headers.get('Location')
                 .replace('/shelves/me/', '');
         }
-        console.log(newId);
-        // rest of actions send to sync endpoint
-        return of();
+        const syncActions: any[] = [];
+        syncActions.push(...(groupedByType[UPDATE]? groupedByType[UPDATE] : []));
+        syncActions.push(...(groupedByType[ADD_BOOK]? groupedByType[ADD_BOOK] : []));
+        syncActions.push(...(groupedByType[REMOVE_BOOK]? groupedByType[REMOVE_BOOK] : []));
+        return this.sendSyncShelfRequest(newId? newId : shelfId, syncActions).toPromise();
     }
 
     private groupByShelf(actions: any[]) {
@@ -73,5 +81,11 @@ export class SyncService {
             (result[action[key]] = result[action[key]] || []).push(action);
             return result;
         }, {});
+    }
+
+    private sendSyncShelfRequest(shelfId: string, actions: any[]): Observable<any> {
+        if (actions)
+            return this.http.post(this.url + shelfId, actions);
+        return of();
     }
 }
