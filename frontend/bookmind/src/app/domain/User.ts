@@ -7,4 +7,5 @@ export interface User {
     email: string
     enabled: boolean
     authorities: Authority[]
+    password: string
 }

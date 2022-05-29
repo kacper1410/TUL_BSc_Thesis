@@ -8,5 +8,6 @@ export function defaultUser(): User {
         email: '',
         enabled: false,
         authorities: [],
+        password: ''
     }
 }

@@ -18,7 +18,10 @@
         "shelf": {
             "update": "Shelf update successful"
         },
-        "sync": "Synchronization successful"
+        "sync": "Synchronization successful",
+        "register": {
+            "form-sent": "Sign up successful! Confirmation was sent to provided email address"
+        }
     },
     "navbar": {
         "home": "Home",

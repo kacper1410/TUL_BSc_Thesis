@@ -65,4 +65,8 @@ export class UserService {
     getSavedUsers() {
         return this.dbService.getSavedUsers();
     }
+
+    registerUser(user: User): Observable<any> {
+        return this.http.post(this.url + 'register', user);
+    }
 }

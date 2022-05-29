@@ -30,6 +30,7 @@ import { ShelfAddBookComponent } from './components/shelf/shelf-add-book/shelf-a
 import { OfflineLoginComponent } from './components/login/offline-login/offline-login.component';
 import { OnlineLoginComponent } from './components/login/online-login/online-login.component';
 import { ShelfEditComponent } from './components/shelf/shelf-edit/shelf-edit.component';
+import { RegisterFormComponent } from './components/register/register-form/register-form.component';
 
 export function rootLoaderFactory(http: HttpClient) {
     return new TranslateHttpLoader(http)
@@ -51,7 +52,8 @@ export function rootLoaderFactory(http: HttpClient) {
         ShelfAddBookComponent,
         OfflineLoginComponent,
         OnlineLoginComponent,
-        ShelfEditComponent
+        ShelfEditComponent,
+        RegisterFormComponent
     ],
     imports: [
         BrowserModule,

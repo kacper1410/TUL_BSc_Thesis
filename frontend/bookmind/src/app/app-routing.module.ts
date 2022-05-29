@@ -19,11 +19,13 @@ import { ShelfDetailsComponent } from "./components/shelf/shelf-details/shelf-de
 import { ShelfDetailsResolver } from "./resolvers/ShelfDetailsResolver";
 import { ShelfAddBookComponent } from "./components/shelf/shelf-add-book/shelf-add-book.component";
 import { ShelfEditComponent } from "./components/shelf/shelf-edit/shelf-edit.component";
+import { RegisterFormComponent } from "./components/register/register-form/register-form.component";
 
 const routes: Routes = [
     {path: '', redirectTo: '/home', pathMatch: 'full'},
     {path: 'home', component: MainComponent},
     {path: 'login', component: LoginComponent},
+    {path: 'register', component: RegisterFormComponent},
     {path: 'profile', component: ProfileComponent, resolve: {user: ProfileResolver}},
     {path: 'users', component: UserListComponent, resolve: {users: UserResolver}},
     {path: 'shelves', component: ShelfListComponent, resolve: {shelves: ShelfResolver}},
