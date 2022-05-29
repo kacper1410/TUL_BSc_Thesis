@@ -69,4 +69,8 @@ export class UserService {
     registerUser(user: User): Observable<any> {
         return this.http.post(this.url + 'register', user);
     }
+
+    confirmUser(code: any): Observable<any> {
+        return this.http.post(`${this.url}confirm/${code}`, {});
+    }
 }

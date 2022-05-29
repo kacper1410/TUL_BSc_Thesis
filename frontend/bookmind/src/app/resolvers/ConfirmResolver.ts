@@ -6,12 +6,13 @@ import { UserService } from "../service/user.service";
 @Injectable({
     providedIn: 'root'
 })
-export class UserResolver implements Resolve<any> {
+export class ConfirmResolver implements Resolve<boolean> {
 
     constructor(private userService: UserService) {
     }
 
     resolve(route: ActivatedRouteSnapshot, rstate: RouterStateSnapshot): Observable<any> {
-        return this.userService.getUsers();
+        const confirmationCode = route.params.code;
+        return this.userService.confirmUser(confirmationCode);
     }
 }

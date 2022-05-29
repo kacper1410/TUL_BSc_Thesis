@@ -20,12 +20,15 @@ import { ShelfDetailsResolver } from "./resolvers/ShelfDetailsResolver";
 import { ShelfAddBookComponent } from "./components/shelf/shelf-add-book/shelf-add-book.component";
 import { ShelfEditComponent } from "./components/shelf/shelf-edit/shelf-edit.component";
 import { RegisterFormComponent } from "./components/register/register-form/register-form.component";
+import { ConfirmAccountComponent } from "./components/register/confirm-account/confirm-account.component";
+import { ConfirmResolver } from "./resolvers/ConfirmResolver";
 
 const routes: Routes = [
     {path: '', redirectTo: '/home', pathMatch: 'full'},
     {path: 'home', component: MainComponent},
     {path: 'login', component: LoginComponent},
     {path: 'register', component: RegisterFormComponent},
+    {path: 'confirm/:code', component: ConfirmAccountComponent, resolve: {status: ConfirmResolver}},
     {path: 'profile', component: ProfileComponent, resolve: {user: ProfileResolver}},
     {path: 'users', component: UserListComponent, resolve: {users: UserResolver}},
     {path: 'shelves', component: ShelfListComponent, resolve: {shelves: ShelfResolver}},

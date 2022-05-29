@@ -31,6 +31,7 @@ import { OfflineLoginComponent } from './components/login/offline-login/offline-
 import { OnlineLoginComponent } from './components/login/online-login/online-login.component';
 import { ShelfEditComponent } from './components/shelf/shelf-edit/shelf-edit.component';
 import { RegisterFormComponent } from './components/register/register-form/register-form.component';
+import { ConfirmAccountComponent } from './components/register/confirm-account/confirm-account.component';
 
 export function rootLoaderFactory(http: HttpClient) {
     return new TranslateHttpLoader(http)
@@ -53,7 +54,8 @@ export function rootLoaderFactory(http: HttpClient) {
         OfflineLoginComponent,
         OnlineLoginComponent,
         ShelfEditComponent,
-        RegisterFormComponent
+        RegisterFormComponent,
+        ConfirmAccountComponent
     ],
     imports: [
         BrowserModule,
