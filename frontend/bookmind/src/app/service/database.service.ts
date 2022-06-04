@@ -198,6 +198,7 @@ export class DatabaseService {
             .and((shelf: Shelf) => shelf.username === username)
             .modify(
                 (shelf: Shelf) => {
+                    if (!shelf.books) shelf.books = []
                     const bookIndex = shelf.books.findIndex((book: Book) => book.id === bookId);
                     if (bookIndex >= 0) {
                         shelf.books.splice(bookIndex, 1);
@@ -228,7 +229,10 @@ export class DatabaseService {
         return this.db.shelves
             .where('id').equals(shelfId)
             .and((shelf: Shelf) => shelf.username === username)
-            .modify((shelf: Shelf) => shelf.books.push(book));
+            .modify((shelf: Shelf) => {
+                if (!shelf.books) shelf.books = []
+                shelf.books.push(book)
+            });
     }
 
     modifyShelf(id: any, newShelf: Shelf, username: string) {
