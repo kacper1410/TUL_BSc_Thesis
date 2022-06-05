@@ -1,5 +1,7 @@
 package tul.swiercz.thesis.bookmind.domain;
 
+import org.hibernate.annotations.OptimisticLock;
+
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
@@ -13,6 +15,7 @@ public class Shelf extends AbstractDomain {
 
     private String name;
 
+    @OptimisticLock(excluded = true)
     @ManyToMany
     private Set<Book> books;
 
