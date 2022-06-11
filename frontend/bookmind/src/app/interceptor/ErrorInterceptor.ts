@@ -38,6 +38,9 @@ export class ErrorInterceptor implements HttpInterceptor {
         if (error.status < 400 || error.status > 500)
             return;
 
+        if (error.status === 409 && error.url?.match('.*\/sync\/.*'))
+            return;
+
         const errorCode = error.error?.message ? error.error?.message : 'Exception.INTERNAL_EXCEPTION';
         this.notify.error(errorCode);
 

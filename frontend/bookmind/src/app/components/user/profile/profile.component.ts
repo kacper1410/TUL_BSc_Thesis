@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { defaultUser } from "../../domain/default/defaultUser";
+import { defaultUser } from "../../../domain/default/defaultUser";
 import { ActivatedRoute } from "@angular/router";
-import { AuthService } from "../../service/auth.service";
-import { Authority } from "../../domain/Authority";
+import { AuthService } from "../../../service/auth.service";
+import { Authority } from "../../../domain/Authority";
 
 @Component({
     selector: 'app-profile',

@@ -7,6 +7,8 @@ import { AuthService } from "./auth.service";
 import { Observable, of } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 import { environment } from "../../environments/environment";
+import { SyncErrorModalComponent } from "../components/sync-error-modal/sync-error-modal.component";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 
 @Injectable({
     providedIn: 'root'
@@ -18,7 +20,8 @@ export class SyncService {
     constructor(private onlineStatusService: OnlineStatusService,
                 private dbService: DatabaseService,
                 private shelfService: ShelfService,
-                private http: HttpClient) {
+                private http: HttpClient,
+                private modalService: NgbModal) {
         this.url = environment.url + '/sync/';
     }
 
@@ -37,15 +40,33 @@ export class SyncService {
         return this.dbService.getActionsForUsername(username).then(
             (actions: any[]) => {
                 const grouped = this.groupByShelf(actions);
+                const errors: any = {};
+                const syncPromises = [];
 
                 for (let shelfId in grouped) {
-                    this.syncShelf(Number(shelfId), grouped[shelfId]).then(
-                        () => {
-                            console.log(`Successful synchronization of shelf with id: ${shelfId}`)
-                        }
-                    )
-                    this.dbService.removeActions(grouped[shelfId]);
+                    const syncPromise = this.syncShelf(Number(shelfId), grouped[shelfId])
+                        .then(
+                            () => {
+                                console.log(`Successful synchronization of shelf with id: ${shelfId}`);
+                                this.dbService.removeActions(grouped[shelfId]);
+                            },
+                            (response) => {
+                                if (response.status === 409) {
+                                    console.warn(`Some actions could not be synchronized for shelf with id ${shelfId}`);
+                                    errors[Number(shelfId)] = (response.error);
+                                    this.dbService.removeActions(grouped[shelfId]);
+                                }
+                            }
+                        );
+                    syncPromises.push(syncPromise);
                 }
+                Promise.all(syncPromises)
+                    .then(() => {
+                        if (Object.keys(errors).length !== 0) {
+                            const ngbModalRef = this.modalService.open(SyncErrorModalComponent, {backdrop: 'static', keyboard: false});
+                            ngbModalRef.componentInstance.initialize(errors);
+                        }
+                    })
             }
         );
     }
@@ -62,10 +83,10 @@ export class SyncService {
                 .replace('/shelves/me/', '');
         }
         const syncActions: any[] = [];
-        syncActions.push(...(groupedByType[UPDATE]? groupedByType[UPDATE] : []));
-        syncActions.push(...(groupedByType[ADD_BOOK]? groupedByType[ADD_BOOK] : []));
-        syncActions.push(...(groupedByType[REMOVE_BOOK]? groupedByType[REMOVE_BOOK] : []));
-        return this.sendSyncShelfRequest(newId? newId : shelfId, syncActions).toPromise();
+        syncActions.push(...(groupedByType[UPDATE] ? groupedByType[UPDATE] : []));
+        syncActions.push(...(groupedByType[ADD_BOOK] ? groupedByType[ADD_BOOK] : []));
+        syncActions.push(...(groupedByType[REMOVE_BOOK] ? groupedByType[REMOVE_BOOK] : []));
+        return this.sendSyncShelfRequest(newId ? newId : shelfId, syncActions).toPromise();
     }
 
     private groupByShelf(actions: any[]) {
@@ -85,7 +106,7 @@ export class SyncService {
 
     private sendSyncShelfRequest(shelfId: string, actions: any[]): Observable<any> {
         if (actions)
-            return this.http.post(this.url + shelfId, actions);
+            return this.http.post(this.url + shelfId, actions, {observe: 'response'});
         return of();
     }
 }

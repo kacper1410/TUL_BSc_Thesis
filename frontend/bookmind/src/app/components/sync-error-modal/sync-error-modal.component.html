@@ -1,0 +1,24 @@
+<div class="modal-content bg-dark text-white">
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Following actions could not be synchronized!</h4>
+        <button type="button" class="btn-close btn-close-white" aria-label="Close"
+                (click)="activeModal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+        <table class="text-center">
+            <tr>
+                <th>Shelf</th>
+                <th>Type</th>
+                <th>Book</th>
+            </tr>
+            <tr *ngFor="let e of errorNotifications">
+                <td class="p-3">{{e.shelf}}</td>
+                <td>{{e.type}}</td>
+                <td>{{e.book}}</td>
+            </tr>
+        </table>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" ngbAutofocus (click)="activeModal.dismiss('Okay click')">Okay</button>
+    </div>
+</div>

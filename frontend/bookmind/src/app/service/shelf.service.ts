@@ -46,7 +46,7 @@ export class ShelfService {
 
     deleteShelf(id: number): Observable<any> {
         return this.connService.getIfOnline(
-            () => this.http.delete(this.url + `me/${id}`),
+            () => this.http.delete(this.url + `me/${id}`, {observe: 'response'}),
             () => this.dbService.deleteShelf(id, this.authService.getUsername())
         );
     }

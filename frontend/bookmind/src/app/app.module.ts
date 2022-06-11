@@ -21,8 +21,8 @@ import { TranslateHttpLoader } from "@ngx-translate/http-loader";
 import { TranslateLoader, TranslateModule, TranslateService } from "@ngx-translate/core";
 import { NgxBootstrapConfirmModule } from "ngx-bootstrap-confirm";
 import { BookEditComponent } from './components/book/book-edit/book-edit.component';
-import { ProfileComponent } from './components/profile/profile.component';
-import { UserListComponent } from './components/user-list/user-list.component';
+import { ProfileComponent } from './components/user/profile/profile.component';
+import { UserListComponent } from './components/user/user-list/user-list.component';
 import { ShelfListComponent } from './components/shelf/shelf-list/shelf-list.component';
 import { ShelfAddComponent } from './components/shelf/shelf-add/shelf-add.component';
 import { ShelfDetailsComponent } from './components/shelf/shelf-details/shelf-details.component';
@@ -32,6 +32,7 @@ import { OnlineLoginComponent } from './components/login/online-login/online-log
 import { ShelfEditComponent } from './components/shelf/shelf-edit/shelf-edit.component';
 import { RegisterFormComponent } from './components/register/register-form/register-form.component';
 import { ConfirmAccountComponent } from './components/register/confirm-account/confirm-account.component';
+import { SyncErrorModalComponent } from './components/sync-error-modal/sync-error-modal.component';
 
 export function rootLoaderFactory(http: HttpClient) {
     return new TranslateHttpLoader(http)
@@ -55,7 +56,8 @@ export function rootLoaderFactory(http: HttpClient) {
         OnlineLoginComponent,
         ShelfEditComponent,
         RegisterFormComponent,
-        ConfirmAccountComponent
+        ConfirmAccountComponent,
+        SyncErrorModalComponent
     ],
     imports: [
         BrowserModule,
