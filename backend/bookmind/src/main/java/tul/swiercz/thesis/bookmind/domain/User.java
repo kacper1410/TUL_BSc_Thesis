@@ -8,7 +8,7 @@ import java.util.Set;
 
 @Entity
 @Table(name="bookmind_user")
-public class User extends AbstractDomain implements UserDetails {
+public class User extends AbstractIdDomain implements UserDetails {
 
     @Column(unique = true)
     private String username;

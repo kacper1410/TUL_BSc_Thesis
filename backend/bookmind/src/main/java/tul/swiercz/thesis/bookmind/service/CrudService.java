@@ -1,12 +1,12 @@
 package tul.swiercz.thesis.bookmind.service;
 
 import org.springframework.data.repository.CrudRepository;
-import tul.swiercz.thesis.bookmind.domain.AbstractDomain;
+import tul.swiercz.thesis.bookmind.domain.AbstractIdDomain;
 import tul.swiercz.thesis.bookmind.exception.ExceptionMessages;
 import tul.swiercz.thesis.bookmind.exception.NotFoundException;
 import tul.swiercz.thesis.bookmind.mapper.AbstractMapper;
 
-public abstract class CrudService<DOMAIN extends AbstractDomain> {
+public abstract class CrudService<DOMAIN extends AbstractIdDomain> {
 
     protected abstract CrudRepository<DOMAIN, Long> getRepository();
 

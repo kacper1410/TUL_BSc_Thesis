@@ -2,14 +2,12 @@ package tul.swiercz.thesis.bookmind.domain;
 
 
 import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import java.util.List;
 import java.util.Objects;
 
 @Entity
 @Table(name="bookmind_book")
-public class Book extends AbstractDomain {
+public class Book extends AbstractIdDomain {
 
     private String title;
 

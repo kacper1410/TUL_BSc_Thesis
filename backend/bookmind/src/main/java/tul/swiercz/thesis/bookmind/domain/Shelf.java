@@ -2,16 +2,13 @@ package tul.swiercz.thesis.bookmind.domain;
 
 import org.hibernate.annotations.OptimisticLock;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Objects;
 import java.util.Set;
 
 @Entity
 @Table(name="bookmind_shelf")
-public class Shelf extends AbstractDomain {
+public class Shelf extends AbstractIdDomain {
 
     private String name;
 

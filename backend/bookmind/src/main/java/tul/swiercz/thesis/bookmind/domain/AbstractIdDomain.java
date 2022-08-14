@@ -1,28 +1,17 @@
 package tul.swiercz.thesis.bookmind.domain;
 
-import org.hibernate.annotations.ColumnDefault;
-
-import javax.persistence.*;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
 import java.util.Objects;
 
 @MappedSuperclass
-public abstract class AbstractDomain {
+public abstract class AbstractIdDomain extends AbstractVersionDomain {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Version
-    @ColumnDefault("0")
-    private Long version;
-
-    public Long getVersion() {
-        return version;
-    }
-
-    public void setVersion(Long version) {
-        this.version = version;
-    }
 
     public Long getId() {
         return id;
@@ -36,7 +25,7 @@ public abstract class AbstractDomain {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        AbstractDomain that = (AbstractDomain) o;
+        AbstractIdDomain that = (AbstractIdDomain) o;
         return id.equals(that.id);
     }
 

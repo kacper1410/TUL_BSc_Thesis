@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.data.repository.CrudRepository;
-import tul.swiercz.thesis.bookmind.domain.AbstractDomain;
+import tul.swiercz.thesis.bookmind.domain.AbstractIdDomain;
 import tul.swiercz.thesis.bookmind.exception.ExceptionMessages;
 import tul.swiercz.thesis.bookmind.exception.NotFoundException;
 import tul.swiercz.thesis.bookmind.mapper.AbstractMapper;
@@ -24,16 +24,16 @@ class CrudServiceTest {
     private TestCrudService testCrudService;
 
     @Mock
-    private CrudRepository<TestDomain, Long> repository;
+    private CrudRepository<TestIdDomain, Long> repository;
 
     @Mock
-    private AbstractMapper<TestDomain> mapper;
+    private AbstractMapper<TestIdDomain> mapper;
 
-    private List<TestDomain> testDomainList;
+    private List<TestIdDomain> testDomainList;
 
-    private TestDomain testDomain1;
+    private TestIdDomain testDomain1;
 
-    private TestDomain testDomain2;
+    private TestIdDomain testDomain2;
 
     @BeforeEach
     void initMocks() {
@@ -44,9 +44,9 @@ class CrudServiceTest {
     void initFields() {
         testCrudService = new TestCrudService();
 
-        testDomain1 = new TestDomain();
+        testDomain1 = new TestIdDomain();
         testDomain1.setId(1L);
-        testDomain2 = new TestDomain();
+        testDomain2 = new TestIdDomain();
 
         testDomainList = new ArrayList<>();
         testDomainList.add(testDomain1);
@@ -57,7 +57,7 @@ class CrudServiceTest {
     void getAll() {
         when(repository.findAll()).thenReturn(testDomainList);
 
-        Iterable<TestDomain> testDomains = testCrudService.getAll();
+        Iterable<TestIdDomain> testDomains = testCrudService.getAll();
 
         assertEquals(testDomainList, testDomains);
     }
@@ -66,7 +66,7 @@ class CrudServiceTest {
     void getById() throws NotFoundException {
         when(repository.findById(1L)).thenReturn(Optional.ofNullable(testDomain1));
 
-        TestDomain testDomain = testCrudService.getById(1L);
+        TestIdDomain testDomain = testCrudService.getById(1L);
 
         assertEquals(testDomain1, testDomain);
     }
@@ -123,18 +123,18 @@ class CrudServiceTest {
         verify(repository).deleteById(1L);
     }
 
-    private static class TestDomain extends AbstractDomain {
+    private static class TestIdDomain extends AbstractIdDomain {
     }
 
-    private class TestCrudService extends CrudService<TestDomain> {
+    private class TestCrudService extends CrudService<TestIdDomain> {
 
         @Override
-        protected CrudRepository<TestDomain, Long> getRepository() {
+        protected CrudRepository<TestIdDomain, Long> getRepository() {
             return repository;
         }
 
         @Override
-        protected AbstractMapper<TestDomain> getMapper() {
+        protected AbstractMapper<TestIdDomain> getMapper() {
             return mapper;
         }
 

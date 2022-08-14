@@ -71,6 +71,8 @@ class SyncControllerTest {
         action3.setActionDate(LocalDateTime.now());
         action3.setShelf(modifyShelf);
 
+        shelf = new Shelf("name");
+
         actions = new ArrayList<>();
     }
 
@@ -102,6 +104,7 @@ class SyncControllerTest {
                 .addBookToShelf(2L, action1.getBookId(), "username", action1.getActionDate());
 
         ResponseEntity<?> response = syncController.sync(2L, actions, principal);
+
         verify(shelfService).update(eq(2L), eq(shelf), eq("username"), notNull());
         verify(shelfService).addBookToShelf(eq(2L), eq(action1.getBookId()), eq("username"), notNull());
         verify(shelfService).removeBookFromShelf(eq(2L), eq(action2.getBookId()), eq("username"), notNull());

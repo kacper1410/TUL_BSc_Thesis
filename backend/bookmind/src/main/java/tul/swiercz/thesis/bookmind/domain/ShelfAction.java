@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name="bookmind_shelf_action")
-public class ShelfAction extends AbstractDomain {
+public class ShelfAction extends AbstractIdDomain {
 
     private ShelfActionType shelfActionType;
 

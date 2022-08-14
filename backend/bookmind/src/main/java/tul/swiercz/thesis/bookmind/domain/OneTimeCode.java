@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name="bookmind_one_time_code")
-public class OneTimeCode extends AbstractDomain {
+public class OneTimeCode extends AbstractIdDomain {
 
     @Column(unique = true)
     private String code;

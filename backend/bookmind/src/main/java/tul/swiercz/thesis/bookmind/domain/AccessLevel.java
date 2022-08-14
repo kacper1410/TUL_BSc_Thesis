@@ -7,7 +7,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="bookmind_access_level")
-public class AccessLevel extends AbstractDomain implements GrantedAuthority {
+public class AccessLevel extends AbstractIdDomain implements GrantedAuthority {
 
     private String authority;
 
