@@ -14,7 +14,7 @@ public interface ShelfRepository extends CrudRepository<Shelf, Long> {
 
     Optional<Shelf> findByIdAndUserUsername(Long id, String username);
 
-    @EntityGraph(attributePaths = {"books"})
+    @EntityGraph(attributePaths = {"books", "shelfBooks"})
     Optional<Shelf> findWithBooksByIdAndUserUsername(Long id, String username);
 
     Set<Shelf> findAllByBooksAndUserUsername(Book book, String username);

@@ -16,6 +16,13 @@ public class Shelf extends AbstractIdDomain {
     @ManyToMany
     private Set<Book> books;
 
+    @OneToMany(
+            mappedBy = "shelf",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private Set<ShelfBook> shelfBooks;
+
     @ManyToOne
     private User user;
 
@@ -64,6 +71,13 @@ public class Shelf extends AbstractIdDomain {
     public int hashCode() {
         return Objects.hash(super.hashCode(), name, books, user);
     }
-    //endregion
 
+    public Set<ShelfBook> getShelfBooks() {
+        return shelfBooks;
+    }
+
+    public void setShelfBooks(Set<ShelfBook> shelfBook) {
+        this.shelfBooks = shelfBook;
+    }
+    //endregion
 }
