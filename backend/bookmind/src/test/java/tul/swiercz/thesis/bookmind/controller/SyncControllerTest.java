@@ -86,7 +86,7 @@ class SyncControllerTest {
 
         ResponseEntity<?> response = syncController.sync(2L, actions, principal);
 
-        verify(shelfService).update(eq(2L), eq(shelf), eq("username"), notNull());
+        verify(shelfService).update(eq(2L), eq(shelf), eq("username"));
         verify(shelfService).addBookToShelf(eq(2L), eq(action1.getBookId()), eq("username"));
         verify(shelfService).removeBookFromShelf(eq(2L), eq(action2.getBookId()), eq("username"));
         assertEquals(HttpStatus.ACCEPTED, response.getStatusCode());
@@ -105,7 +105,7 @@ class SyncControllerTest {
 
         ResponseEntity<?> response = syncController.sync(2L, actions, principal);
 
-        verify(shelfService).update(eq(2L), eq(shelf), eq("username"), notNull());
+        verify(shelfService).update(eq(2L), eq(shelf), eq("username"));
         verify(shelfService).addBookToShelf(eq(2L), eq(action1.getBookId()), eq("username"));
         verify(shelfService).removeBookFromShelf(eq(2L), eq(action2.getBookId()), eq("username"));
         assertEquals(HttpStatus.CONFLICT, response.getStatusCode());

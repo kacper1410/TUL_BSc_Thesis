@@ -20,7 +20,6 @@ import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import java.net.URI;
 import java.security.Principal;
-import java.time.LocalDateTime;
 
 @Controller
 @DenyAll
@@ -54,7 +53,7 @@ public class ShelfController {
     @PutMapping("/me/{id}")
     @RolesAllowed(Roles.READER)
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody @Valid ModifyShelf modifyShelf, Principal principal) throws NotFoundException, SyncException {
-        shelfService.update(id, shelfMapper.modifyToShelf(modifyShelf), principal.getName(), LocalDateTime.now());
+        shelfService.update(id, shelfMapper.modifyToShelf(modifyShelf), principal.getName());
         return ResponseEntity.accepted().build();
     }
 
@@ -67,14 +66,14 @@ public class ShelfController {
 
     @PutMapping("/me/{id}/book/{bookId}")
     @RolesAllowed(Roles.READER)
-    public ResponseEntity<?> addBookToShelf(@PathVariable Long id, @PathVariable Long bookId, Principal principal) throws NotFoundException, SyncException {
+    public ResponseEntity<?> addBookToShelf(@PathVariable Long id, @PathVariable Long bookId, Principal principal) throws NotFoundException {
         shelfService.addBookToShelf(id, bookId, principal.getName());
         return ResponseEntity.accepted().build();
     }
 
     @DeleteMapping("/me/{id}/book/{bookId}")
     @RolesAllowed(Roles.READER)
-    public ResponseEntity<?> removeBookFromShelf(@PathVariable Long id, @PathVariable Long bookId, Principal principal) throws NotFoundException, SyncException {
+    public ResponseEntity<?> removeBookFromShelf(@PathVariable Long id, @PathVariable Long bookId, Principal principal) throws NotFoundException {
         shelfService.removeBookFromShelf(id, bookId, principal.getName());
         return ResponseEntity.accepted().build();
     }

@@ -17,5 +17,4 @@ public interface ShelfMapper extends AbstractMapper<Shelf> {
     Shelf modifyToShelf(ModifyShelf modifyShelf);
 
     ShelfInfo shelfToInfo(Shelf shelf);
-
 }

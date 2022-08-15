@@ -25,7 +25,6 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.ArgumentMatchers.notNull;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -115,7 +114,7 @@ class ShelfControllerTest {
 
         ResponseEntity<?> response = shelfController.update(1L, modifyShelf, principal);
 
-        verify(shelfService).update(eq(1L), eq(shelf), eq(username), notNull());
+        verify(shelfService).update(eq(1L), eq(shelf), eq(username));
         assertNull(response.getBody());
         assertEquals(HttpStatus.ACCEPTED, response.getStatusCode());
     }
@@ -133,7 +132,7 @@ class ShelfControllerTest {
     }
 
     @Test
-    void addBookToShelf() throws NotFoundException, SyncException {
+    void addBookToShelf() throws NotFoundException {
         when(principal.getName()).thenReturn(username);
 
         ResponseEntity<?> response = shelfController.addBookToShelf(1L, 2L, principal);
@@ -144,7 +143,7 @@ class ShelfControllerTest {
     }
 
     @Test
-    void removeBookFromShelf() throws NotFoundException, SyncException {
+    void removeBookFromShelf() throws NotFoundException {
         when(principal.getName()).thenReturn(username);
 
         ResponseEntity<?> response = shelfController.removeBookFromShelf(1L, 2L, principal);
