@@ -5,6 +5,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 import tul.swiercz.thesis.bookmind.domain.ShelfBook;
 import tul.swiercz.thesis.bookmind.dto.book.BookOnShelfListInfo;
+import tul.swiercz.thesis.bookmind.dto.shelf.ShelfForBookListInfo;
 
 @Mapper(componentModel = "spring")
 public interface ShelfBookMapper {
@@ -17,4 +18,14 @@ public interface ShelfBookMapper {
             @Mapping(source = "book.version", target = "version")
     })
     BookOnShelfListInfo mapToBookOnShelf(ShelfBook shelfBook);
+
+    @Mappings({
+            @Mapping(source = "version", target = "connectionVersion"),
+            @Mapping(source = "shelf.name", target = "name"),
+            @Mapping(source = "shelf.id", target = "id"),
+            @Mapping(source = "shelf.version", target = "version")
+    })
+    ShelfForBookListInfo mapToShelfForBook(ShelfBook shelfBook);
+
+    Iterable<ShelfForBookListInfo> mapToShelvesForBook(Iterable<ShelfBook> books);
 }

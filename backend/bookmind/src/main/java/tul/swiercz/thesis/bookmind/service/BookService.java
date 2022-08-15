@@ -4,14 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 import tul.swiercz.thesis.bookmind.domain.Book;
-import tul.swiercz.thesis.bookmind.domain.Shelf;
+import tul.swiercz.thesis.bookmind.domain.ShelfBook;
 import tul.swiercz.thesis.bookmind.dto.book.BookWithShelvesInfo;
 import tul.swiercz.thesis.bookmind.exception.NotFoundException;
 import tul.swiercz.thesis.bookmind.mapper.AbstractMapper;
 import tul.swiercz.thesis.bookmind.mapper.BookMapper;
-import tul.swiercz.thesis.bookmind.mapper.ShelfMapper;
+import tul.swiercz.thesis.bookmind.mapper.ShelfBookMapper;
 import tul.swiercz.thesis.bookmind.repository.BookRepository;
-import tul.swiercz.thesis.bookmind.repository.ShelfRepository;
+import tul.swiercz.thesis.bookmind.repository.ShelfBookRepository;
 
 import javax.transaction.Transactional;
 import java.util.Set;
@@ -21,18 +21,18 @@ public class BookService extends CrudService<Book> {
 
     private final BookRepository bookRepository;
 
-    private final ShelfRepository shelfRepository;
+    private final ShelfBookRepository shelfBookRepository;
 
     private final BookMapper bookMapper;
 
-    private final ShelfMapper shelfMapper;
+    private final ShelfBookMapper shelfBookMapper;
 
     @Autowired
-    public BookService(BookRepository bookRepository, ShelfRepository shelfRepository, BookMapper bookMapper, ShelfMapper shelfMapper) {
+    public BookService(BookRepository bookRepository, ShelfBookRepository shelfBookRepository, BookMapper bookMapper, ShelfBookMapper shelfBookMapper) {
         this.bookRepository = bookRepository;
-        this.shelfRepository = shelfRepository;
+        this.shelfBookRepository = shelfBookRepository;
         this.bookMapper = bookMapper;
-        this.shelfMapper = shelfMapper;
+        this.shelfBookMapper = shelfBookMapper;
     }
 
     @Override
@@ -49,8 +49,8 @@ public class BookService extends CrudService<Book> {
     public BookWithShelvesInfo getByIdWithShelves(Long id, String username) throws NotFoundException {
         Book book = getById(id);
         BookWithShelvesInfo bookWithShelvesInfo = bookMapper.bookToDtoWithShelves(book);
-        Set<Shelf> shelves = shelfRepository.findAllByShelfBooksBooksAndUserUsername(book, username);
-        bookWithShelvesInfo.setShelves(shelfMapper.shelfToListInfo(shelves));
+        Set<ShelfBook> shelfBooks = shelfBookRepository.findAllByBooksAndShelfUserUsername(book, username);
+        bookWithShelvesInfo.setShelves(shelfBookMapper.mapToShelvesForBook(shelfBooks));
         return bookWithShelvesInfo;
     }
 }
