@@ -1,20 +1,16 @@
 package tul.swiercz.thesis.bookmind.domain;
 
-import org.hibernate.annotations.OptimisticLock;
-
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name="bookmind_shelf")
 public class Shelf extends AbstractIdDomain {
 
     private String name;
-
-    @OptimisticLock(excluded = true)
-    @ManyToMany
-    private Set<Book> books;
 
     @OneToMany(
             mappedBy = "shelf",
@@ -43,11 +39,19 @@ public class Shelf extends AbstractIdDomain {
     }
 
     public Set<Book> getBooks() {
-        return books;
+        if (shelfBooks == null) {
+            shelfBooks = new HashSet<>();
+        }
+        return shelfBooks.stream()
+                .filter(ShelfBook::isActive)
+                .map(ShelfBook::getBook)
+                .collect(Collectors.toSet());
     }
 
     public void setBooks(Set<Book> books) {
-        this.books = books;
+        this.shelfBooks = books.stream()
+                .map(book -> new ShelfBook(this, book))
+                .collect(Collectors.toSet());
     }
 
     public User getUser() {
@@ -64,12 +68,12 @@ public class Shelf extends AbstractIdDomain {
         if (!(o instanceof Shelf)) return false;
         if (!super.equals(o)) return false;
         Shelf shelf = (Shelf) o;
-        return Objects.equals(name, shelf.name) && Objects.equals(books, shelf.books) && Objects.equals(user, shelf.user);
+        return Objects.equals(name, shelf.name) && Objects.equals(user, shelf.user);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), name, books, user);
+        return Objects.hash(super.hashCode(), name, user);
     }
 
     public Set<ShelfBook> getShelfBooks() {

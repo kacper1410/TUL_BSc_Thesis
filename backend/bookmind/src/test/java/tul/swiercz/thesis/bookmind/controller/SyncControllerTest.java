@@ -87,8 +87,8 @@ class SyncControllerTest {
         ResponseEntity<?> response = syncController.sync(2L, actions, principal);
 
         verify(shelfService).update(eq(2L), eq(shelf), eq("username"), notNull());
-        verify(shelfService).addBookToShelf(eq(2L), eq(action1.getBookId()), eq("username"), notNull());
-        verify(shelfService).removeBookFromShelf(eq(2L), eq(action2.getBookId()), eq("username"), notNull());
+        verify(shelfService).addBookToShelf(eq(2L), eq(action1.getBookId()), eq("username"));
+        verify(shelfService).removeBookFromShelf(eq(2L), eq(action2.getBookId()), eq("username"));
         assertEquals(HttpStatus.ACCEPTED, response.getStatusCode());
         assertNull(response.getBody());
     }
@@ -101,13 +101,13 @@ class SyncControllerTest {
         actions.add(action2);
         actions.add(action3);
         doThrow(SyncException.class).when(shelfService)
-                .addBookToShelf(2L, action1.getBookId(), "username", action1.getActionDate());
+                .addBookToShelf(2L, action1.getBookId(), "username");
 
         ResponseEntity<?> response = syncController.sync(2L, actions, principal);
 
         verify(shelfService).update(eq(2L), eq(shelf), eq("username"), notNull());
-        verify(shelfService).addBookToShelf(eq(2L), eq(action1.getBookId()), eq("username"), notNull());
-        verify(shelfService).removeBookFromShelf(eq(2L), eq(action2.getBookId()), eq("username"), notNull());
+        verify(shelfService).addBookToShelf(eq(2L), eq(action1.getBookId()), eq("username"));
+        verify(shelfService).removeBookFromShelf(eq(2L), eq(action2.getBookId()), eq("username"));
         assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
         assertEquals(List.of(action1), response.getBody());
     }

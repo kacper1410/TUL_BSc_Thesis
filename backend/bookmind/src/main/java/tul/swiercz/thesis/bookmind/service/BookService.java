@@ -49,7 +49,7 @@ public class BookService extends CrudService<Book> {
     public BookWithShelvesInfo getByIdWithShelves(Long id, String username) throws NotFoundException {
         Book book = getById(id);
         BookWithShelvesInfo bookWithShelvesInfo = bookMapper.bookToDtoWithShelves(book);
-        Set<Shelf> shelves = shelfRepository.findAllByBooksAndUserUsername(book, username);
+        Set<Shelf> shelves = shelfRepository.findAllByShelfBooksBooksAndUserUsername(book, username);
         bookWithShelvesInfo.setShelves(shelfMapper.shelfToListInfo(shelves));
         return bookWithShelvesInfo;
     }

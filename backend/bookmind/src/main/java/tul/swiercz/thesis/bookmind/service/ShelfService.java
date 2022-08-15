@@ -9,10 +9,7 @@ import tul.swiercz.thesis.bookmind.exception.NotFoundException;
 import tul.swiercz.thesis.bookmind.exception.SyncException;
 import tul.swiercz.thesis.bookmind.mapper.AbstractMapper;
 import tul.swiercz.thesis.bookmind.mapper.ShelfMapper;
-import tul.swiercz.thesis.bookmind.repository.BookRepository;
-import tul.swiercz.thesis.bookmind.repository.ShelfActionRepository;
-import tul.swiercz.thesis.bookmind.repository.ShelfRepository;
-import tul.swiercz.thesis.bookmind.repository.UserRepository;
+import tul.swiercz.thesis.bookmind.repository.*;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
@@ -30,13 +27,16 @@ public class ShelfService extends CrudService<Shelf> {
 
     private final ShelfActionRepository shelfActionRepository;
 
+    private final ShelfBookRepository shelfBookRepository;
+
     @Autowired
-    public ShelfService(UserRepository userRepository, ShelfRepository shelfRepository, BookRepository bookRepository, ShelfMapper shelfMapper, ShelfActionRepository shelfActionRepository) {
+    public ShelfService(UserRepository userRepository, ShelfRepository shelfRepository, BookRepository bookRepository, ShelfMapper shelfMapper, ShelfActionRepository shelfActionRepository, ShelfBookRepository shelfBookRepository) {
         this.userRepository = userRepository;
         this.shelfRepository = shelfRepository;
         this.bookRepository = bookRepository;
         this.shelfMapper = shelfMapper;
         this.shelfActionRepository = shelfActionRepository;
+        this.shelfBookRepository = shelfBookRepository;
     }
 
     @Override
@@ -90,64 +90,36 @@ public class ShelfService extends CrudService<Shelf> {
     }
 
     @Transactional
-    public void addBookToShelf(Long id, Long bookId, String username, LocalDateTime actionDate) throws NotFoundException, SyncException {
+    public void addBookToShelf(Long id, Long bookId, String username) throws NotFoundException {
         Shelf shelf = shelfRepository.findWithBooksByIdAndUserUsername(id, username)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessages.UPDATE_NOT_FOUND));
-        Book book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new NotFoundException(ExceptionMessages.UPDATE_NOT_FOUND));
+        ShelfBook shelfBook = shelfBookRepository.findById(new ShelfBook.ShelfBookId(id, bookId))
+                .orElse(null);
 
-        ShelfAction dbAction = shelfActionRepository.findByShelfIdAndBookId(id, bookId);
-
-        if (dbAction == null) {
-            shelf.getBooks().add(book);
-            shelfRepository.save(shelf);
-
-            ShelfAction performed = new ShelfAction(ShelfActionType.ADD_BOOK, actionDate, shelf, book);
-            shelfActionRepository.save(performed);
-        } else if (ShelfActionType.ADD_BOOK.equals(dbAction.getShelfActionType())
-                && actionDate.isAfter(dbAction.getActionDate())) {
-            dbAction.setActionDate(actionDate);
-            shelfActionRepository.save(dbAction);
-        } else if (actionDate.isAfter(dbAction.getActionDate())) {
-            shelf.getBooks().add(book);
-            shelfRepository.save(shelf);
-
-            dbAction.setActionDate(actionDate);
-            dbAction.setShelfActionType(ShelfActionType.ADD_BOOK);
-            shelfActionRepository.save(dbAction);
+        if (shelfBook == null) {
+            Book book = bookRepository.findById(bookId)
+                    .orElseThrow(() -> new NotFoundException(ExceptionMessages.UPDATE_NOT_FOUND));
+            shelfBookRepository.save(new ShelfBook(shelf, book, true));
         } else {
-            throw new SyncException(ExceptionMessages.SYNC_ERROR);
+            shelfBook.setActive(true);
+            shelfBookRepository.save(shelfBook);
         }
     }
 
     @Transactional
-    public void removeBookFromShelf(Long id, Long bookId, String username, LocalDateTime actionDate) throws NotFoundException, SyncException {
+    public void removeBookFromShelf(Long id, Long bookId, String username) throws NotFoundException {
         Shelf shelf = shelfRepository.findWithBooksByIdAndUserUsername(id, username)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessages.UPDATE_NOT_FOUND));
-        Book book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new NotFoundException(ExceptionMessages.UPDATE_NOT_FOUND));
+        ShelfBook shelfBook = shelfBookRepository.findById(new ShelfBook.ShelfBookId(id, bookId))
+                .orElse(null);
 
-        ShelfAction dbAction = shelfActionRepository.findByShelfIdAndBookId(id, bookId);
-
-        if (dbAction == null) {
-            shelf.getBooks().remove(book);
-            shelfRepository.save(shelf);
-
-            ShelfAction performed = new ShelfAction(ShelfActionType.REMOVE_BOOK, actionDate, shelf, book);
-            shelfActionRepository.save(performed);
-        } else if (ShelfActionType.REMOVE_BOOK.equals(dbAction.getShelfActionType())
-                && actionDate.isAfter(dbAction.getActionDate())) {
-            dbAction.setActionDate(actionDate);
-            shelfActionRepository.save(dbAction);
-        } else if (actionDate.isAfter(dbAction.getActionDate())) {
-            shelf.getBooks().remove(book);
-            shelfRepository.save(shelf);
-
-            dbAction.setActionDate(actionDate);
-            dbAction.setShelfActionType(ShelfActionType.REMOVE_BOOK);
-            shelfActionRepository.save(dbAction);
+        if (shelfBook == null) {
+            Book book = bookRepository.findById(bookId)
+                    .orElseThrow(() -> new NotFoundException(ExceptionMessages.UPDATE_NOT_FOUND));
+            shelfBookRepository.save(new ShelfBook(shelf, book, false));
         } else {
-            throw new SyncException(ExceptionMessages.SYNC_ERROR);
+            shelfBook.setActive(false);
+            shelfBookRepository.save(shelfBook);
         }
     }
 

@@ -65,9 +65,10 @@ create table bookmind_one_time_code
 
 create table bookmind_shelf_books
 (
-    shelf_id bigint not null,
-    books_id bigint not null,
-    version  bigint default 0,
+    shelf_id bigint              not null,
+    books_id bigint              not null,
+    version  bigint default 0    not null,
+    active   bool   default true not null,
     primary key (shelf_id, books_id),
     foreign key (shelf_id) references bookmind_shelf (id) on delete cascade,
     foreign key (books_id) references bookmind_book (id) on delete cascade

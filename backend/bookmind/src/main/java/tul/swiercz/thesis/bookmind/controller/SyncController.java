@@ -58,10 +58,10 @@ public class SyncController {
                 shelfService.update(shelfId, shelfMapper.modifyToShelf(((ShelfActionModifyDto) action).getShelf()), username, action.getActionDate());
                 break;
             case ADD_BOOK:
-                shelfService.addBookToShelf(shelfId, ((ShelfActionBookDto) action).getBookId(), username, action.getActionDate());
+                shelfService.addBookToShelf(shelfId, ((ShelfActionBookDto) action).getBookId(), username);
                 break;
             case REMOVE_BOOK:
-                shelfService.removeBookFromShelf(shelfId, ((ShelfActionBookDto) action).getBookId(), username, action.getActionDate());
+                shelfService.removeBookFromShelf(shelfId, ((ShelfActionBookDto) action).getBookId(), username);
         }
     }
 

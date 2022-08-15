@@ -68,14 +68,14 @@ public class ShelfController {
     @PutMapping("/me/{id}/book/{bookId}")
     @RolesAllowed(Roles.READER)
     public ResponseEntity<?> addBookToShelf(@PathVariable Long id, @PathVariable Long bookId, Principal principal) throws NotFoundException, SyncException {
-        shelfService.addBookToShelf(id, bookId, principal.getName(), LocalDateTime.now());
+        shelfService.addBookToShelf(id, bookId, principal.getName());
         return ResponseEntity.accepted().build();
     }
 
     @DeleteMapping("/me/{id}/book/{bookId}")
     @RolesAllowed(Roles.READER)
     public ResponseEntity<?> removeBookFromShelf(@PathVariable Long id, @PathVariable Long bookId, Principal principal) throws NotFoundException, SyncException {
-        shelfService.removeBookFromShelf(id, bookId, principal.getName(), LocalDateTime.now());
+        shelfService.removeBookFromShelf(id, bookId, principal.getName());
         return ResponseEntity.accepted().build();
     }
 

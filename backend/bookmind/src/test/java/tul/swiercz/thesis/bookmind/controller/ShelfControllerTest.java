@@ -138,7 +138,7 @@ class ShelfControllerTest {
 
         ResponseEntity<?> response = shelfController.addBookToShelf(1L, 2L, principal);
 
-        verify(shelfService).addBookToShelf(eq(1L), eq(2L), eq(username), notNull());
+        verify(shelfService).addBookToShelf(eq(1L), eq(2L), eq(username));
         assertNull(response.getBody());
         assertEquals(HttpStatus.ACCEPTED, response.getStatusCode());
     }
@@ -149,7 +149,7 @@ class ShelfControllerTest {
 
         ResponseEntity<?> response = shelfController.removeBookFromShelf(1L, 2L, principal);
 
-        verify(shelfService).removeBookFromShelf(eq(1L), eq(2L), eq(username), notNull());
+        verify(shelfService).removeBookFromShelf(eq(1L), eq(2L), eq(username));
         assertNull(response.getBody());
         assertEquals(HttpStatus.ACCEPTED, response.getStatusCode());
     }

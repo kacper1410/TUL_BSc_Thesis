@@ -190,7 +190,8 @@ class ShelfServiceTest {
 
     @Test
     void getShelf() throws NotFoundException {
-        when(shelfRepository.findWithBooksByIdAndUserUsername(1L, username)).thenReturn(Optional.ofNullable(shelf1));
+        when(shelfRepository.findWithBooksByIdAndUserUsername(1L, username))
+                .thenReturn(Optional.ofNullable(shelf1));
 
         Shelf shelf = shelfService.getShelf(1L, username);
 
@@ -199,7 +200,8 @@ class ShelfServiceTest {
 
     @Test
     void getShelfException() {
-        when(shelfRepository.findWithBooksByIdAndUserUsername(1L, username)).thenReturn(Optional.empty());
+        when(shelfRepository.findWithBooksByIdAndUserUsername(1L, username))
+                .thenReturn(Optional.empty());
 
         NotFoundException exception = assertThrows(
                 NotFoundException.class,
@@ -211,12 +213,13 @@ class ShelfServiceTest {
 
     @Test
     void addBookToShelf() throws NotFoundException, SyncException {
-        when(shelfRepository.findWithBooksByIdAndUserUsername(1L, username)).thenReturn(Optional.ofNullable(shelf1));
+        when(shelfRepository.findWithBooksByIdAndUserUsername(1L, username))
+                .thenReturn(Optional.ofNullable(shelf1));
         when(bookRepository.findById(2L)).thenReturn(Optional.ofNullable(book3));
         when(shelfActionRepository.findByShelfIdAndBookId(1L, 2L)).thenReturn(null);
 
         LocalDateTime now = LocalDateTime.now();
-        shelfService.addBookToShelf(1L, 2L, username, now);
+        shelfService.addBookToShelf(1L, 2L, username);
 
         verify(shelfActionRepository).save(argThat((shelfAction) ->
                 shelfAction.getShelfActionType().equals(ShelfActionType.ADD_BOOK)
@@ -231,13 +234,14 @@ class ShelfServiceTest {
 
     @Test
     void addBookToShelfWithActionFound() throws NotFoundException, SyncException {
-        when(shelfRepository.findWithBooksByIdAndUserUsername(1L, username)).thenReturn(Optional.ofNullable(shelf1));
+        when(shelfRepository.findWithBooksByIdAndUserUsername(1L, username))
+                .thenReturn(Optional.ofNullable(shelf1));
         when(bookRepository.findById(2L)).thenReturn(Optional.ofNullable(book3));
         when(shelfActionRepository.findByShelfIdAndBookId(1L, 2L)).thenReturn(shelfAction);
         LocalDateTime now = LocalDateTime.now();
         shelfAction.setActionDate(now.minus(20, ChronoUnit.HOURS));
 
-        shelfService.addBookToShelf(1L, 2L, username, now);
+        shelfService.addBookToShelf(1L, 2L, username);
 
         verify(shelfActionRepository).save(shelfAction);
         verify(shelfRepository).save(shelf1);
@@ -248,7 +252,8 @@ class ShelfServiceTest {
 
     @Test
     void addBookToShelfSyncException() {
-        when(shelfRepository.findWithBooksByIdAndUserUsername(1L, username)).thenReturn(Optional.ofNullable(shelf1));
+        when(shelfRepository.findWithBooksByIdAndUserUsername(1L, username))
+                .thenReturn(Optional.ofNullable(shelf1));
         when(bookRepository.findById(2L)).thenReturn(Optional.ofNullable(book3));
         when(shelfActionRepository.findByShelfIdAndBookId(1L, 2L)).thenReturn(shelfAction);
         LocalDateTime now = LocalDateTime.now();
@@ -256,7 +261,7 @@ class ShelfServiceTest {
 
         SyncException exception = assertThrows(
                 SyncException.class,
-                () -> shelfService.addBookToShelf(1L, 2L, username, LocalDateTime.now())
+                () -> shelfService.addBookToShelf(1L, 2L, username)
         );
 
         assertEquals(ExceptionMessages.SYNC_ERROR, exception.getMessage());
@@ -264,11 +269,12 @@ class ShelfServiceTest {
 
     @Test
     void addBookToShelfException() {
-        when(shelfRepository.findWithBooksByIdAndUserUsername(1L, username)).thenReturn(Optional.empty());
+        when(shelfRepository.findWithBooksByIdAndUserUsername(1L, username))
+                .thenReturn(Optional.empty());
 
         NotFoundException exception = assertThrows(
                 NotFoundException.class,
-                () -> shelfService.addBookToShelf(1L, 2L, username, LocalDateTime.now())
+                () -> shelfService.addBookToShelf(1L, 2L, username)
         );
 
         assertEquals(ExceptionMessages.UPDATE_NOT_FOUND, exception.getMessage());
@@ -280,7 +286,7 @@ class ShelfServiceTest {
 
         NotFoundException exception = assertThrows(
                 NotFoundException.class,
-                () -> shelfService.addBookToShelf(1L, 2L, username, LocalDateTime.now())
+                () -> shelfService.addBookToShelf(1L, 2L, username)
         );
 
         assertEquals(ExceptionMessages.UPDATE_NOT_FOUND, exception.getMessage());
@@ -288,10 +294,11 @@ class ShelfServiceTest {
 
     @Test
     void addBookToShelfContains() throws NotFoundException, SyncException {
-        when(shelfRepository.findWithBooksByIdAndUserUsername(1L, username)).thenReturn(Optional.ofNullable(shelf1));
+        when(shelfRepository.findWithBooksByIdAndUserUsername(1L, username))
+                .thenReturn(Optional.ofNullable(shelf1));
         when(bookRepository.findById(2L)).thenReturn(Optional.ofNullable(book2));
 
-        shelfService.addBookToShelf(1L, 2L, username, LocalDateTime.now());
+        shelfService.addBookToShelf(1L, 2L, username);
 
         verify(shelfRepository, times(1)).save(shelf1);
         assertEquals(2, shelf1.getBooks().size());
@@ -300,12 +307,13 @@ class ShelfServiceTest {
 
     @Test
     void removeBookFromShelf() throws NotFoundException, SyncException {
-        when(shelfRepository.findWithBooksByIdAndUserUsername(1L, username)).thenReturn(Optional.ofNullable(shelf1));
+        when(shelfRepository.findWithBooksByIdAndUserUsername(1L, username))
+                .thenReturn(Optional.ofNullable(shelf1));
         when(bookRepository.findById(2L)).thenReturn(Optional.ofNullable(book2));
         when(shelfActionRepository.findByShelfIdAndBookId(1L, 2L)).thenReturn(null);
         LocalDateTime now = LocalDateTime.now();
 
-        shelfService.removeBookFromShelf(1L, 2L, username, now);
+        shelfService.removeBookFromShelf(1L, 2L, username);
 
 
         verify(shelfActionRepository).save(argThat((shelfAction) ->
@@ -321,13 +329,14 @@ class ShelfServiceTest {
 
     @Test
     void removeBookFromShelfWithActionFound() throws NotFoundException, SyncException {
-        when(shelfRepository.findWithBooksByIdAndUserUsername(1L, username)).thenReturn(Optional.ofNullable(shelf1));
+        when(shelfRepository.findWithBooksByIdAndUserUsername(1L, username))
+                .thenReturn(Optional.ofNullable(shelf1));
         when(bookRepository.findById(2L)).thenReturn(Optional.ofNullable(book2));
         when(shelfActionRepository.findByShelfIdAndBookId(1L, 2L)).thenReturn(shelfAction);
         LocalDateTime now = LocalDateTime.now();
         shelfAction.setActionDate(now.minus(20, ChronoUnit.HOURS));
 
-        shelfService.removeBookFromShelf(1L, 2L, username, now);
+        shelfService.removeBookFromShelf(1L, 2L, username);
 
         verify(shelfActionRepository).save(shelfAction);
         assertEquals(now, shelfAction.getActionDate());
@@ -338,7 +347,8 @@ class ShelfServiceTest {
 
     @Test
     void removeBookFromShelfSyncException() {
-        when(shelfRepository.findWithBooksByIdAndUserUsername(1L, username)).thenReturn(Optional.ofNullable(shelf1));
+        when(shelfRepository.findWithBooksByIdAndUserUsername(1L, username))
+                .thenReturn(Optional.ofNullable(shelf1));
         when(bookRepository.findById(2L)).thenReturn(Optional.ofNullable(book2));
         when(shelfActionRepository.findByShelfIdAndBookId(1L, 2L)).thenReturn(shelfAction);
         LocalDateTime now = LocalDateTime.now();
@@ -346,7 +356,7 @@ class ShelfServiceTest {
 
         SyncException exception = assertThrows(
                 SyncException.class,
-                () -> shelfService.removeBookFromShelf(1L, 2L, username, LocalDateTime.now())
+                () -> shelfService.removeBookFromShelf(1L, 2L, username)
         );
 
         assertEquals(ExceptionMessages.SYNC_ERROR, exception.getMessage());
@@ -354,11 +364,12 @@ class ShelfServiceTest {
 
     @Test
     void removeBookFromShelfException() {
-        when(shelfRepository.findWithBooksByIdAndUserUsername(1L, username)).thenReturn(Optional.empty());
+        when(shelfRepository.findWithBooksByIdAndUserUsername(1L, username))
+                .thenReturn(Optional.empty());
 
         NotFoundException exception = assertThrows(
                 NotFoundException.class,
-                () -> shelfService.removeBookFromShelf(1L, 2L, username, LocalDateTime.now())
+                () -> shelfService.removeBookFromShelf(1L, 2L, username)
         );
 
         assertEquals(ExceptionMessages.UPDATE_NOT_FOUND, exception.getMessage());
@@ -370,7 +381,7 @@ class ShelfServiceTest {
 
         NotFoundException exception = assertThrows(
                 NotFoundException.class,
-                () -> shelfService.removeBookFromShelf(1L, 2L, username, LocalDateTime.now())
+                () -> shelfService.removeBookFromShelf(1L, 2L, username)
         );
 
         assertEquals(ExceptionMessages.UPDATE_NOT_FOUND, exception.getMessage());
@@ -378,10 +389,11 @@ class ShelfServiceTest {
 
     @Test
     void removeBookFromShelfNotContains() throws NotFoundException, SyncException {
-        when(shelfRepository.findWithBooksByIdAndUserUsername(1L, username)).thenReturn(Optional.ofNullable(shelf1));
+        when(shelfRepository.findWithBooksByIdAndUserUsername(1L, username))
+                .thenReturn(Optional.ofNullable(shelf1));
         when(bookRepository.findById(2L)).thenReturn(Optional.ofNullable(book3));
 
-        shelfService.removeBookFromShelf(1L, 2L, username, LocalDateTime.now());
+        shelfService.removeBookFromShelf(1L, 2L, username);
 
         verify(shelfRepository).save(shelf1);
         assertEquals(2, shelf1.getBooks().size());

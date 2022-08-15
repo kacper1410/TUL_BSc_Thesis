@@ -74,7 +74,7 @@ public class BookServiceTest {
     public void testGetByIdWithShelves() throws NotFoundException {
         when(bookRepository.findById(1L)).thenReturn(Optional.ofNullable(book1));
         when(bookMapper.bookToDtoWithShelves(book1)).thenReturn(bookWithShelvesInfo);
-        when(shelfRepository.findAllByBooksAndUserUsername(book1, "username")).thenReturn(shelves);
+        when(shelfRepository.findAllByShelfBooksBooksAndUserUsername(book1, "username")).thenReturn(shelves);
         when(shelfMapper.shelfToListInfo(shelves)).thenReturn(shelvesDto);
 
         BookWithShelvesInfo returnedBookWithShelvesInfo = bookService.getByIdWithShelves(1L, "username");
