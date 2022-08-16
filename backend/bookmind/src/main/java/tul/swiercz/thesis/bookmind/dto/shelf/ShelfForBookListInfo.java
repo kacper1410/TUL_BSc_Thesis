@@ -1,5 +1,7 @@
 package tul.swiercz.thesis.bookmind.dto.shelf;
 
+import tul.swiercz.thesis.bookmind.security.SignatureUtil;
+
 public class ShelfForBookListInfo extends ShelfListInfo {
 
     private Long connectionVersion;
@@ -29,5 +31,9 @@ public class ShelfForBookListInfo extends ShelfListInfo {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public String getConnectionVersionSignature() {
+        return SignatureUtil.calcSignature(connectionVersion);
     }
 }

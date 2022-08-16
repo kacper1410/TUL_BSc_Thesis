@@ -1,5 +1,7 @@
 package tul.swiercz.thesis.bookmind.dto;
 
+import tul.swiercz.thesis.bookmind.security.SignatureUtil;
+
 public abstract class InfoDto {
 
     private Long id;
@@ -24,4 +26,7 @@ public abstract class InfoDto {
     }
     //endregion
 
+    public String getVersionSignature() {
+        return SignatureUtil.calcSignature(version);
+    }
 }
