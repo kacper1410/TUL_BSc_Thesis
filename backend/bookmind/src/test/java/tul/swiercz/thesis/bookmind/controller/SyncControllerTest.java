@@ -19,7 +19,6 @@ import tul.swiercz.thesis.bookmind.mapper.ShelfMapper;
 import tul.swiercz.thesis.bookmind.service.ShelfService;
 
 import java.security.Principal;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,18 +56,15 @@ class SyncControllerTest {
     void initFields() {
         action1 = new ShelfActionBookDto();
         action1.setShelfActionType(ShelfActionType.ADD_BOOK);
-        action1.setActionDate(LocalDateTime.now());
         action1.setBookId(3L);
 
         action2 = new ShelfActionBookDto();
         action2.setShelfActionType(ShelfActionType.REMOVE_BOOK);
-        action2.setActionDate(LocalDateTime.now());
         action2.setBookId(4L);
 
         modifyShelf = new ModifyShelf("shelfName");
         action3 = new ShelfActionModifyDto();
         action3.setShelfActionType(ShelfActionType.UPDATE);
-        action3.setActionDate(LocalDateTime.now());
         action3.setShelf(modifyShelf);
 
         shelf = new Shelf("name");

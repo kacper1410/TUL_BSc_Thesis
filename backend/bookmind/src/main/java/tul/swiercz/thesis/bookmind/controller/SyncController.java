@@ -1,9 +1,11 @@
 package tul.swiercz.thesis.bookmind.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,12 +21,14 @@ import tul.swiercz.thesis.bookmind.service.ShelfService;
 
 import javax.annotation.security.DenyAll;
 import javax.annotation.security.RolesAllowed;
+import javax.validation.Valid;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
 @Controller
 @DenyAll
+@Validated
 @RequestMapping("/sync")
 public class SyncController {
 
@@ -40,12 +44,12 @@ public class SyncController {
 
     @PostMapping("/{shelfId}")
     @RolesAllowed(Roles.READER)
-    public ResponseEntity<?> sync(@PathVariable Long shelfId, @RequestBody List<ShelfActionDto> shelfActionDtos, Principal principal) throws NotFoundException {
+    public ResponseEntity<?> sync(@PathVariable Long shelfId, @RequestBody @Valid List<ShelfActionDto> shelfActionDtos, Principal principal) {
         List<ShelfActionDto> failed = new ArrayList<>();
         for (ShelfActionDto action : shelfActionDtos) {
             try {
                 performAction(shelfId, action, principal.getName());
-            } catch (SyncException e) {
+            } catch (SyncException | NotFoundException | OptimisticLockingFailureException e) {
                 failed.add(action);
             }
         }
@@ -53,15 +57,18 @@ public class SyncController {
     }
 
     private void performAction(Long shelfId, ShelfActionDto action, String username) throws NotFoundException, SyncException {
+        ShelfActionBookDto bookAction;
         switch (action.getShelfActionType()) {
             case UPDATE:
                 shelfService.update(shelfId, shelfMapper.modifyToShelf(((ShelfActionModifyDto) action).getShelf()), username);
                 break;
             case ADD_BOOK:
-                shelfService.addBookToShelf(shelfId, ((ShelfActionBookDto) action).getBookId(), username);
+                bookAction = (ShelfActionBookDto) action;
+                shelfService.addBookToShelfSync(shelfId, bookAction.getBookId(), username, bookAction.getConnectionVersion());
                 break;
             case REMOVE_BOOK:
-                shelfService.removeBookFromShelf(shelfId, ((ShelfActionBookDto) action).getBookId(), username);
+                bookAction = (ShelfActionBookDto) action;
+                shelfService.removeBookFromShelfSync(shelfId, bookAction.getBookId(), username, bookAction.getConnectionVersion());
         }
     }
 

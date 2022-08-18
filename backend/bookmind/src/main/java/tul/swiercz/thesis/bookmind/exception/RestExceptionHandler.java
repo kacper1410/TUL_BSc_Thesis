@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import tul.swiercz.thesis.bookmind.dto.exception.ExceptionInfo;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.ConstraintViolationException;
 import java.time.LocalDateTime;
 
 import static tul.swiercz.thesis.bookmind.exception.ExceptionMessages.OPTIMISTIC_LOCK;
@@ -31,6 +32,12 @@ public class RestExceptionHandler {
     @ResponseStatus(code = HttpStatus.CONFLICT)
     protected ExceptionInfo handleStaleStateException(Exception ex, HttpServletRequest request) {
         return mapException(new OptimisticLockException(OPTIMISTIC_LOCK, ex), request);
+    }
+
+    @ExceptionHandler(value = ConstraintViolationException.class)
+    @ResponseStatus(code = HttpStatus.UNPROCESSABLE_ENTITY)
+    protected ExceptionInfo handleConstraintViolationException(Exception ex, HttpServletRequest request) {
+        return mapException(ex, request);
     }
 
     protected ExceptionInfo mapException(Exception ex, HttpServletRequest request) {

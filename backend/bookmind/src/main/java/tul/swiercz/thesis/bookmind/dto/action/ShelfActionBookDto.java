@@ -6,6 +6,8 @@ public class ShelfActionBookDto extends ShelfActionDto {
 
     private Long bookId;
 
+    private Long connectionVersion;
+
     @NotNull
     public Long getBookId() {
         return bookId;
@@ -13,5 +15,13 @@ public class ShelfActionBookDto extends ShelfActionDto {
 
     public void setBookId(Long bookId) {
         this.bookId = bookId;
+    }
+
+    public Long getConnectionVersion() {
+        return connectionVersion;
+    }
+
+    public void setConnectionVersion(Long connectionVersion) {
+        this.connectionVersion = connectionVersion;
     }
 }
