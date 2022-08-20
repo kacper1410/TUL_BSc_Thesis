@@ -146,6 +146,11 @@ public class ShelfService extends CrudService<Shelf> {
         ShelfBook shelfBook = shelfBookRepository.findById(new ShelfBook.ShelfBookId(shelfId, bookId))
                 .orElse(null);
 
+        if (version == null && shelfBook == null) {
+            shelfBookRepository.save(newShelfBook(bookId, shelf, false));
+            return;
+        }
+
         if (version != null && shelfBook != null) {
             if (!shelfBook.isActive()) {
                 return;
