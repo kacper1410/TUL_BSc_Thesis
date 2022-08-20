@@ -7,6 +7,7 @@ import { ConnectionService } from "./connection.service";
 import { DatabaseService } from "./database.service";
 import { mergeMap, tap } from "rxjs/operators";
 import { AuthService } from "./auth.service";
+import { Book } from "../domain/Book";
 
 @Injectable({
     providedIn: 'root'
@@ -66,26 +67,26 @@ export class ShelfService {
         );
     }
 
-    removeBookFromShelf(bookId: number, shelfId: number) {
+    removeBookFromShelf(book: Book, shelf: Shelf) {
         const username = this.authService.getUsername();
         return this.connService.getIfOnline(
-            () => this.http.delete(this.url + `me/${shelfId}/book/${bookId}`),
-            () => this.dbService.removeBookFromShelfOffline(shelfId, bookId, username)
+            () => this.http.delete(this.url + `me/${shelf.id}/book/${book.id}`),
+            () => this.dbService.removeBookFromShelfOffline(shelf, book, username)
         ).pipe(
             mergeMap(
-                () => this.dbService.removeBookFromShelf(shelfId, bookId, username)
+                () => this.dbService.removeBookFromShelf(shelf.id, book.id, username)
             )
         );
     }
 
-    addBookToShelf(bookId: number, shelfId: number) {
+    addBookToShelf(book: Book, shelf: Shelf) {
         const username = this.authService.getUsername();
         return this.connService.getIfOnline(
-            () => this.http.put(this.url + `me/${shelfId}/book/${bookId}`, {}),
-            () => this.dbService.addBookToShelfOffline(shelfId, bookId, username)
+            () => this.http.put(this.url + `me/${shelf.id}/book/${book.id}`, {}),
+            () => this.dbService.addBookToShelfOffline(shelf, book, username)
         ).pipe(
             mergeMap(
-                () => this.dbService.addBookToShelf(shelfId, bookId, username)
+                () => this.dbService.addBookToShelf(shelf.id, book.id, username)
             )
         );
     }

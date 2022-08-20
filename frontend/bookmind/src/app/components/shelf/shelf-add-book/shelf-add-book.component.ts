@@ -5,6 +5,7 @@ import { ShelfService } from "../../../service/shelf.service";
 import { defaultBook } from "../../../domain/default/defaultBook";
 import { Shelf } from "../../../domain/Shelf";
 import { BookService } from "../../../service/book.service";
+import { Book } from "../../../domain/Book";
 
 @Component({
     selector: 'app-shelf-add-book',
@@ -45,19 +46,19 @@ export class ShelfAddBookComponent implements OnInit {
 
     isOnShelf(shelfId: number) {
         if (this.book.shelves)
-            return this.book.shelves.some(shelf => shelf.id === shelfId);
+            return this.book.shelves.some(shelf => shelf.id === shelfId && shelf.active);
         return false;
     }
 
-    addBookToShelf(shelfId: number, bookId: number) {
-        this.shelfService.addBookToShelf(bookId, shelfId).subscribe(
+    addBookToShelf(shelf: Shelf, book: Book) {
+        this.shelfService.addBookToShelf(book, shelf).subscribe(
             () => this.getShelvesAndBook()
         )
     }
 
-    removeBookFromShelf(shelfId: number, bookId: number) {
+    removeBookFromShelf(shelf: Shelf, book: Book) {
         this.confirm.confirm('Are you sure you want to remove this book from shelf?', () =>
-            this.shelfService.removeBookFromShelf(bookId, shelfId).subscribe(
+            this.shelfService.removeBookFromShelf(book, shelf).subscribe(
                 () => this.getShelvesAndBook()
             )
         )

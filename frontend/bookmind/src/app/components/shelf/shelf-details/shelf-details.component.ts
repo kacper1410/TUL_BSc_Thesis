@@ -3,6 +3,7 @@ import { ActivatedRoute } from "@angular/router";
 import { defaultShelf } from "../../../domain/default/defaultShelf";
 import { ShelfService } from "../../../service/shelf.service";
 import { ConfirmService } from "../../../service/confirm.service";
+import { Book } from "../../../domain/Book";
 
 @Component({
     selector: 'app-shelf-details',
@@ -24,9 +25,9 @@ export class ShelfDetailsComponent implements OnInit {
     ngOnInit(): void {
     }
 
-    removeFromShelf(id: number) {
+    removeFromShelf(book: Book) {
         this.confirm.confirm('Are you sure you want to remove this book from shelf?', () =>
-            this.shelfService.removeBookFromShelf(id, this.shelf.id).subscribe(
+            this.shelfService.removeBookFromShelf(book, this.shelf).subscribe(
                 () => this.getShelf()
             )
         )
@@ -36,5 +37,9 @@ export class ShelfDetailsComponent implements OnInit {
         this.shelfService.getShelf(this.shelf.id).subscribe(
             (shelf) => this.shelf = shelf
         )
+    }
+
+    getActiveBooks() {
+        return this.shelf.books.filter(b => b.active);
     }
 }

@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 import { ADD_BOOK, REMOVE_BOOK, UPDATE } from "../../domain/actionTypes";
-import { ShelfService } from "../../service/shelf.service";
-import { BookService } from "../../service/book.service";
 import { Shelf } from "../../domain/Shelf";
+import { DatabaseService } from "../../service/database.service";
+import { AuthService } from "../../service/auth.service";
 
 @Component({
     selector: 'app-sync-error-modal',
@@ -15,16 +15,17 @@ export class SyncErrorModalComponent implements OnInit {
     errorNotifications: any = [];
 
     constructor(public activeModal: NgbActiveModal,
-                private shelfService: ShelfService,
-                private bookService: BookService) {
+                private dbService: DatabaseService,
+                private authService: AuthService) {
     }
 
     ngOnInit(): void {
     }
 
     public initialize(errorsByShelfId: any) {
+        const username = this.authService.getUsername();
         for (const shelfId in errorsByShelfId) {
-            this.shelfService.getShelf(Number(shelfId)).subscribe(
+            this.dbService.getShelfByUsername(Number(shelfId), username).subscribe(
                 (shelf) => {
                     errorsByShelfId[shelfId].forEach(
                         (error: any) => error.bookId
@@ -37,7 +38,7 @@ export class SyncErrorModalComponent implements OnInit {
     }
 
     private resolveBook(bookId: number, shelf: Shelf, actionType: string) {
-        this.bookService.getBookDetails(bookId).subscribe(
+        this.dbService.getBook(bookId).subscribe(
             (book)=> this.errorNotifications.push({
                 shelf: shelf.name,
                 type: this.translateActionType(actionType),

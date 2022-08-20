@@ -71,12 +71,14 @@ export class DatabaseService {
     }
 
     getShelfByUsername(id: number, username: string): Observable<Shelf> {
-        return fromPromise(
-            this.db.shelves
-                .where('id').equals(id)
-                .and((shelf: Shelf) => shelf.username === username)
-                .first()
-        );
+        return fromPromise(this.getShelfByUsernamePromise(id, username));
+    }
+
+    getShelfByUsernamePromise(id: number, username: string): Promise<Shelf> {
+        return this.db.shelves
+            .where('id').equals(id)
+            .and((shelf: Shelf) => shelf.username === username)
+            .first();
     }
 
     saveUser(newUser: any) {
@@ -116,7 +118,6 @@ export class DatabaseService {
                     shelfCopy.id = id;
                     return this.db.actions.put({
                         shelfActionType: ADD_SHELF,
-                        actionDate: new Date(),
                         username: username,
                         shelf: shelfCopy,
                         shelfId: shelfCopy.id
@@ -143,7 +144,6 @@ export class DatabaseService {
                     } else {
                         promiseSync = this.db.actions.put({
                             shelfActionType: REMOVE_SHELF,
-                            actionDate: new Date(),
                             username: username,
                             shelf: shelf,
                             shelfId: shelf.id
@@ -159,6 +159,12 @@ export class DatabaseService {
         return fromPromise(promise);
     }
 
+    getBook(id: number): Observable<Book> {
+        return fromPromise(this.db.books
+            .where('id').equals(id)
+            .first());
+    }
+
     getBookWithShelves(id: number, username: string): Observable<Book> {
         const promiseBook = this.db.books
             .where('id').equals(id)
@@ -166,29 +172,37 @@ export class DatabaseService {
         const promiseShelves = this.db.shelves
             .where('username').equals(username)
             .and((shelf: Shelf) => shelf.books.some(
-                (book: Book) => book.id === id)
+                    (book: Book) => book.id === id && book.active
+                )
             )
             .toArray();
+
         const promise = Promise.all([promiseBook, promiseShelves])
             .then((values: any) => {
+                values[1].forEach((shelf: any) => shelf.active = true);
                 values[0].shelves = values[1];
                 return values[0];
             })
         return fromPromise(promise);
     }
 
-    removeBookFromShelfOffline(shelfId: number, bookId: number, username: string): Observable<any> {
+    removeBookFromShelfOffline(shelf: Shelf, book: Book, username: string): Observable<any> {
         const promiseDelete = this.db.actions
             .where('shelfActionType').equals(ADD_BOOK)
-            .and((action: any) => action.shelfId === shelfId && action.bookId === bookId)
+            .and((action: any) => action.shelfId === shelf.id && action.bookId === book.id)
             .delete();
-        const promisePut = this.db.actions.put({
-            shelfActionType: REMOVE_BOOK,
-            actionDate: new Date(),
-            username: username,
-            shelfId: shelfId,
-            bookId: bookId
-        });
+
+        let promisePut = this.getShelfByUsernamePromise(shelf.id, username).then(foundShelf => {
+            const foundBook = foundShelf.books.find(b => b.id === book.id);
+            return this.db.actions.put({
+                shelfActionType: REMOVE_BOOK,
+                username: username,
+                shelfId: foundShelf.id,
+                bookId: book.id,
+                connectionVersion: foundBook?.connectionVersion,
+                connectionSignature: foundBook?.connectionSignature
+            });
+        })
         return fromPromise(Promise.all([promisePut, promiseDelete]));
     }
 
@@ -201,23 +215,29 @@ export class DatabaseService {
                     if (!shelf.books) shelf.books = []
                     const bookIndex = shelf.books.findIndex((book: Book) => book.id === bookId);
                     if (bookIndex >= 0) {
-                        shelf.books.splice(bookIndex, 1);
+                        shelf.books[bookIndex].active = false;
                     }
                 }
             )
     }
 
-    addBookToShelfOffline(shelfId: number, bookId: number, username: string) {
+    addBookToShelfOffline(shelf: Shelf, book: Book, username: string) {
         const promiseDelete = this.db.actions
             .where('shelfActionType').equals(REMOVE_BOOK)
-            .and((action: any) => action.shelfId === shelfId && action.bookId === bookId)
+            .and((action: any) => action.shelfId === shelf.id && action.bookId === book.id)
             .delete();
-        const promisePut = this.db.actions.put({
-            shelfActionType: ADD_BOOK,
-            actionDate: new Date(),
-            username: username,
-            shelfId: shelfId,
-            bookId: bookId
+
+        let promisePut = this.getShelfByUsernamePromise(shelf.id, username).then(foundShelf => {
+            const foundBook = foundShelf.books.find(b => b.id === book.id);
+            return this.db.actions.put({
+                shelfActionType: ADD_BOOK,
+                actionDate: new Date(),
+                username: username,
+                shelfId: shelf.id,
+                bookId: book.id,
+                connectionVersion: foundBook?.connectionVersion,
+                connectionSignature: foundBook?.connectionSignature
+            });
         });
         return fromPromise(Promise.all([promisePut, promiseDelete]));
     }
@@ -231,7 +251,13 @@ export class DatabaseService {
             .and((shelf: Shelf) => shelf.username === username)
             .modify((shelf: Shelf) => {
                 if (!shelf.books) shelf.books = []
-                shelf.books.push(book)
+                const bookIndex = shelf.books.findIndex((book: Book) => book.id === bookId);
+                if (bookIndex >= 0) {
+                    shelf.books[bookIndex].active = true;
+                } else {
+                    book.active = true;
+                    shelf.books.push(book)
+                }
             });
     }
 
@@ -249,7 +275,6 @@ export class DatabaseService {
             .where('shelfActionType').equals(UPDATE)
             .and((action: any) => action.shelf.id === id)
             .modify((action: any) => {
-                action.actionDate = new Date();
                 action.shelf = newShelf;
             })
             .then(
@@ -259,7 +284,6 @@ export class DatabaseService {
 
                     return this.db.actions.put({
                         shelfActionType: UPDATE,
-                        actionDate: new Date(),
                         username: username,
                         shelf: newShelf,
                         shelfId: newShelf.id
