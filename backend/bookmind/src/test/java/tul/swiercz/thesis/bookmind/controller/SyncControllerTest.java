@@ -1,5 +1,6 @@
 package tul.swiercz.thesis.bookmind.controller;
 
+import com.nimbusds.jose.JOSEException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -19,6 +20,7 @@ import tul.swiercz.thesis.bookmind.mapper.ShelfMapper;
 import tul.swiercz.thesis.bookmind.service.ShelfService;
 
 import java.security.Principal;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -73,7 +75,7 @@ class SyncControllerTest {
     }
 
     @Test
-    void sync() throws NotFoundException, SyncException {
+    void sync() throws NotFoundException, SyncException, ParseException, JOSEException {
         when(principal.getName()).thenReturn("username");
         when(shelfMapper.modifyToShelf(modifyShelf)).thenReturn(shelf);
         actions.add(action1);
@@ -90,7 +92,7 @@ class SyncControllerTest {
     }
 
     @Test
-    void syncException() throws NotFoundException, SyncException {
+    void syncException() throws NotFoundException, SyncException, ParseException, JOSEException {
         when(principal.getName()).thenReturn("username");
         when(shelfMapper.modifyToShelf(modifyShelf)).thenReturn(shelf);
         actions.add(action1);

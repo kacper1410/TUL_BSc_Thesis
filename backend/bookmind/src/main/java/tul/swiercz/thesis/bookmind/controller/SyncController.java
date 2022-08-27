@@ -1,5 +1,6 @@
 package tul.swiercz.thesis.bookmind.controller;
 
+import com.nimbusds.jose.JOSEException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
@@ -14,15 +15,18 @@ import tul.swiercz.thesis.bookmind.dto.action.ShelfActionBookDto;
 import tul.swiercz.thesis.bookmind.dto.action.ShelfActionDto;
 import tul.swiercz.thesis.bookmind.dto.action.ShelfActionModifyDto;
 import tul.swiercz.thesis.bookmind.exception.NotFoundException;
+import tul.swiercz.thesis.bookmind.exception.SignatureNotValidException;
 import tul.swiercz.thesis.bookmind.exception.SyncException;
 import tul.swiercz.thesis.bookmind.mapper.ShelfMapper;
 import tul.swiercz.thesis.bookmind.security.Roles;
+import tul.swiercz.thesis.bookmind.security.SignatureUtil;
 import tul.swiercz.thesis.bookmind.service.ShelfService;
 
 import javax.annotation.security.DenyAll;
 import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import java.security.Principal;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,19 +48,20 @@ public class SyncController {
 
     @PostMapping("/{shelfId}")
     @RolesAllowed(Roles.READER)
-    public ResponseEntity<?> sync(@PathVariable Long shelfId, @RequestBody @Valid List<ShelfActionDto> shelfActionDtos, Principal principal) {
+    public ResponseEntity<?> sync(@PathVariable Long shelfId, @RequestBody @Valid List<ShelfActionDto> shelfActionDtos, Principal principal) throws ParseException, JOSEException {
         List<ShelfActionDto> failed = new ArrayList<>();
         for (ShelfActionDto action : shelfActionDtos) {
             try {
                 performAction(shelfId, action, principal.getName());
-            } catch (SyncException | NotFoundException | OptimisticLockingFailureException e) {
+            } catch (SyncException | NotFoundException | OptimisticLockingFailureException | SignatureNotValidException e) {
                 failed.add(action);
             }
         }
         return failed.isEmpty()? ResponseEntity.accepted().build() : ResponseEntity.status(HttpStatus.CONFLICT).body(failed);
     }
 
-    private void performAction(Long shelfId, ShelfActionDto action, String username) throws NotFoundException, SyncException {
+    private void performAction(Long shelfId, ShelfActionDto action, String username)
+            throws NotFoundException, SyncException, ParseException, JOSEException, SignatureNotValidException {
         ShelfActionBookDto bookAction;
         switch (action.getShelfActionType()) {
             case UPDATE:
@@ -64,10 +69,12 @@ public class SyncController {
                 break;
             case ADD_BOOK:
                 bookAction = (ShelfActionBookDto) action;
+                SignatureUtil.verifySignature(bookAction.getConnectionVersionSignature(), bookAction.getConnectionVersion());
                 shelfService.addBookToShelfSync(shelfId, bookAction.getBookId(), username, bookAction.getConnectionVersion());
                 break;
             case REMOVE_BOOK:
                 bookAction = (ShelfActionBookDto) action;
+                SignatureUtil.verifySignature(bookAction.getConnectionVersionSignature(), bookAction.getConnectionVersion());
                 shelfService.removeBookFromShelfSync(shelfId, bookAction.getBookId(), username, bookAction.getConnectionVersion());
         }
     }

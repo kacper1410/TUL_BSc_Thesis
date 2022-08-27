@@ -18,4 +18,6 @@ public class ExceptionMessages {
     public static final String OPTIMISTIC_LOCK = EXCEPTION_PREFIX + "OPTIMISTIC_LOCK";
 
     public static final String SYNC_ERROR = EXCEPTION_PREFIX + "SYNC_ERROR";
+
+    public static final String SIGNATURE_NOT_VALID_EXCEPTION = EXCEPTION_PREFIX + "SIGNATURE_NOT_VALID_EXCEPTION";
 }

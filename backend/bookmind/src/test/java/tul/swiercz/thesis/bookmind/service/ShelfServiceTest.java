@@ -8,12 +8,14 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import tul.swiercz.thesis.bookmind.domain.Book;
 import tul.swiercz.thesis.bookmind.domain.Shelf;
+import tul.swiercz.thesis.bookmind.domain.ShelfBook;
 import tul.swiercz.thesis.bookmind.domain.User;
 import tul.swiercz.thesis.bookmind.exception.ExceptionMessages;
 import tul.swiercz.thesis.bookmind.exception.NotFoundException;
 import tul.swiercz.thesis.bookmind.exception.SyncException;
 import tul.swiercz.thesis.bookmind.mapper.ShelfMapper;
 import tul.swiercz.thesis.bookmind.repository.BookRepository;
+import tul.swiercz.thesis.bookmind.repository.ShelfBookRepository;
 import tul.swiercz.thesis.bookmind.repository.ShelfRepository;
 import tul.swiercz.thesis.bookmind.repository.UserRepository;
 
@@ -42,6 +44,9 @@ class ShelfServiceTest {
     @Mock
     private ShelfMapper shelfMapper;
 
+    @Mock
+    private ShelfBookRepository shelfBookRepository;
+
     private Iterable<Shelf> shelves;
 
     private Shelf shelf1;
@@ -58,6 +63,7 @@ class ShelfServiceTest {
 
     private User user;
 
+    private ShelfBook shelfBook;
 
     @BeforeEach
     void initMocks() {
@@ -83,6 +89,7 @@ class ShelfServiceTest {
         shelf1.setBooks(books);
         user = new User();
         user.setUsername(username);
+        shelfBook = new ShelfBook(shelf1, book1);
 
         shelves = List.of(shelf1, shelf2);
     }
@@ -260,13 +267,16 @@ class ShelfServiceTest {
     void addBookToShelfContains() throws NotFoundException {
         when(shelfRepository.findWithBooksByIdAndUserUsername(1L, username))
                 .thenReturn(Optional.ofNullable(shelf1));
-        when(bookRepository.findById(2L)).thenReturn(Optional.ofNullable(book2));
+        when(bookRepository.findById(2L))
+                .thenReturn(Optional.ofNullable(book2));
+        when(shelfBookRepository.findById(any()))
+                .thenReturn(Optional.ofNullable(shelfBook));
+        shelfBook.setActive(false);
 
         shelfService.addBookToShelf(1L, 2L, username);
 
-        verify(shelfRepository, times(1)).save(shelf1);
-        assertEquals(2, shelf1.getBooks().size());
-        assertTrue(shelf1.getBooks().contains(book2));
+        assertTrue(shelfBook.isActive());
+        verify(shelfBookRepository, times(1)).save(shelfBook);
     }
 
     @Test
@@ -274,25 +284,38 @@ class ShelfServiceTest {
         when(shelfRepository.findWithBooksByIdAndUserUsername(1L, username))
                 .thenReturn(Optional.ofNullable(shelf1));
         when(bookRepository.findById(2L)).thenReturn(Optional.ofNullable(book2));
+        when(shelfBookRepository.findById(any()))
+                .thenReturn(Optional.ofNullable(shelfBook));
+        shelfBook.setActive(true);
 
         shelfService.removeBookFromShelf(1L, 2L, username);
 
-        verify(shelfRepository).save(shelf1);
-        assertEquals(1, shelf1.getBooks().size());
-        assertFalse(shelf1.getBooks().contains(book2));
+        assertFalse(shelfBook.isActive());
+        verify(shelfBookRepository, times(1)).save(shelfBook);
     }
 
     @Test
-    void removeBookFromShelfWithActionFound() throws NotFoundException {
+    void removeBookFromShelfWithShelfBookNotFound() throws NotFoundException {
         when(shelfRepository.findWithBooksByIdAndUserUsername(1L, username))
                 .thenReturn(Optional.ofNullable(shelf1));
         when(bookRepository.findById(2L)).thenReturn(Optional.ofNullable(book2));
 
         shelfService.removeBookFromShelf(1L, 2L, username);
 
-        verify(shelfRepository).save(shelf1);
-        assertEquals(1, shelf1.getBooks().size());
-        assertFalse(shelf1.getBooks().contains(book2));
+        verify(shelfBookRepository, times(1)).save(any(ShelfBook.class));
+    }
+
+    @Test
+    void removeBookFromShelfSync() throws NotFoundException, SyncException {
+        when(shelfRepository.findWithBooksByIdAndUserUsername(1L, username))
+                .thenReturn(Optional.ofNullable(shelf1));
+        when(bookRepository.findById(2L)).thenReturn(Optional.ofNullable(book2));
+        when(shelfBookRepository.findById(any()))
+                .thenReturn(Optional.ofNullable(shelfBook));
+
+        shelfService.removeBookFromShelfSync(1L, 2L, username, 0L);
+
+//        assertEquals(ExceptionMessages.SYNC_ERROR, exception.getMessage());
     }
 
     @Test
@@ -303,7 +326,7 @@ class ShelfServiceTest {
 
         SyncException exception = assertThrows(
                 SyncException.class,
-                () -> shelfService.removeBookFromShelf(1L, 2L, username)
+                () -> shelfService.removeBookFromShelfSync(1L, 2L, username, 0L)
         );
 
         assertEquals(ExceptionMessages.SYNC_ERROR, exception.getMessage());
