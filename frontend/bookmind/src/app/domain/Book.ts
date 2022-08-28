@@ -8,5 +8,5 @@ export interface Book {
     author: string;
     shelves: Shelf[],
     connectionVersion: number,
-    connectionSignature: string
+    connectionVersionSignature: string
 }

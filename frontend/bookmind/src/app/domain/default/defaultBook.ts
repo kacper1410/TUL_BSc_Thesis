@@ -9,6 +9,6 @@ export function defaultBook(): Book {
         author: '',
         shelves: [],
         connectionVersion: 0,
-        connectionSignature: ''
+        connectionVersionSignature: ''
     }
 }

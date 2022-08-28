@@ -200,7 +200,7 @@ export class DatabaseService {
                 shelfId: foundShelf.id,
                 bookId: book.id,
                 connectionVersion: foundBook?.connectionVersion,
-                connectionSignature: foundBook?.connectionSignature
+                connectionVersionSignature: foundBook?.connectionVersionSignature
             });
         })
         return fromPromise(Promise.all([promisePut, promiseDelete]));
@@ -236,7 +236,7 @@ export class DatabaseService {
                 shelfId: shelf.id,
                 bookId: book.id,
                 connectionVersion: foundBook?.connectionVersion,
-                connectionSignature: foundBook?.connectionSignature
+                connectionVersionSignature: foundBook?.connectionVersionSignature
             });
         });
         return fromPromise(Promise.all([promisePut, promiseDelete]));
