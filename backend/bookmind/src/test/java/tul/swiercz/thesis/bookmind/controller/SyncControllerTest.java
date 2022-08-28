@@ -17,6 +17,7 @@ import tul.swiercz.thesis.bookmind.dto.shelf.ModifyShelf;
 import tul.swiercz.thesis.bookmind.exception.NotFoundException;
 import tul.swiercz.thesis.bookmind.exception.SyncException;
 import tul.swiercz.thesis.bookmind.mapper.ShelfMapper;
+import tul.swiercz.thesis.bookmind.security.SignatureUtil;
 import tul.swiercz.thesis.bookmind.service.ShelfService;
 
 import java.security.Principal;
@@ -59,10 +60,14 @@ class SyncControllerTest {
         action1 = new ShelfActionBookDto();
         action1.setShelfActionType(ShelfActionType.ADD_BOOK);
         action1.setBookId(3L);
+        action1.setConnectionVersion(0L);
+        action1.setConnectionVersionSignature(SignatureUtil.calcSignature(0L));
 
         action2 = new ShelfActionBookDto();
         action2.setShelfActionType(ShelfActionType.REMOVE_BOOK);
         action2.setBookId(4L);
+        action2.setConnectionVersion(0L);
+        action2.setConnectionVersionSignature(SignatureUtil.calcSignature(0L));
 
         modifyShelf = new ModifyShelf("shelfName");
         action3 = new ShelfActionModifyDto();
@@ -85,8 +90,8 @@ class SyncControllerTest {
         ResponseEntity<?> response = syncController.sync(2L, actions, principal);
 
         verify(shelfService).update(eq(2L), eq(shelf), eq("username"));
-        verify(shelfService).addBookToShelf(eq(2L), eq(action1.getBookId()), eq("username"));
-        verify(shelfService).removeBookFromShelf(eq(2L), eq(action2.getBookId()), eq("username"));
+        verify(shelfService).addBookToShelfSync(2L, action1.getBookId(), "username", 0L);
+        verify(shelfService).removeBookFromShelfSync(2L, action2.getBookId(), "username", 0L);
         assertEquals(HttpStatus.ACCEPTED, response.getStatusCode());
         assertNull(response.getBody());
     }
@@ -99,13 +104,13 @@ class SyncControllerTest {
         actions.add(action2);
         actions.add(action3);
         doThrow(SyncException.class).when(shelfService)
-                .addBookToShelf(2L, action1.getBookId(), "username");
+                .addBookToShelfSync(2L, action1.getBookId(), "username", 0L);
 
         ResponseEntity<?> response = syncController.sync(2L, actions, principal);
 
         verify(shelfService).update(eq(2L), eq(shelf), eq("username"));
-        verify(shelfService).addBookToShelf(eq(2L), eq(action1.getBookId()), eq("username"));
-        verify(shelfService).removeBookFromShelf(eq(2L), eq(action2.getBookId()), eq("username"));
+        verify(shelfService).addBookToShelfSync(2L, action1.getBookId(), "username", 0L);
+        verify(shelfService).removeBookFromShelfSync(2L, action2.getBookId(), "username", 0L);
         assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
         assertEquals(List.of(action1), response.getBody());
     }

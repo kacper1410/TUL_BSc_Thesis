@@ -68,7 +68,7 @@ public class ShelfService extends CrudService<Shelf> {
     }
 
     @Transactional
-    public void update(Long id, Shelf newShelf, String username) throws NotFoundException, SyncException {
+    public void update(Long id, Shelf newShelf, String username) throws NotFoundException {
         Shelf shelf = shelfRepository.findByIdAndUserUsername(id, username)
                 .orElseThrow(() -> new NotFoundException(ExceptionMessages.UPDATE_NOT_FOUND));
         Shelf toUpdate = new Shelf();
